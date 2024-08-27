@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,21 +53,22 @@ public class UserController {
 	}
 	
 	
-	@GetMapping("/writeForm")
-	public String writeForm() {
+	@GetMapping("/joinForm")
+	public String joinForm() {
 		
-		return "/user/writeForm";
+		return "/user/joinForm";
 	}
 	
-	@PostMapping("/write")
-	public String write(User user) {
-		service.create(user);
-		return "/user/writeForm";
+	@PostMapping("/join")
+	public String join(UserDTO userDTO, Model model) {
+		User user = service.join(userDTO);
+		model.addAttribute("user", user);
+		return "/user/join";
 	}
 	
-	@GetMapping("/main")
+	@GetMapping("/index")
 	public String main() {
 
-		return "/main";
+		return "/index";
 	}
 }

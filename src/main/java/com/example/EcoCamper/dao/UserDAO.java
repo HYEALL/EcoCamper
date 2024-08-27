@@ -1,10 +1,13 @@
 package com.example.EcoCamper.dao;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import com.example.EcoCamper.dto.UserDTO;
 import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.repository.UserRepository;
 
@@ -14,15 +17,18 @@ public class UserDAO {
 	UserRepository repository;
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
-	public User create(final User user) {
-		if (user == null || user.getId() == null) {
-			throw new RuntimeException("Invalid arguments");
+	public User join(final UserDTO userDTO) {
+		if (userDTO == null || userDTO.getId() == null) {
+			return null;
 		}
-		final String userId = user.getId();
+		final String userId = userDTO.getId();
 		if (repository.existsById(userId)) {
-			throw new RuntimeException("userId already exists");
+			return null;
 		}
-		user.setPwd(passwordEncoder.encode(user.getPwd()));
+		
+		userDTO.setPwd(passwordEncoder.encode(userDTO.getPwd()));
+		userDTO.setLogtime(new Date());
+		User user = userDTO.toEntity();
 		return repository.save(user);
 	}
 
