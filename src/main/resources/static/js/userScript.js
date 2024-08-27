@@ -65,7 +65,7 @@ function login() {
 			console.log(data);
 			if (data.token) {
 				// 로그인 성공 시 리디렉션
-				window.location.href = '/main'; // 원하는 페이지로 변경
+				window.location.href = '/index'; // 원하는 페이지로 변경
 			} else {
 				alert('Login failed: ' + data.error);
 			}
