@@ -1,0 +1,52 @@
+<div class="container">
+	<script type="text/javascript" src="../js/userScript.js?v=2"></script>
+	<h3 class="text-primary">회원 가입</h3>
+	<form action="write" name="form1" method="post">
+		<table style="width: 400px;" class="table">
+			<tr>
+				<td width="100">이름</td>
+				<td><input type="text" name="name" placeholder="이름 입력"></td>
+			</tr>
+			<tr>
+				<td>아이디</td>
+				<td><input type="text" name="id"> <input type="button"
+					value="중복체크" onclick="checkId()"></td>
+			</tr>
+			<tr>
+				<td>비밀번호</td>
+				<td><input type="password" name="pwd"></td>
+			</tr>
+			<tr>
+				<td>재확인</td>
+				<td><input type="password" name="repwd"></td>
+			</tr>
+			<tr>
+				<td>나이</td>
+				<td><input type="text" name="age" size="4"></td>
+			</tr>
+			<tr>
+				<td>성별</td>
+				<td><input type="radio" name="gender" value="m" checked>남
+					<input type="radio" name="gender" value="f">여</td>
+			</tr>
+			<tr>
+				<td>이메일</td>
+				<td><input type="text" name="email" size="20"></td>
+			</tr>
+			<tr>
+				<td>핸드폰</td>
+				<td><input type="text" name="tel" size="12"></td>
+			</tr>
+			<tr>
+				<td>주소</td>
+				<td><input type="text" name="addr" size="35"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><input type="button"
+					value="회원가입" onclick="inputCheck()"> <input type="reset"
+					value="다시 작성"></td>
+			</tr>
+		</table>
+	</form>
+	<a href="../index">메인화면</a>
+</div>
