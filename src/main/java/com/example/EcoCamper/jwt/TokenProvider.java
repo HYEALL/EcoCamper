@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class TokenProvider {
-	private static final String SECRET_KEY = "mySecretKey";
+	private static final String SECRET_KEY = "ecocamperabcxyzggg123";
 	
     // JWT Token 발급
     public String createToken(User user) {
