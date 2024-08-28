@@ -56,7 +56,7 @@ function login() {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			// Authorization: `JWT ${localStorage.getItem("token")}`,
+			//'Authorization': 'Bearer ' + localStorage.getItem('token'),
 		},
 		body: JSON.stringify(userDTO)
 	})
@@ -64,16 +64,15 @@ function login() {
 		.then(data => {
 			console.log(data);
 			if (data.token) {
-				// 로그인 성공 시 리디렉션
-				window.location.href = '/index'; // 원하는 페이지로 변경
+				// 로그인 성공 시 리다이렉션
+				//localStorage.setItem('token', data.token);
+				window.location.href = '/index'; // index로 이동
 			} else {
-				alert('Login failed: ' + data.error);
+				alert('Login failed js: ' + data.error);
 			}
 		})
 		.catch(error => console.error('Error:', error));
 }
-
-
 
 function checkId() {
 	var sId = document.form1.id.value;
@@ -84,6 +83,8 @@ function checkId() {
 		window.open("checkId?id=" + sId, "", "width=450 height=200")
 	}
 }
+
+
 
 function checkModify() {
 	var frm = document.form1;

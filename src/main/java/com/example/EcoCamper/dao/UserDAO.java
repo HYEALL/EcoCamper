@@ -16,7 +16,7 @@ public class UserDAO {
 	@Autowired
 	UserRepository repository;
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	
+
 	public User join(final UserDTO userDTO) {
 		if (userDTO == null || userDTO.getId() == null) {
 			return null;
@@ -25,7 +25,7 @@ public class UserDAO {
 		if (repository.existsById(userId)) {
 			return null;
 		}
-		
+
 		userDTO.setPwd(passwordEncoder.encode(userDTO.getPwd()));
 		userDTO.setLogtime(new Date());
 		User user = userDTO.toEntity();
@@ -40,4 +40,9 @@ public class UserDAO {
 
 		return null;
 	}
+
+	public User getUser(String id) {
+		return repository.findById(id).orElse(null);
+	}
+
 }
