@@ -1,52 +1,86 @@
-<div class="container">
-	<script type="text/javascript" src="../js/userScript.js?v=2"></script>
-	<h3 class="text-primary">회원 가입</h3>
-	<form action="join" name="form1" method="post">
-		<table style="width: 400px;" class="table">
-			<tr>
-				<td width="100">이름</td>
-				<td><input type="text" name="name" placeholder="이름 입력"></td>
-			</tr>
-			<tr>
-				<td>아이디</td>
-				<td><input type="text" name="id"> <input type="button"
-					value="중복체크" onclick="checkId()"></td>
-			</tr>
-			<tr>
-				<td>비밀번호</td>
-				<td><input type="password" name="pwd"></td>
-			</tr>
-			<tr>
-				<td>재확인</td>
-				<td><input type="password" name="repwd"></td>
-			</tr>
-			<tr>
-				<td>나이</td>
-				<td><input type="text" name="age" size="4"></td>
-			</tr>
-			<tr>
-				<td>성별</td>
-				<td><input type="radio" name="gender" value="m" checked>남
-					<input type="radio" name="gender" value="f">여</td>
-			</tr>
-			<tr>
-				<td>이메일</td>
-				<td><input type="text" name="email" size="20"></td>
-			</tr>
-			<tr>
-				<td>핸드폰</td>
-				<td><input type="text" name="tel" size="12"></td>
-			</tr>
-			<tr>
-				<td>주소</td>
-				<td><input type="text" name="addr" size="35"></td>
-			</tr>
-			<tr>
-				<td colspan="2" align="center"><input type="button"
-					value="회원가입" onclick="inputCheck()"> <input type="reset"
-					value="다시 작성"></td>
-			</tr>
-		</table>
-	</form>
-	<a href="../index">메인화면</a>
-</div>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+<script type="text/javascript" src="../js/userScript.js?v=2"></script>
+<h3 class="text-primary">회원 가입</h3>
+<form action="join" name="form1" method="post" style="width:400px;">
+<fieldset>
+    <label>
+      이름
+      <input
+      	type="text"
+        name="name"
+        placeholder="이름 입력"
+      />
+    </label>
+    <label>
+      아이디
+      <input
+      	type="text"
+        name="id"
+        placeholder="아이디를 입력하세요"
+      />
+      <input type="button"
+				value="중복체크" onclick="checkId()">
+    </label>
+    <label>
+      비밀번호
+      <input
+        type="password"
+        name="pwd"
+        placeholder="비밀번호 입력"
+      />
+    </label>
+    <label>
+      비밀번호 재확인
+      <input
+        type="password"
+        name="repwd"
+        placeholder="비밀번호 재확인"
+      />
+    </label>
+    <label>
+     	나이
+      <input
+      	type="text"
+        name="age"
+        placeholder="나이 입력"
+        size="3"
+      />
+    </label>
+    <fieldset role="group">
+    <legend>성별</legend>
+      <label><input type="radio" name="gender" value="m" checked>남</label>
+				<label><input type="radio" name="gender" value="f">여</label>
+    </fieldset>
+    <label>
+     	이메일
+      <input
+      	type="email"
+        name="email"
+        placeholder="이메일을 입력하세요"
+        size="20"
+      />
+    </label>
+    <label>
+     	핸드폰
+      <input
+      	type="tel"
+        name="tel"
+        placeholder="핸드폰 입력"
+        size="12"
+      />
+    </label>
+    <label>
+     	주소
+      <input
+      	type="text"
+        name="addr"
+        placeholder="주소 입력"
+        size="35"
+      />
+    </label>
+    <input type="button" value="회원가입"
+				onclick="inputCheck()"> <input type="reset" value="다시 작성">
+  </fieldset>
+</form>
+<a href="../index">메인화면</a>
