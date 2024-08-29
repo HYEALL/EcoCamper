@@ -9,27 +9,26 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.EcoCamper.jwt.JwtFilter;
+import com.example.EcoCamper.jwt.TokenProvider;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-
-	@Bean
-	public JwtFilter jwtAuthenticationFilter() {
-		return new JwtFilter();
-	}
-
+	private final TokenProvider jwtProvider;
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http.csrf(csrf -> csrf.disable())
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/login", "/loginForm", "/join", "/joinForm", "/index", "/myPage", "/menu", "/user/checkId", "/user/logout",
+	            .requestMatchers("/login", "/loginForm", "/join", "/joinForm",
 	            		"/js/**", "/css/**", "/images/**").permitAll()
-	            
+	            .requestMatchers("/index", "/myPage", "/menu", "/user/checkId", "/user/logout").hasRole("USER")
 	            .anyRequest().authenticated()
 	        )
-	        .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+	        .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 
 	    return http.build();
 	}

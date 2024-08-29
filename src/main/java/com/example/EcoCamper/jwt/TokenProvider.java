@@ -2,21 +2,30 @@ package com.example.EcoCamper.jwt;
 
 import java.util.Date;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.example.EcoCamper.entity.User;
+import com.example.EcoCamper.service.JwtUserDetailsService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
+@Component
 public class TokenProvider {
+	private final JwtUserDetailsService userDetailService;
 	private static final String SECRET_KEY = "ecocamperabcxyzggg123";
 	
     // JWT Token 발급
@@ -29,7 +38,7 @@ public class TokenProvider {
                 .compact();
     }
     
-    public static String validateToken(String token) {
+    public String validateToken(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
@@ -56,6 +65,9 @@ public class TokenProvider {
         }
         return null;
     }
-
+    public Authentication getAuthentication (String token) {
+        UserDetails userDetails = userDetailService.loadUserByUsername(this.validateAndGetUserId(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
 
 }

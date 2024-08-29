@@ -57,7 +57,7 @@ public class UserController {
 
 			response.setHeader("Set-Cookie", cookie.toString());
 
-			System.out.println(token);
+			System.out.println("login" + token);
 			final UserDTO responseUserDTO = UserDTO.builder().id(user.getId()).token(token).age(user.getAge())
 					.name(user.getName()).build();
 			return ResponseEntity.ok().body(responseUserDTO);
