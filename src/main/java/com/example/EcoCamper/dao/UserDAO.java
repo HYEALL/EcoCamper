@@ -45,4 +45,8 @@ public class UserDAO {
 		return repository.findById(id).orElse(null);
 	}
 
+	public boolean checkId(String id) {
+		return repository.existsById(id);
+	}
+
 }

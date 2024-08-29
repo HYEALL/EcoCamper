@@ -1,6 +1,5 @@
 function inputCheck() {
-	//alert("test");
-	var frm = document.form1;
+	var frm = document.joinForm;
 
 	if (!frm.name.value.trim()) {
 		alert("이름을 입력하세요");
@@ -75,12 +74,12 @@ function login() {
 }
 
 function checkId() {
-	var sId = document.form1.id.value;
+	var sId = document.joinForm.id.value;
 	if (sId == "") {
 		alert("먼저 아이디를 입력하세요.");
-		document.form1.id.focus();
+		document.joinForm.id.focus();
 	} else {
-		window.open("checkId?id=" + sId, "", "width=450 height=200")
+		window.open("/user/checkId?id=" + sId, "", "width=450 height=200")
 	}
 }
 

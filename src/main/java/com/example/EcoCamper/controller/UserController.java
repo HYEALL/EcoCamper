@@ -36,7 +36,8 @@ public class UserController {
 	private TokenProvider tokenProvider;
 
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
+	
+	// 로그인
 	@PostMapping(value = "/login")
 	public ResponseEntity<?> login(@RequestBody UserDTO userDTO, HttpServletResponse response) {
 		User user = service.login(userDTO.getId(), userDTO.getPwd(), passwordEncoder);
@@ -45,16 +46,14 @@ public class UserController {
 			// 토큰 생성
 			final String token = tokenProvider.createToken(user);
 			// JWT 토큰을 HttpOnly 쿠키에 저장
-		    ResponseCookie cookie = ResponseCookie.from("token", token)
-		            .httpOnly(true) // 자바스크립트 접근 불가
-		            .secure(true)   // HTTPS에서만 전송
-		            .path("/")
-		            .maxAge(24 * 60 * 60) // 쿠키 유효기간 설정(1일)
-		            .sameSite("Strict") // SameSite 속성 설정
-		            .build();
-		    
-		    response.setHeader("Set-Cookie", cookie.toString());
-		    
+			ResponseCookie cookie = ResponseCookie.from("token", token).httpOnly(true) // 자바스크립트 접근 불가
+					.secure(true) // HTTPS에서만 전송
+					.path("/").maxAge(24 * 60 * 60) // 쿠키 유효기간 설정(1일)
+					.sameSite("Strict") // SameSite 속성 설정
+					.build();
+
+			response.setHeader("Set-Cookie", cookie.toString());
+
 			System.out.println(token);
 			final UserDTO responseUserDTO = UserDTO.builder().id(user.getId()).token(token).age(user.getAge())
 					.name(user.getName()).build();
@@ -66,54 +65,72 @@ public class UserController {
 		}
 
 	}
-
+	
 	@GetMapping("/loginForm")
 	public String loginForm() {
 		return "/user/loginForm";
 	}
-	
-	
+
+	// 아이디 중복 체크
+	@GetMapping("/user/checkId")
+	public String checkId(Model model, HttpServletRequest request) {
+		// 1. 데이터 처리
+		String id = request.getParameter("id");
+		// db
+		boolean result = service.checkId(id);
+
+		// 2. 데이터 공유
+		model.addAttribute("result", result);
+		model.addAttribute("id", id);
+
+		// 3. view 파일 선택
+		return "/user/checkId";
+	}
+
+	/*
+	 * @PostMapping("/logout") public String logout() {
+	 * 
+	 * return "/index"; }
+	 */
+
 	@GetMapping("/joinForm")
 	public String joinForm() {
 		return "/user/joinForm";
 	}
-	
+
 	@PostMapping("/join")
 	public String join(UserDTO userDTO, Model model) {
 		User user = service.join(userDTO);
 		model.addAttribute("user", user);
 		return "/user/join";
 	}
-	
+
 	@GetMapping("/index")
 	public String index() {
 		return "/index";
 	}
-	
+
 	@GetMapping("/menu")
 	public String menu() {
-	        return "/menu";
-	    
+		return "/menu";
+
 	}
+
 	@GetMapping("/myPage")
 	public String myPage(Model model, HttpServletRequest request) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		System.out.println("token : " + token);
-	    String userId = tokenProvider.validateAndGetUserId(token);
-	    if (userId != null) {
-	    	User user = service.getUser(userId);
+		String userId = tokenProvider.validateAndGetUserId(token);
+		if (userId != null) {
+			User user = service.getUser(userId);
 			System.out.println("user : " + user);
 			model.addAttribute("user", user);
-			
+
 			return "/user/myPage";
-	    } else {
-	    	return "index";
-	    }
+		} else {
+			return "index";
+		}
 
-		
 	}
-
-
-	
 
 }

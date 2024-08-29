@@ -26,4 +26,8 @@ public class UserService {
 	public User getUser(String id) {
 		return dao.getUser(id);
 	}
+
+	public boolean checkId(String id) {
+		return dao.checkId(id);
+	}
 }
