@@ -4,10 +4,16 @@
 <h3 class="text-primary" th:text="${user.name}+'님'"></h3>
 <table style="width:500px">
 	<tr style="text-align: center;">
-		<td colspan="2"><input type="button" value="회원정보수정"> <input
+		<td>
+			<input type="button" value="회원정보수정"> <input
 			type="button" value="주문배송조회"> <input type="button"
-			value="나의 리뷰"></td>
-
+			value="나의 리뷰">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="button" value="로그아웃" onclick="location.href='/user/logout'">
+		</td>
 	</tr>
 </table>
 

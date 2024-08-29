@@ -1,6 +1,8 @@
 package com.example.EcoCamper.controller;
 
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.Optional;
 
 import javax.swing.text.Document;
 
@@ -24,6 +26,7 @@ import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.UserService;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -36,7 +39,7 @@ public class UserController {
 	private TokenProvider tokenProvider;
 
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	
+
 	// 로그인
 	@PostMapping(value = "/login")
 	public ResponseEntity<?> login(@RequestBody UserDTO userDTO, HttpServletResponse response) {
@@ -65,7 +68,7 @@ public class UserController {
 		}
 
 	}
-	
+
 	@GetMapping("/loginForm")
 	public String loginForm() {
 		return "/user/loginForm";
@@ -87,11 +90,19 @@ public class UserController {
 		return "/user/checkId";
 	}
 
-	/*
-	 * @PostMapping("/logout") public String logout() {
-	 * 
-	 * return "/index"; }
-	 */
+	@GetMapping("/user/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		Optional<Cookie> tokenCookie = Arrays.stream(request.getCookies())
+				.filter(cookie -> cookie.getName().equals("token")).findFirst();
+		if (tokenCookie.isPresent()) {
+			Cookie cookie = tokenCookie.get();
+			cookie.setValue("");
+			cookie.setMaxAge(0);
+			cookie.setPath("/");
+			response.addCookie(cookie);
+		}
+		return "/user/logout";
+	}
 
 	@GetMapping("/joinForm")
 	public String joinForm() {
@@ -118,9 +129,9 @@ public class UserController {
 
 	@GetMapping("/myPage")
 	public String myPage(Model model, HttpServletRequest request) {
-		String token = tokenProvider.resolveTokenFromCookie(request);
+		String token = tokenProvider.resolveTokenFromCookie(request); // 쿠키에서 token 가져오기
 		System.out.println("token : " + token);
-		String userId = tokenProvider.validateAndGetUserId(token);
+		String userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
 		if (userId != null) {
 			User user = service.getUser(userId);
 			System.out.println("user : " + user);
