@@ -92,9 +92,9 @@ public class UserController {
 
 	@GetMapping("/user/logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		Optional<Cookie> tokenCookie = Arrays.stream(request.getCookies())
+		Optional<Cookie> tokenCookie = Arrays.stream(request.getCookies()) // 토큰 쿠키 가져오기
 				.filter(cookie -> cookie.getName().equals("token")).findFirst();
-		if (tokenCookie.isPresent()) {
+		if (tokenCookie.isPresent()) { // JWT 토큰 쿠키 삭제
 			Cookie cookie = tokenCookie.get();
 			cookie.setValue("");
 			cookie.setMaxAge(0);
