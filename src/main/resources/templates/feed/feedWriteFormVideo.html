@@ -1,0 +1,420 @@
+
+<script type="text/javascript" src="../js/feed.js?v=2"></script>
+<script>
+       function addVideo(event) {
+           var files = event.target.files;
+           var videoList = document.getElementById('video-list');
+           var videoCountElement = document.getElementById('video-count');
+           var videoIcon = document.querySelector('#video-list img'); // 비디오 아이콘 이미지 요소
+
+           // 비디오 아이콘 숨기기
+           if (videoIcon) {
+               videoIcon.style.display = 'none';
+           }
+           
+           var existingVideo = videoList.querySelector('video');
+
+           // 비디오가 이미 있는 경우, 기존 비디오를 제거
+           if (existingVideo) {
+               videoList.removeChild(existingVideo);
+           }
+
+           if (files.length > 0) {
+               var file = files[0];
+               if (file && file.type.startsWith('video/')) {
+                   var video = document.createElement('video');
+                   video.controls = true;
+                   video.src = URL.createObjectURL(file);
+                   video.className = 'uploaded-video';
+                   videoList.appendChild(video);
+
+                   videoCountElement.textContent = '1'; // 비디오 수는 항상 1로 설정
+               } else {
+                   alert('비디오 파일만 선택할 수 있습니다.');
+               }
+           } else {
+               videoCountElement.textContent = '0'; // 파일이 없으면 0으로 설정
+           }
+       }
+    // 이모지 클릭 시 텍스트에 추가
+       document.addEventListener('DOMContentLoaded', () => {
+           document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+               emoji.addEventListener('click', function() {
+                   const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
+                   const textArea = document.getElementById('text-input');
+                   const cursorPos = textArea.selectionStart;
+                   const textBefore = textArea.value.substring(0, cursorPos);
+                   const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
+                   textArea.value = textBefore + emojiValue + textAfter;
+                   textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+                   textArea.focus();
+               });
+           });
+       });
+
+       function resizeTextarea(textarea) {
+           textarea.style.height = 'auto';
+           textarea.style.height = (textarea.scrollHeight) + 'px';
+       }
+    </script>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	overflow-x: hidden;
+	background-color: #f4f4f4;
+}
+
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled),
+	button:not(:disabled) {
+	cursor: pointer;
+}
+
+h2 {
+	text-align: center;
+	color: #333;
+	padding: 20px 0;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+}
+
+.form-container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.section.content textarea {
+	width: calc(100%);
+	display: block;
+	height: 250px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 10px;
+	box-sizing: border-box;
+	resize: vertical;
+}
+
+.section.category {
+	margin: 20px 0;
+}
+
+.section.category .title {
+	font-size: 22px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	color: #333;
+}
+
+.section.category .d-flex {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.section.category .name {
+	font-size: 18px;
+	font-weight: bold;
+	color: #555;
+}
+
+.section.category .d-flex div {
+	margin-right: 10px;
+}
+
+.section.category input[type="radio"] {
+	display: none;
+}
+
+.section.category label {
+	display: inline-block;
+	padding: 10px 20px;
+	margin: 5px;
+	border: 2px solid #ddd;
+	border-radius: 4px;
+	background-color: #f4f4f4;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+.section.category input[type="radio"]:checked+label {
+	background-color: #2A4E3F;
+	color: #FFA500;
+	border-color: #2A4E3F;
+}
+
+#video-list {
+	margin-top: 20px;
+	padding: 10px;
+	background-color: #fafafa;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#video-list video {
+	width: 100%;
+	max-width: 600px;
+	margin-top: 10px;
+}
+
+.part {
+	background: #e0f7fa;
+	border-radius: 4px;
+	margin: 10px 0;
+	padding: 10px;
+}
+
+#label {
+	background: #00bcd4;
+	color: #fff;
+	padding: 10px;
+	text-align: center;
+	border-radius: 4px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+input[type="text"] {
+	width: calc(100% - 20px);
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type="button"], input[type="reset"], button {
+	background-color: #00bcd4;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 4px;
+	font-size: 16px;
+	cursor: pointer;
+	margin: 5px;
+	transition: background-color 0.3s;
+}
+
+input[type="button"]:hover, input[type="reset"]:hover, button:hover {
+	background-color: #0097a7;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid #ddd;
+	margin: 20px 0;
+}
+
+.video-button {
+	background: #f4f4f4;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px;
+	text-align: center;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.video-button img {
+	max-width: 100px;
+	max-height: 100px;
+}
+
+.video-button div {
+	margin-top: 5px;
+	font-size: 14px;
+	color: #555;
+}
+
+.video-button input[type="file"] {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.uploaded-video {
+	max-width: 100%;
+	max-height: 400px; /* 원하는 최대 높이 설정 */
+	object-fit: cover;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+ #emoji-container {
+            margin-bottom: 10px;
+        }
+
+
+        #emoji-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        #emoji-container summary {
+            cursor: pointer;
+            font-size: 25px;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            background-color: #fafafa;
+            margin-bottom: 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        #emoji-container summary:hover {
+            background-color: #f0f0f0;
+        }
+
+        #emoji-container details[open] .emoji-popup {
+            display: flex;
+        }
+
+        .emoji-popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .emoji {
+            font-size: 24px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        #video-icon {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+}
+</style>
+</head>
+<body>
+	<h2>피드 올리기</h2>
+	<form action="feedWriteVoD" name="form1" method="post"
+		enctype="multipart/form-data">
+		<div class="form-container">
+			<div class="section content">
+				<div id="video-list">
+					<div class="video-button">
+						<input id="video-icon" type="file" accept="video/*" onchange="addVideo(event)" name="feed_file1"> 
+						<img src="../images/video.jpg"
+							alt="비디오 아이콘" />
+						<div>
+							<span id="video-count">0</span>/1
+						</div>
+					</div>
+				</div>
+				<br>
+				<div>
+					<textarea  id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
+						autocomplete="off" onkeydown="resizeTextarea(this);"
+						onkeyup="resizeTextarea(this);" rows="7" cols="50"></textarea>
+				</div>
+				 <div id="emoji-container">
+				 <details>
+				  <summary role="button">😀</summary>
+        		<div class="emoji-popup">
+                            <span class="emoji">😀</span>
+                            <span class="emoji">😂</span>
+                            <span class="emoji">😍</span>
+                            <span class="emoji">😠</span>
+                            <span class="emoji">👍</span>
+                            <span class="emoji">❤️</span>
+                            <span class="emoji">💔</span>
+                            <!-- 추가 이모지를 여기 넣을 수 있습니다 -->
+                        </div>
+                         </details>
+    			</div>
+			</div>
+			<hr>
+
+			<div class="section category" align="center">
+				<div class="title">카테고리</div>
+				<div class="d-flex">
+					<div class="name">아웃도어</div>
+					<div>
+						<input type="radio" id="camper" name="outdoor" value="캠퍼">
+						<label for="camper">캠퍼</label> 
+						
+						<input type="radio" id="backpacker" name="outdoor" value="백팩커"> 
+						<label for="backpacker">백팩커</label>
+						
+						<input type="radio" id="traveler" name="outdoor" value="트래블러">
+						<label for="traveler">트래블러</label>
+						
+						<input type="radio" id="hiker"name="outdoor" value="하이커">
+						<label for="hiker">하이커</label>
+					</div>
+				</div>
+				<div class="d-flex">
+					<div class="name">글 종류</div>
+					<div>
+						<input type="radio" id="gear" name="feed_subject" value="기어">
+						<label for="gear">기어</label> 
+						
+						<input type="radio" id="place"name="feed_subject" value="장소"> 
+						<label for="place">장소</label>
+
+						<input type="radio" id="news" name="feed_subject" value="뉴스">
+						<label for="news">뉴스</label>
+					</div>
+				</div>
+			</div>
+			<hr>
+
+			<div align="center">
+				<div class="part">
+					<div id="label">해시태그</div>
+					<div>
+						<input type="text" name="feed_tag">
+					</div>
+				</div>
+
+				<div class="part">
+					<div id="label">장소</div>
+					<div>
+						<input type="text" name="place">
+					</div>
+				</div>
+				<div>
+					<div class="part">
+						<div id="label">상품</div>
+						<div>
+							<input type="text" name="goods">
+						</div>
+					</div>
+				</div>
+				<hr>
+
+				<div align="center" id="left">
+					<input type="button" value="글쓰기" onclick="checkWrite()"> <input
+						type="reset" value="다시작성">
+				</div>
+			</div>
+		</div>
+	</form>
+</body>

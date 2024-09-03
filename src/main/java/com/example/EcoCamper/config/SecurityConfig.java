@@ -23,8 +23,8 @@ public class SecurityConfig {
 	    http.csrf(csrf -> csrf.disable())
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/login", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index", "/myPage", "/menu",
-	            		"/js/**", "/css/**", "/images/**").permitAll()
+	            .requestMatchers("/login", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index", "/myPage", "/menu", "/shop/**", "/map_main", "/feed/**",
+	            		"/js/**", "/css/**", "/images/**",  "/storage/**").permitAll()
 	            .requestMatchers("/user/logout", "/user/edit").hasRole("USER")
 	            .requestMatchers("/admin/**").hasRole("ADMIN")
 	            .anyRequest().authenticated()

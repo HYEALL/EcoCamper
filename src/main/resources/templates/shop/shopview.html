@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쇼핑몰 상세보기</title>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<header>
+		<h1>쇼핑몰</h1>
+		<nav>
+			<a href="/shop/shopmain">홈</a> <a href="#">카테고리</a> <a href="#">장바구니</a> <a
+				href="#">내 계정</a>
+		</nav>
+	</header>
+	<div class="cart" onclick="showCart()">
+		장바구니 (<span id="cart-count">0</span>)
+	</div>
+	<main>
+		<section class="product-details">
+			<div class="product-image">
+				<img th:src="@{/images/}+${dto.pimg}" alt="상품 이미지">
+			</div>
+			<div class="productinfo"
+			 	 th:data-code="${dto.pcode}" th:data-name="${dto.pname}"  
+			 	 th:data-price="${dto.pprice}"  th:data-img="${dto.pimg}">
+				<h2>[[${dto.pname}]]</h2>
+				<p class="price">₩ [[${dto.pprice}]]</p>
+				<p class="description">이곳에 상품의 상세 설명을 입력합니다. 상품의 특징, 사용 방법, 재질
+					등에 대한 정보를 포함하세요.</p>
+				<div>
+					<label class="qty">수량 </label>&emsp;<select id="productqty" >
+						<option>1</option><option>2</option><option>3</option><option>4</option>
+						<option>5</option><option>6</option><option>7</option><option>8</option>
+						<option>9</option><option>10</option>
+					</select>
+				</div>
+				<p></p>
+				<button onclick="addToCart()" class="add-to-cart">장바구니에 담기&ensp;(1개씩 추가)</button><p></p>
+				<button id="" onclick="confirm_buy()" style="width: 127px;">회원 구매하기</button>&ensp;
+				<button id="" onclick="confirm_buy()" style="width: 140px;">비회원 구매하기</button>
+			</div>
+		</section>
+
+		<section class="product-reviews">
+			<h3>상품 리뷰</h3>
+			<div class="review">
+				<p>
+					<strong>사용자1:</strong> 상품이 정말 좋습니다! 강력히 추천합니다.
+				</p>
+			</div>
+			<div class="review">
+				<p>
+					<strong>사용자2:</strong> 가격이 조금 비싸지만 품질이 좋아요.
+				</p>
+			</div>
+		</section>
+	</main>
+	<footer>
+		<!-- <p>&copy; 2024 나의 쇼핑몰. 모든 권리 보유.</p> -->
+	</footer>
+
+	<script src="scripts.js"></script>
+</body>
+</html>
+
+<script type="text/javascript">
+	/*document.getElementById('add-to-cart').addEventListener('click',
+			function() {
+				alert('장바구니에 상품이 담겼습니다!');
+			});*/
+			function confirm_buy() {
+			    // Select 요소에서 선택된 값 가져오기
+			    const productqty = document.getElementById('productqty').value;
+			    
+			    // 선택된 값 확인용 알림
+			    alert(productqty +"개를 선택하셨습니다.");
+
+			    // Thymeleaf로 pcode를 렌더링하고, JavaScript로 productqty 값을 추가
+			   // const pcode = /*[[${dto.pcode}]]*/ 'default_pcode';  // Thymeleaf가 렌더링할 때 'default_pcode'를 실제 pcode 값으로 대체합니다.
+			    
+			    // 최종 URL 설정
+			    location.href = `shopbuy?pcode=[[${dto.pcode}]]&productqty=${productqty}`;
+			} 
+			
+	let cartCount = 0;
+
+	function addToCart() {
+		cartCount++;
+		document.getElementById('cart-count').innerText = cartCount;
+	}
+
+	function showCart() {
+		location.href = '/shop/shopcart';
+	}
+	
+	 document.addEventListener('DOMContentLoaded', function() {
+			let cartItems = JSON.parse(sessionStorage.getItem('cart')) || [];
+	        let totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+	        document.getElementById('cart-count').textContent = totalQuantity;
+	
+/* 장바구니 저장*/
+	 document.querySelectorAll('.add-to-cart').forEach(button => {
+         button.addEventListener('click', function() {
+             const productinfoDiv = document.querySelector('.productinfo');
+             const code = productinfoDiv.getAttribute('data-code');
+             const name = productinfoDiv.getAttribute('data-name');
+             const img = productinfoDiv.getAttribute('data-img');
+             const price = parseFloat(productinfoDiv.getAttribute('data-price'));
+             const quantity = 1;  // 기본 수량
+
+             // 기존 장바구니 데이터 불러오기
+             let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+
+             // 상품이 이미 장바구니에 있는지 확인
+             const existingProductIndex = cart.findIndex(item => item.name === name);
+             if (existingProductIndex > -1) {
+                 // 상품이 이미 장바구니에 있을 경우 수량을 증가
+                 cart[existingProductIndex].quantity += quantity;
+             } else {
+                 // 새 상품 추가
+                 cart.push({ code, name, img, price, quantity });
+             }
+
+             // sessionStorage에 저장
+             sessionStorage.setItem('cart', JSON.stringify(cart));
+
+             // 확인 메시지
+             alert(name + '이(가) 장바구니에 추가되었습니다!');
+         });
+     });
+	 });
+	
+</script>
+
+
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+header {
+	background-color: #333;
+	color: #fff;
+	padding: 10px 0;
+	text-align: center;
+}
+
+header h1 {
+	margin: 0;
+}
+
+nav {
+	display: flex;
+	/*justify-content: center;*/
+	justify-content: space-between;
+	background-color: #444;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	width: 100%;
+}
+
+nav .top_mypage {
+	justify-content: flex-end;
+}
+
+nav a {
+	color: white;
+	padding: 14px 20px;
+	text-decoration: none;
+	display: inline-block;
+}
+
+nav a:hover {
+	background-color: #575757;
+}
+
+main {
+	padding: 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.product-details {
+	display: flex;
+	margin-bottom: 30px;
+}
+
+.product-image img {
+	max-width: 500px;
+	width: 100%;
+	height: auto;
+}
+
+.productinfo {
+	margin-left: 20px;
+}
+
+.productinfo h2 {
+	margin-top: 0;
+}
+
+.price {
+	font-size: 24px;
+	color: #b12704;
+}
+
+.description {
+	margin: 10px 0;
+}
+
+button {
+	padding: 10px 15px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+
+.product-reviews {
+	border-top: 1px solid #ddd;
+	padding-top: 20px;
+}
+
+.review {
+	border-bottom: 1px solid #ddd;
+	padding: 10px 0;
+}
+
+footer {
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+	padding: 10px 0;
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+}
+
+select {
+	font-size: 16px;
+	width: 65px; /* 너비 조정 */
+	height: 30px; /* 높이 조정 */
+	padding: 5px;
+	text-align:center;
+}
+
+.cart {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 50px;
+}
+
+.cart:hover {
+	background-color: #45a049;
+}
+</style>
+
+

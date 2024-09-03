@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나의 쇼핑몰</title>
+<style>
+/* 기존 스타일 시트 */
+</style>
+</head>
+<body>
+	<header>
+		<nav>
+			<!-- 네비게이션 메뉴 -->
+		</nav>
+	</header>
+
+	<!-- 장바구니 태그 -->
+	<div class="cart" onclick="showCart()">
+		장바구니 (<span id="cart-count">0</span>)
+	</div>
+
+	<!-- 슬라이드 화면 -->
+	<div class="slider">
+		<!-- 슬라이드 이미지 -->
+	</div>
+
+	<!-- 상품 진열 -->
+	<div class="product-container" id="products1">
+		<!-- 제품 리스트 -->
+	</div>
+
+	<footer>
+		<!-- 푸터 내용 -->
+	</footer>
+
+	<script>
+/* 슬라이드 화면 */
+	let slideIndex = 0;
+	showSlides();
+
+	function showSlides() {
+		let slides = document.getElementsByClassName("slide");
+		for (let i = 0; i < slides.length; i++) {
+			slides[i].style.display = "none";
+		}
+		slideIndex++;
+		if (slideIndex > slides.length) {
+			slideIndex = 1;
+		}
+		slides[slideIndex - 1].style.display = "block";
+		setTimeout(showSlides, 3000); // Change image every 3 seconds
+	}
+
+	function prevSlide() {
+		let slides = document.getElementsByClassName("slide");
+		slideIndex--;
+		if (slideIndex < 1) {
+			slideIndex = slides.length;
+		}
+		for (let i = 0; i < slides.length; i++) {
+			slides[i].style.display = "none";
+		}
+		slides[slideIndex - 1].style.display = "block";
+	}
+
+	function nextSlide() {
+		let slides = document.getElementsByClassName("slide");
+		slideIndex++;
+		if (slideIndex > slides.length) {
+			slideIndex = 1;
+		}
+		for (let i = 0; i < slides.length; i++) {
+			slides[i].style.display = "none";
+		}
+		slides[slideIndex - 1].style.display = "block";
+	}
+
+/* 장바구니 저장 및 업데이트 */
+	let cartCount = 0;
+
+	function addToCart() {
+		// 제품 정보를 가져옴
+		const productinfoDiv = event.target.parentElement;
+		const code = productinfoDiv.getAttribute('data-code');
+		const name = productinfoDiv.getAttribute('data-name');
+		const img = productinfoDiv.getAttribute('data-img');
+		const price = parseFloat(productinfoDiv.getAttribute('data-price'));
+		const quantity = 1;  // 기본 수량
+
+		// 기존 장바구니 데이터 불러오기
+		let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+
+		// 상품이 이미 장바구니에 있는지 확인
+		const existingProductIndex = cart.findIndex(item => item.code === code);
+		if (existingProductIndex > -1) {
+			// 상품이 이미 장바구니에 있을 경우 수량을 증가
+			cart[existingProductIndex].quantity += quantity;
+		} else {
+			// 새 상품 추가
+			cart.push({ code, name, img, price, quantity });
+		}
+
+		// sessionStorage에 저장
+		sessionStorage.setItem('cart', JSON.stringify(cart));
+
+		// 장바구니 카운트 업데이트
+		updateCartCount();
+
+		// 확인 메시지
+		alert(name + '이(가) 장바구니에 추가되었습니다!');
+	}
+
+	function updateCartCount() {
+		// 장바구니 아이템 수량 계산
+		let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+		let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+		document.getElementById('cart-count').textContent = totalQuantity;
+	}
+
+	function showCart() {
+		location.href = '/shop/shopcart';
+	}
+
+	// 페이지 로드 시 장바구니 카운트 초기화
+	document.addEventListener('DOMContentLoaded', function() {
+		updateCartCount();
+
+		document.querySelectorAll('.add-to-cart').forEach(button => {
+			button.addEventListener('click', addToCart);
+		});
+	});
+	</script>
+</body>
+</html>

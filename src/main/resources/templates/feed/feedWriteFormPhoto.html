@@ -1,0 +1,414 @@
+
+<script type="text/javascript" src="../js/feed.js?v=2"></script>
+<script>
+        var selectedImages = [];
+
+        function addPhoto() {
+            var files = event.target.files;
+            var photoList = document.getElementById('photo-list');
+            var imageCountElement = document.getElementById('image-count');
+
+            // 기존 이미지와 새로 추가된 이미지 수를 합산하여 체크
+            if (files.length + selectedImages.length > 10) {
+                alert('최대 10개의 이미지만 선택할 수 있습니다.');
+                return;
+            }
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (file && file.type.startsWith('image/')) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        var img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'uploaded-img';
+                        photoList.appendChild(img);
+                        selectedImages.push(e.target.result);
+                        
+                        // 이미지 수 업데이트
+                        imageCountElement.textContent = selectedImages.length;
+                    }
+
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+        // 이모지 클릭 시 텍스트에 추가
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+                emoji.addEventListener('click', function() {
+                    const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
+                    const textArea = document.getElementById('text-input');
+                    const cursorPos = textArea.selectionStart;
+                    const textBefore = textArea.value.substring(0, cursorPos);
+                    const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
+                    textArea.value = textBefore + emojiValue + textAfter;
+                    textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+                    textArea.focus();
+                });
+            });
+        });
+
+        function resizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+    </script>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	overflow-x: hidden;
+	background-color: #f4f4f4;
+}
+
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled),
+	button:not(:disabled) {
+	cursor: pointer;
+}
+
+h2 {
+	text-align: center;
+	color: #333;
+	padding: 20px 0;
+	background-color: #fff;
+	border-bottom: 1px solid #ddd;
+}
+
+.form-container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	
+}
+
+.section.content textarea {
+	width: calc(100%);
+	display: block;
+	height: 250px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 10px;
+	box-sizing: border-box;
+	resize: vertical;
+}
+
+.section.category {
+	margin: 20px 0;
+}
+
+.section.category .title {
+	font-size: 22px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	color: #333;
+}
+
+.section.category .d-flex {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.section.category .name {
+	font-size: 18px;
+	font-weight: bold;
+	color: #555;
+}
+
+.section.category .d-flex div {
+	margin-right: 10px;
+}
+
+.section.category input[type="radio"] {
+	display: none;
+}
+
+.section.category label {
+	display: inline-block;
+	padding: 10px 20px;
+	margin: 5px;
+	border: 2px solid #ddd;
+	border-radius: 4px;
+	background-color: #f4f4f4;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+.section.category input[type="radio"]:checked+label {
+	background-color: #2A4E3F;
+	color: #FFA500;
+	border-color: #2A4E3F;
+}
+
+#photo-list {
+	margin-top: 20px;
+	padding: 10px;
+	background-color: #fafafa;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+#photo-list img {
+	max-width: 100px;
+	max-height: 100px;
+	object-fit: cover;
+}
+
+.part {
+	background: #e0f7fa;
+	border-radius: 4px;
+	margin: 10px 0;
+	padding: 10px;
+}
+
+#label {
+	background: #00bcd4;
+	color: #fff;
+	padding: 10px;
+	text-align: center;
+	border-radius: 4px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+input[type="text"] {
+	width: calc(100% - 20px);
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type="button"], input[type="reset"], button {
+	background-color: #00bcd4;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 4px;
+	font-size: 16px;
+	cursor: pointer;
+	margin: 5px;
+	transition: background-color 0.3s;
+}
+
+input[type="button"]:hover, input[type="reset"]:hover, button:hover {
+	background-color: #0097a7;
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid #ddd;
+	margin: 20px 0;
+}
+
+.photo-button {
+	background: #f4f4f4;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px;
+	text-align: center;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.photo-button img {
+	max-width: 100px;
+	max-height: 100px;
+}
+
+.photo-button div {
+	margin-top: 5px;
+	font-size: 14px;
+	color: #555;
+}
+
+.photo-button input[type="file"] {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.uploaded-img {
+	max-width: auto;
+	max-height: auto;
+	object-fit: cover;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+#emoji-container {
+            margin-bottom: 10px;
+        }
+
+
+        #emoji-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        #emoji-container summary {
+            cursor: pointer;
+            font-size: 25px;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            background-color: #fafafa;
+            margin-bottom: 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        #emoji-container summary:hover {
+            background-color: #f0f0f0;
+        }
+
+        #emoji-container details[open] .emoji-popup {
+            display: flex;
+        }
+
+        .emoji-popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .emoji {
+            font-size: 24px;
+            cursor: pointer;
+            margin: 5px;
+        }
+</style>
+</head>
+<body>
+	<h2>피드 올리기</h2>
+	<form action="feedWritePh" name="form1" method="post"
+		enctype="multipart/form-data">
+		<div class="form-container">
+			<div class="section content">
+				<div id="photo-list">
+					<div class="photo-button">
+						<input type="file" accept="image/*" multiple onchange="addPhoto()" name="feed_file1[]"> 
+						<img src="../images/camera.jpg"
+							alt="카메라 아이콘" />
+						<div>
+							<span id="image-count">0</span>/10
+						</div>
+					</div>
+				</div>
+				<br>
+				<div>
+					<textarea id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
+						autocomplete="off" onkeydown="resizeTextarea(this);"
+						onkeyup="resizeTextarea(this);" rows="13"></textarea>
+				</div>
+				
+				<div id="emoji-container">
+				 <details>
+				  <summary role="button">😀</summary>
+        		<div class="emoji-popup">
+                            <span class="emoji">😀</span>
+                            <span class="emoji">😂</span>
+                            <span class="emoji">😍</span>
+                            <span class="emoji">😠</span>
+                            <span class="emoji">👍</span>
+                            <span class="emoji">❤️</span>
+                            <span class="emoji">💔</span>
+                            <!-- 추가 이모지를 여기 넣을 수 있습니다 -->
+                        </div>
+                         </details>
+    			</div>
+			</div>
+			<hr>
+
+			<div class="section category" align="center">
+				<div class="title">카테고리</div>
+					<div class="d-flex">
+					<div class="name">아웃도어</div>
+					<div>
+						<input type="radio" id="camper" name="outdoor" value="캠퍼">
+						<label for="camper">캠퍼</label> 
+						
+						<input type="radio" id="backpacker" name="outdoor" value="백팩커"> 
+						<label for="backpacker">백팩커</label>
+						
+						<input type="radio" id="traveler" name="outdoor" value="트래블러">
+						<label for="traveler">트래블러</label>
+						
+						<input type="radio" id="hiker"name="outdoor" value="하이커">
+						<label for="hiker">하이커</label>
+					</div>
+				</div>
+				<div class="d-flex">
+					<div class="name">글 종류</div>
+					<div>
+						<input type="radio" id="gear" name="feed_subject" value="기어">
+						<label for="gear">기어</label> 
+						
+						<input type="radio" id="place"name="feed_subject" value="장소"> 
+						<label for="place">장소</label>
+
+						<input type="radio" id="news" name="feed_subject" value="뉴스">
+						<label for="news">뉴스</label>
+					</div>
+					</div>
+				</div>
+			<hr>
+
+			<div align="center">
+				<div class="part">
+					<div id="label">해시태그</div>
+					<div>
+						<input type="text" name="feed_tag">
+					</div>
+				</div>
+
+				<div class="part">
+					<div id="label">장소</div>
+					<div>
+						<input type="text" name="place">
+					</div>
+				</div>
+				<div>
+					<div class="part">
+						<div id="label">상품</div>
+						<div>
+							<input type="text" name="goods">
+						</div>
+					</div>
+				</div>
+				<hr>
+
+				<div align="center" id="left">
+					<input type="button" value="글쓰기" onclick="checkWrite()"> <input
+						type="reset" value="다시작성">
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
