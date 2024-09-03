@@ -1,0 +1,44 @@
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+<script type="text/javascript" src="../js/userScript.js?v=2"></script>
+<h3 class="text-primary">정보 수정</h3>
+<form action="edit" name="inputForm" method="post" style="width: 400px;">
+	<fieldset>
+		<label> 이름 <input type="text" name="name" th:value="${user.name}" placeholder="이름 입력" />
+		</label>
+		<fieldset role="group">
+			<legend> 아이디 </legend>
+			<input type="text" name="id" th:value="${user.id}" placeholder="아이디 입력" /> <input
+				type="button" value="중복체크" onclick="checkId()">
+
+
+		</fieldset>
+		<label> 비밀번호 <input type="password" name="pwd"
+			placeholder="비밀번호 입력" />
+		</label> <label> 비밀번호 재확인 <input type="password" name="repwd"
+			placeholder="비밀번호 재확인" />
+		</label> <label> 나이 <input type="text" name="age" th:value="${user.age}" placeholder="나이 입력"
+			size="3" />
+		</label>
+		<fieldset role="group">
+			<legend>성별</legend>
+			<th:block th:if="${user.gender} == 'm'">
+				<label><input type="radio" name="gender" value="m" checked>남</label>
+				<label><input type="radio" name="gender" value="f">여</label>
+			</th:block>
+			<th:block th:if="${user.gender} == 'f'">
+				<label><input type="radio" name="gender" value="m">남</label>
+				<label><input type="radio" name="gender" value="f" checked>여</label>
+			</th:block>
+		</fieldset>
+		<label> 이메일 <input type="email" name="email"
+			placeholder="이메일을 입력하세요" size="20" th:value="${user.email}"/>
+		 </label><label> 핸드폰<input type="tel" name="tel" placeholder="010-1234-5678" th:value="${user.tel}"
+			size="12" />
+		</label> <label> 주소 <input type="text" name="addr" placeholder="주소 입력" th:value="${user.addr}"
+			size="35" />
+		</label> <input type="button" value="정보수정" onclick="inputCheck()"> <input
+			type="reset" value="다시 작성">
+	</fieldset>
+</form>
+<a href="../index">메인화면</a>

@@ -1,5 +1,5 @@
 function inputCheck() {
-	var frm = document.joinForm;
+	var frm = document.inputForm;
 
 	if (!frm.name.value.trim()) {
 		alert("이름을 입력하세요");

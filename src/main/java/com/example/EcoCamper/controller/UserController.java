@@ -130,14 +130,27 @@ public class UserController {
 	@GetMapping("/myPage")
 	public String myPage(Model model, HttpServletRequest request) {
 		String token = tokenProvider.resolveTokenFromCookie(request); // 쿠키에서 token 가져오기
-		System.out.println("token : " + token);
 		String userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
 		if (userId != null) {
 			User user = service.getUser(userId);
-			System.out.println("user : " + user);
 			model.addAttribute("user", user);
 
 			return "/user/myPage";
+		} else {
+			return "index";
+		}
+
+	}
+	
+	@GetMapping("/user/edit")
+	public String edit(Model model, HttpServletRequest request) {
+		String token = tokenProvider.resolveTokenFromCookie(request); // 쿠키에서 token 가져오기
+		String userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
+		if (userId != null) {
+			User user = service.getUser(userId);
+			model.addAttribute("user", user);
+
+			return "/user/edit";
 		} else {
 			return "index";
 		}
