@@ -67,14 +67,14 @@ function login() {
 				//localStorage.setItem('token', data.token);
 				window.location.href = '/index'; // index로 이동
 			} else {
-				alert('Login failed js: ' + data.error);
+				alert('회원 정보가 틀렸습니다. 다시 입력하세요');
 			}
 		})
 		.catch(error => console.error('Error:', error));
 }
 
 function checkId() {
-	var sId = document.joinForm.id.value;
+	var sId = document.inputForm.id.value;
 	if (sId == "") {
 		alert("먼저 아이디를 입력하세요.");
 		document.joinForm.id.focus();

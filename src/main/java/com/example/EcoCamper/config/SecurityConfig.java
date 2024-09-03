@@ -26,6 +26,7 @@ public class SecurityConfig {
 	            .requestMatchers("/login", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index", "/myPage", "/menu",
 	            		"/js/**", "/css/**", "/images/**").permitAll()
 	            .requestMatchers("/user/logout", "/user/edit").hasRole("USER")
+	            .requestMatchers("/admin/**").hasRole("ADMIN")
 	            .anyRequest().authenticated()
 	        )
 	        .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);

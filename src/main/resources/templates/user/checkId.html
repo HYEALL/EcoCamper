@@ -8,9 +8,9 @@
 <script type="text/javascript" src="../js/userScript.js"></script>
 <script type="text/javascript">
 	function checkIdClose() {
-		opener.joinForm.id.value = "[[${id}]]";
+		opener.inputForm.id.value = "[[${id}]]";
 		window.close();
-		opener.joinForm.pwd.focus();
+		opener.inputForm.pwd.focus();
 	}
 
 	function checkId() {

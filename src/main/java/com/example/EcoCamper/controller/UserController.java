@@ -111,6 +111,7 @@ public class UserController {
 
 	@PostMapping("/join")
 	public String join(UserDTO userDTO, Model model) {
+		userDTO.setRole("USER");
 		User user = service.join(userDTO);
 		model.addAttribute("user", user);
 		return "/user/join";
