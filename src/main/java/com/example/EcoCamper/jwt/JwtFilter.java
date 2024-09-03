@@ -24,7 +24,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 쿠키에서 JWT 토큰을 추출
         String token = extractJwtFromCookies(request);
-        System.out.println("jwtfilter" + token);
+        //System.out.println("jwtfilter" + token);
         if (token != null) {
             String username = jwtProvider.validateToken(token);
             if (username != null) {
@@ -36,7 +36,6 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 	
 	private String extractJwtFromCookies(HttpServletRequest request) {
-		System.out.println("cookie");
         if (request.getCookies() != null) {
             return Arrays.stream(request.getCookies())
                 .filter(cookie -> "token".equals(cookie.getName()))

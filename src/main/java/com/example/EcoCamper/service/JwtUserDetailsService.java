@@ -27,7 +27,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     // DB에 해당하는 User 값이 존재한다면 UserDetails 객체로 리턴
     private UserDetails createUserDetails(User user) {
-    	System.out.println("role" + user.getRole());
+    	//System.out.println("role" + user.getRole());
         return User.builder()
         		.id(user.getId())
                 .name(user.getName())
