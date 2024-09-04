@@ -51,7 +51,7 @@ function inputCheck() {
 		frm.id.focus();
 		return false;
 	}
-	if (frm.checkIdOk.value!="true") {
+	if (frm.checkIdOk.value != "true") {
 		alert("아이디 중복체크를 진행해주세요.");
 		frm.checkIdOk.focus();
 		return false;
@@ -70,6 +70,47 @@ function inputCheck() {
 		alert("비밀번호가 틀림니다.");
 		frm.repwd.value = "";
 		frm.repwd.focus();
+		return false;
+	}
+	if (!frm.age.value) {
+		alert("나이를 입력하세요");
+		frm.age.focus();
+		return false;
+	}
+	if (!frm.gender.value) {
+		alert("성별을 입력하세요");
+		frm.gender.focus();
+		return false;
+	}
+	if (!frm.email.value) {
+		alert("이메일을 입력하세요");
+		frm.email.focus();
+		return false;
+	}
+	var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	
+	if (!emailPattern.test(frm.email.value)) {
+	    alert("유효한 이메일 주소를 입력하세요");
+	    frm.email.focus();
+	    return false;
+	}
+	
+	if (!frm.tel.value) {
+		alert("핸드폰 번호를 입력하세요");
+		frm.tel.focus();
+		return false;
+	}
+	var phonePattern = /^010-\d{4}-\d{4}$/;
+
+	// 폰번호 검사
+	if (!phonePattern.test(frm.tel.value)) {
+	    alert("올바른 폰번호 형식 (010-0000-0000)을 입력하세요.");
+	    frm.phone.focus();
+	    return false;
+	}
+	if (!frm.addr.value) {
+		alert("주소를 입력하세요");
+		frm.addr.focus();
 		return false;
 	}
 
