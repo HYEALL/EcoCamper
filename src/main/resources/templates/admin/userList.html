@@ -1,10 +1,82 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+<style>
+.paging {
+	color: green;
+	text-decoration: none;
+}
 
-</body>
-</html>
+.currentPaging {
+	color: red;
+	text-decoration: underline;
+}
+</style>
+
+<div>
+	<h3 class="text-primary" align="center">회원 조회</h3>
+	<table style="width: 1200px; margin: auto;" class="striped">
+		<thead>
+			<tr align="center">
+				<th>회원명</th>
+				<th>ID</th>
+				<th>나이</th>
+				<th>성별</th>
+				<th>메일주소</th>
+				<th>전화번호</th>
+				<th>주소</th>
+				<th>생성날짜</th>
+			</tr>
+		</thead>
+		<tbody>
+			<th:block th:each="user : ${list}">
+				<tr align="center">
+					<td>[[${user.name}]]</td>
+					<td><a
+						th:onclick="location.href='/admin/userView?id='+[[${user.id}]]+'&pg=[[${pg}]]'">[[${user.id}]]</a></td>
+					<td>[[${user.age}]]</td>
+					<th:block th:if="${user.gender} == 'm'">
+						<td>남자</td>
+					</th:block>
+					<th:block th:if="${user.gender} == 'f'">
+						<td>여자</td>
+					</th:block>
+					<td>[[${user.email}]]</td>
+					<td>[[${user.tel}]]</td>
+					<td>[[${user.addr}]]</td>
+					<td>[[${user.logtime}]]</td>
+				</tr>
+			</th:block>
+			</tbody>
+			<tfoot>
+			<tr>
+				<td colspan="8" align="center">
+					<th:block th:if="${startPage > 3}">
+                    [<a th:href="@{userList(pg=${startPage - 1})}" class="paging">이전</a>]
+                	</th:block> 
+                	<!-- 페이징 숫자 링크 --> 
+                	<th:block
+						th:each="page : ${#numbers.sequence(startPage, endPage)}">
+						<th:block th:if="${pg == page}">
+                        [<a
+								th:href="@{userList(pg=${page})}"
+								class="currentPaging">[[${page + 1}]]</a>]
+                    </th:block>
+						<th:block th:if="${pg != page}">
+                        [<a
+								th:href="@{userList(pg=${page})}" class="paging">[[${page
+								+ 1}]]</a>]
+                    </th:block>
+					</th:block> 
+					 <th:block th:if="${endPage < totalPages}">
+                    [<a
+							th:href="@{userList(pg=${endPage + 1})}" class="paging">다음</a>]
+                </th:block>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="8" align="center"><a href="/user/logout">로그아웃</a></td>
+			</tr>
+			</tfoot>
+		
+	</table>
+</div>

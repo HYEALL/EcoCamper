@@ -1,0 +1,26 @@
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+<div class="container">
+	<table style="width: 1200px; margin: auto;">
+		<tr>
+			<td colspan="3">
+				<font size="5">회원 아이디: [[${user.id}]]</font>
+			</td>
+		</tr>
+		<tr align="center">
+			<td width="150">[[${user.name}]]</td>
+			<td width="150">[[${user.email}]]</td>
+			<td width="150">[[${user.tel}]]</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="button" value="목록" 
+					th:onclick="location.href='userList?pg=[[${pg}]]'">			
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+	</table>
+</div>

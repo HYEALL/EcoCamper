@@ -7,7 +7,6 @@ import lombok.ToString;
 
 @Data
 @ToString
-
 public class LikesDTO {
 	
 	private int likes_num; 

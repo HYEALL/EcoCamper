@@ -1,13 +1,18 @@
 package com.example.EcoCamper.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.EcoCamper.dto.UserDTO;
+import com.example.EcoCamper.dto.UserResponseDTO;
 import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.repository.UserRepository;
 
@@ -49,4 +54,11 @@ public class UserDAO {
 		return repository.existsById(id);
 	}
 
+	public Page<User> findAll(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return repository.findAll(pageable);
+	}
+	public int getTotalA() {
+		return (int) repository.count();
+	}
 }

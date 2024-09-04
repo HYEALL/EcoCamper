@@ -18,9 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.EcoCamper.dto.FeedDTO;
-
+import com.example.EcoCamper.entity.Likes;
 import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.FeedService;
+import com.example.EcoCamper.service.LikesService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,8 +29,9 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class FeedController {
 	@Autowired
-	FeedService service;
-
+	FeedService feedService;
+	@Autowired
+	LikesService likesService;
 	@Value("${project.upload.path}")
 	private String uploadpath;
 	
@@ -98,7 +100,7 @@ public class FeedController {
 	    dto.setLogtime(new Date());
 	    dto.setFeed_type("img");
 
-	    boolean result = service.feedWritePhoto(dto);
+	    boolean result = feedService.feedWritePhoto(dto);
 	    model.addAttribute("result", result);
 
 	    return "feed/feedWritePh";
@@ -142,7 +144,7 @@ public class FeedController {
 		dto.setId(userId);
 
 	    // DB 저장
-	    boolean result = service.feedWriteVideo(dto);
+	    boolean result = feedService.feedWriteVideo(dto);
 
 	    // 데이터 공유
 	    model.addAttribute("result", result);
@@ -153,11 +155,15 @@ public class FeedController {
 	
 	@GetMapping("feed/feedList")
 	public String feedList(Model model, HttpServletRequest request) {
-		
-		List<FeedDTO> list =service.getAllFeeds();
+		String token = tokenProvider.resolveTokenFromCookie(request);
+		String userId = tokenProvider.validateAndGetUserId(token);
+		List<FeedDTO> list = feedService.getAllFeeds();
+		List<Likes> likesList = likesService.findByUser_id(userId);
 		System.out.println("list = "+list);
 		model.addAttribute("list", list);
-
+		model.addAttribute("likesList", likesList);
+		System.out.println("likelist = " + likesList);
+		model.addAttribute("userId", userId);
 		return "feed/feedList";
 	}
 	

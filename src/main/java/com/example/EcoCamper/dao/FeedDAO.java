@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.EcoCamper.dto.FeedDTO;
 import com.example.EcoCamper.entity.Feed;
+import com.example.EcoCamper.entity.Likes;
 import com.example.EcoCamper.repository.FeedRepository;
 
 
@@ -35,6 +36,7 @@ public class FeedDAO {
         return feedRepository.findAllByOrderByLogtimeDesc().stream()
             .map(project -> {
             	FeedDTO dto = new FeedDTO();
+            	dto.setSeq(project.getSeq());
                 dto.setId(project.getId());
                 dto.setOutdoor(project.getOutdoor());
                 dto.setFeed_subject(project.getFeed_subject());
@@ -52,7 +54,8 @@ public class FeedDAO {
             })
             .collect(Collectors.toList());
     }
-	
+
+
 	
 	
 }
