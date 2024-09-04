@@ -9,6 +9,7 @@
 <script type="text/javascript">
 	function checkIdClose() {
 		opener.inputForm.id.value = "[[${id}]]";
+		opener.inputForm.checkIdOk.value = "true";
 		window.close();
 		opener.inputForm.pwd.focus();
 	}
@@ -18,6 +19,14 @@
 		if (sId == "") {
 			alert("먼저 아이디를 입력하세요.");
 			document.writeForm.id.focus();
+			return false;
+		} else if (sId.length < 4) {
+			alert("아이디를 4글자 이상 입력하세요.");
+			frm.id.focus();
+			return false;
+		} else if (!checkEngNumber(sId)) {
+			alert("아이디를 영문 대소문자, 숫자만 입력하세요.");
+			frm.id.focus();
 			return false;
 		}
 		document.writeForm.submit();
