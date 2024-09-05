@@ -183,76 +183,13 @@ function checkId() {
 	}
 }
 
-
-
-function checkModify() {
-	var frm = document.form1;
-
-	if (!frm.pwd.value.trim()) {
-		alert("비밀번호를 입력해주세요.");
-		frm.pwd.value = "";
-		frm.pwd.focus();
-		return false;
-	}
-	if (!frm.repwd.value.trim()) {
-		alert("재확인 비밀번호를 입력해주세요.");
-		frm.repwd.value = "";
-		frm.repwd.focus();
-		return false;
-	}
-	if (frm.pwd.value != frm.repwd.value) {
-		alert("비밀번호가 틀렸습니다. 다시 입력해주세요.");
-		frm.repwd.value = "";
-		frm.repwd.focus();
-		return false;
-	}
-
-	if (!frm.gender[0].checked && !frm.gender[1].checked) {
-		alert("성별을 선택해 주세요.");
-		return false;
-	}
-
-	if (!frm.email1.value.trim()) {
-		alert("이메일을 입력해주세요.");
-		frm.email1.value = "";
-		frm.email1.focus();
-		return false;
-	}
-	if (!frm.email2.value.trim()) {
-		alert("이메일을 입력해주세요.");
-		frm.email2.value = "";
-		frm.email2.focus();
-		return false;
-	}
-	if (!frm.tel1.value.trim()) {
-		alert("전화번호를 입력해주세요.");
-		frm.tel1.value = "";
-		frm.tel1.focus();
-		return false;
-	}
-	if (!frm.tel2.value.trim()) {
-		alert("전화번호를 입력해주세요.");
-		frm.tel2.value = "";
-		frm.tel2.focus();
-		return false;
-	}
-	if (!frm.tel3.value.trim()) {
-		alert("전화번호를 입력해주세요.");
-		frm.tel3.value = "";
-		frm.tel3.focus();
-		return false;
-	}
-	if (!frm.addr.value.trim()) {
-		alert("주소를 입력해주세요.");
-		frm.addr.value = "";
-		frm.addr.focus();
-		return false;
-	}
-	frm.submit();
-}
-
 function sendNumber() { // 인증메일 발송 클릭시
 	var frm = document.inputForm;
+	if (frm.checkEmailOk.value == "true") {
+		alert("이미 이메일 인증을 완료했습니다.");
+		frm.email.focus();
+		return false;
+	}
 	if (!frm.email.value) {
 		alert("이메일을 먼저 입력하세요");
 		frm.email.focus();
@@ -270,48 +207,38 @@ function sendNumber() { // 인증메일 발송 클릭시
 	$.ajax({
 		url: "/mail",
 		type: "post",
-		dataType: "json",
+		dataType: "text",
 		data: {
-			"mail": $("#email").val()
+			"mail": $("#email").val() // email 값 param으로 전달
 		},
-		success: function(data) {
-			alert("인증번호 발송");
-//			$("#confirm").attr("value", data);
+		success: function(response) {
+			alert(response);
 		},
 	});
 }
 function confirmNumber() { // 인증하기 클릭시
-    var validNumber = $("#valid_number").val();
-
-    $.ajax({
-        url: "/confirm",
-        type: "post",
-        dataType: "text",
-        data: {
-            "valid_number": validNumber
-        },
-        success: function(response) {
-            alert(response);
-            if (response === "이메일 인증이 완료되었습니다.") {
-                document.inputForm.checkEmailOk.value = "true";
-            }
-        },
-    });
-}
-/*
-function confirmNumber() { // 인증하기 클릭시
-	var number1 = $("#valid_number").val();
-	var number2 = $("#confirm").val();
-	alert("num1" + number1);
-	alert("num2" + number2);
-	if (number1 == number2) {
-		alert("이메일 인증이 완료되었습니다.");
-		document.inputForm.checkEmailOk.value = "true";
-	} else {
-		alert("인증번호가 다릅니다.");
+	var frm = document.inputForm;
+	var validNumber = $("#valid_number").val();
+	if (frm.checkEmailOk.value == "true") {
+		alert("이미 이메일 인증을 완료했습니다.");
+		frm.email.focus();
+		return false;
 	}
+	$.ajax({
+		url: "/confirm",
+		type: "post",
+		dataType: "text",
+		data: {
+			"valid_number": validNumber // 입력한 인증번호 param으로 전달
+		},
+		success: function(response) {
+			alert(response);
+			if (response === "이메일 인증이 완료되었습니다.") {
+				frm.checkEmailOk.value = "true";
+				frm.email.disabled = true;
+			}
+		},
+	});
 }
-*/
-
 
 
