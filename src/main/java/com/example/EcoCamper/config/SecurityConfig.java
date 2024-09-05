@@ -18,12 +18,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final TokenProvider jwtProvider;
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http.csrf(csrf -> csrf.disable())
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/login", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index", "/myPage", "/menu", "/shop/**", "/feed/**", "/add/", "/remove/**",
+	            .requestMatchers("/login", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index", "/myPage", "/menu", "/shop/**", "/feed/**", "/add/", "/remove/**", "/mail/**", "/confirm/**",
 	            		"/js/**", "/css/**", "/images/**",  "/storage/**").permitAll()
 	            .requestMatchers("/user/logout", "/user/edit", "/map_main").hasAnyRole("USER", "ADMIN")
 	            .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -34,6 +35,7 @@ public class SecurityConfig {
               //  exception.authenticationEntryPoint(new MyAuthenticationEntryPoint()); // 인증 실패시
                 //exception.accessDeniedHandler(new MyAccessDeniedHandler()); // 인가 실패시
             //});
+	    	
 	    return http.build();
 	}
 

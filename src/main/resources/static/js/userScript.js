@@ -53,7 +53,7 @@ function inputCheck() {
 	}
 	if (frm.checkIdOk.value != "true") {
 		alert("아이디 중복체크를 진행해주세요.");
-		frm.checkIdOk.focus();
+		frm.id.focus();
 		return false;
 	}
 	if (!frm.pwd.value) {
@@ -88,13 +88,17 @@ function inputCheck() {
 		return false;
 	}
 	var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	
+
 	if (!emailPattern.test(frm.email.value)) {
-	    alert("유효한 이메일 주소를 입력하세요");
-	    frm.email.focus();
-	    return false;
+		alert("유효한 이메일 주소를 입력하세요");
+		frm.email.focus();
+		return false;
 	}
-	
+	if (frm.checkEmailOk.value != "true") {
+		alert("이메일 인증을 진행해주세요.");
+		frm.email.focus();
+		return false;
+	}
 	if (!frm.tel.value) {
 		alert("핸드폰 번호를 입력하세요");
 		frm.tel.focus();
@@ -104,9 +108,9 @@ function inputCheck() {
 
 	// 폰번호 검사
 	if (!phonePattern.test(frm.tel.value)) {
-	    alert("올바른 폰번호 형식 (010-0000-0000)을 입력하세요.");
-	    frm.phone.focus();
-	    return false;
+		alert("올바른 폰번호 형식 (010-0000-0000)을 입력하세요.");
+		frm.phone.focus();
+		return false;
 	}
 	if (!frm.addr.value) {
 		alert("주소를 입력하세요");
@@ -247,8 +251,67 @@ function checkModify() {
 	frm.submit();
 }
 
+function sendNumber() { // 인증메일 발송 클릭시
+	var frm = document.inputForm;
+	if (!frm.email.value) {
+		alert("이메일을 먼저 입력하세요");
+		frm.email.focus();
+		return false;
+	}
+	var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+	if (!emailPattern.test(frm.email.value)) {
+		alert("유효한 이메일 주소를 입력하세요");
+		frm.email.focus();
+		return false;
+	}
 
+	$("#mail_number").css("display", "");
+	$.ajax({
+		url: "/mail",
+		type: "post",
+		dataType: "json",
+		data: {
+			"mail": $("#email").val()
+		},
+		success: function(data) {
+			alert("인증번호 발송");
+//			$("#confirm").attr("value", data);
+		},
+	});
+}
+function confirmNumber() { // 인증하기 클릭시
+    var validNumber = $("#valid_number").val();
+
+    $.ajax({
+        url: "/confirm",
+        type: "post",
+        dataType: "text",
+        data: {
+            "valid_number": validNumber
+        },
+        success: function(response) {
+            alert(response);
+            if (response === "이메일 인증이 완료되었습니다.") {
+                document.inputForm.checkEmailOk.value = "true";
+            }
+        },
+    });
+}
+/*
+function confirmNumber() { // 인증하기 클릭시
+	var number1 = $("#valid_number").val();
+	var number2 = $("#confirm").val();
+	alert("num1" + number1);
+	alert("num2" + number2);
+	if (number1 == number2) {
+		alert("이메일 인증이 완료되었습니다.");
+		document.inputForm.checkEmailOk.value = "true";
+	} else {
+		alert("인증번호가 다릅니다.");
+	}
+}
+*/
 
 
 
