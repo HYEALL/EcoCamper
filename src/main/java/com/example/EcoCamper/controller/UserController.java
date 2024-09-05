@@ -1,7 +1,10 @@
 package com.example.EcoCamper.controller;
 
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Optional;
 
 import javax.swing.text.Document;
@@ -110,7 +113,19 @@ public class UserController {
 	}
 
 	@PostMapping("/join")
-	public String join(UserDTO userDTO, Model model) {
+	public String join(UserDTO userDTO, Model model, HttpServletRequest request) {
+		String birthYear = request.getParameter("birthYear");
+		String birthMonth = request.getParameter("birthMonth");
+		String birthDay = request.getParameter("birthDay");
+		String birthDate = birthYear+"/"+birthMonth+"/"+birthDay;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+		try {
+			Date date = formatter.parse(birthDate);
+			userDTO.setAge(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userDTO.setRole("USER");
 		User user = service.join(userDTO);
 		model.addAttribute("user", user);

@@ -31,7 +31,8 @@ public class UserDTO {
 	private String addr;
 	@Temporal(TemporalType.DATE)
 	private Date logtime;
-	private int age;
+	@Temporal(TemporalType.DATE)
+	private Date age;
 	private String role;
 	public User toEntity() {
 		return new User(name, id, pwd, age, gender, email, tel, addr, logtime, role);

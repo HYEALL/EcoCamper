@@ -72,9 +72,9 @@ function inputCheck() {
 		frm.repwd.focus();
 		return false;
 	}
-	if (!frm.age.value) {
-		alert("나이를 입력하세요");
-		frm.age.focus();
+	if (!frm.birthYear.value || !frm.birthMonth.value || !frm.birthDay.value) {
+		alert("생년월일을 입력하세요");
+		frm.birthYear.focus();
 		return false;
 	}
 	if (!frm.gender.value) {

@@ -31,7 +31,7 @@ public class User implements UserDetails {
 	@Id
 	private String id;
 	private String pwd;
-	private int age;
+	private Date age;
 	private String gender;
 	private String email;
 	private String tel;

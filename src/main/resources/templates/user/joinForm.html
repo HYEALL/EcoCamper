@@ -1,34 +1,100 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
 <script type="text/javascript" src="../js/userScript.js?v=2"></script>
+<script>
+window.onload = function() {
+	//'출생 연도' 셀렉트 박스 option 목록 동적 생성
+	const birthYearEl = document.inputForm.querySelector('#birth-year')
+	// option 목록 생성 여부 확인
+	isYearOptionExisted = false;
+	birthYearEl.addEventListener('focus', function() {
+		// year 목록 생성되지 않았을 때 (최초 클릭 시)
+		if (!isYearOptionExisted) {
+			isYearOptionExisted = true
+			for (var i = 1940; i <= 2005; i++) {
+				// option element 생성
+				const YearOption = document.createElement('option')
+				YearOption.setAttribute('value', i)
+				YearOption.innerText = i
+				// birthYearEl의 자식 요소로 추가
+				this.appendChild(YearOption);
+			}
+		}
+	});
+	//'월' 셀렉트 박스 option 목록 동적 생성
+	const birthMonthEl = document.inputForm.querySelector('#birth-month')
+	// option 목록 생성 여부 확인
+	isMonthOptionExisted = false;
+	birthMonthEl.addEventListener('focus', function() {
+		// Month 목록 생성되지 않았을 때 (최초 클릭 시)
+		if (!isMonthOptionExisted) {
+			isMonthOptionExisted = true
+			for (var i = 1; i <= 12; i++) {
+				// option element 생성
+				const MonthOption = document.createElement('option')
+				MonthOption.setAttribute('value', i)
+				MonthOption.innerText = i
+				// birthMonthEl의 자식 요소로 추가
+				this.appendChild(MonthOption);
+			}
+		}
+	});
+	
+	const birthDayEl = document.inputForm.querySelector('#birth-day')
+	// option 목록 생성 여부 확인
+	isDayOptionExisted = false;
+	birthDayEl.addEventListener('focus', function() {
+		// day 목록 생성되지 않았을 때 (최초 클릭 시)
+		if (!isDayOptionExisted) {
+			isDayOptionExisted = true
+			for (var i = 1; i <= 31; i++) {
+				// option element 생성
+				const DayOption = document.createElement('option')
+				DayOption.setAttribute('value', i)
+				DayOption.innerText = i
+				// birthMonthEl의 자식 요소로 추가
+				this.appendChild(DayOption);
+			}
+		}
+	});
+}
+</script>
 <h3 class="text-primary">회원 가입</h3>
-<form action="join" name="inputForm" method="post" style="width: 400px;">
+<form action="join" name="inputForm" method="post" style="width: 550px;">
 	<fieldset>
 		<label> 이름 <input type="text" name="name" placeholder="이름 입력" />
 		</label>
 		<fieldset role="group">
 			<legend> 아이디 </legend>
 			<input type="text" name="id" placeholder="아이디 입력" /> <input
-				type="button" value="중복체크" onclick="checkId()">
-			<input type="hidden" name="checkIdOk" value="false">
+				type="button" value="중복체크" onclick="checkId()"> <input
+				type="hidden" name="checkIdOk" value="false">
 
 		</fieldset>
 		<label> 비밀번호 <input type="password" name="pwd"
 			placeholder="비밀번호 입력" />
 		</label> <label> 비밀번호 재확인 <input type="password" name="repwd"
 			placeholder="비밀번호 재확인" />
-		</label> <label> 나이 <input type="text" name="age" placeholder="나이 입력"
-			size="3" />
 		</label>
+		<fieldset role="group">
+			<legend>생년월일</legend>
+			<select class="box" id="birth-year" name="birthYear">
+				<option value ="" disabled selected>출생 연도</option>
+			</select> <select class="box" id="birth-month" name="birthMonth">
+				<option value ="" disabled selected>월</option>
+			</select> <select class="box" id="birth-day" name="birthDay">
+				<option value ="" disabled selected>일</option>
+			</select>
+		</fieldset>
 		<fieldset role="group">
 			<legend>성별</legend>
 			<label><input type="radio" name="gender" value="m" checked>남</label>
 			<label><input type="radio" name="gender" value="f">여</label>
 		</fieldset>
 		<label> 이메일 <input type="email" name="email"
-			placeholder="이메일을 입력하세요" size="20"/>
-		</label> <label> 핸드폰<input type="tel" name="tel" placeholder="010-1234-5678"
-			size="12" />
+			placeholder="이메일을 입력하세요" size="20" />
+		</label> <label> 핸드폰<input type="tel" name="tel"
+			placeholder="010-1234-5678" size="12" />
 		</label> <label> 주소 <input type="text" name="addr" placeholder="주소 입력"
 			size="35" />
 		</label> <input type="button" value="회원가입" onclick="inputCheck()"> <input
