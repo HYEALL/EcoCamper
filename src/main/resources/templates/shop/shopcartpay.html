@@ -9,6 +9,7 @@
 		setTimeout(function(){
 		if("[[${result}]]" != null){
 			alert("저희 상품을 구매해 주셔서 감사합니다.")
+			sessionStorage.removeItem('cart')
 			location.href = "/shop/shopmain";
 		}else{
 			alert("해당 주문에 실패하였습니다. 다시 진행해 주시면 감사하겠습니다.")

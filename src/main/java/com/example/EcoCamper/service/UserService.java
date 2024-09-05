@@ -18,7 +18,7 @@ import com.example.EcoCamper.jwt.TokenProvider;
 @Service
 public class UserService {
 	@Autowired
-	UserDAO dao;
+	private UserDAO dao;
 
 	
 	public User join(final UserDTO userDTO) {

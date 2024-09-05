@@ -150,15 +150,37 @@ button:hover {
 
 		<div class="cart-summary">
 			총액: <span id="total-amount">0</span> 원
+			
 		</div>
 
 		<div style="text-align: center; margin-top: 30px;">
 			<button id="clear-cart-button" class="clear-cart-button">전체 삭제</button>
-			<button id="checkout-button">결제하기</button>
+			<button id="checkout-button" onclick="confirm_cartbuy()">구매하기</button>
 		</div>
 	</div>
 
 	<script>
+	function confirm_cartbuy (){
+		
+		if("[[${userId}]]" != null ){
+			// 장바구니 아이템 수량 계산
+			let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+			let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+			
+			
+			alert("총 "+totalQuantity+" 개의 상품이 선택 되었습니다.")
+			
+	
+		    location.href = `shopcartbuy`;
+		
+		}else {
+			alert("로그인 후 구매 가능합니다.")
+			if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
+			    
+		}
+		
+		
+	}
         document.addEventListener('DOMContentLoaded', function() {
             const cartTableBody = document.getElementById('cart-items');
             let cartItems = JSON.parse(sessionStorage.getItem('cart')) || [];
@@ -185,7 +207,6 @@ button:hover {
                 });
 
                 document.getElementById('total-amount').textContent = totalAmount.toLocaleString();
-
                 document.querySelectorAll('.delete-button').forEach(button => {
                     button.addEventListener('click', function() {
                         const index = parseInt(this.getAttribute('data-index'));

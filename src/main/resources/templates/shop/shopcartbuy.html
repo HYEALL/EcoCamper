@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>장바구니</title>
+
+</head>
+<body>
+	<header>
+		<h1>쇼핑몰</h1>
+		<nav>
+			<a href="/shop/shopmain">홈</a> <a href="#">카테고리</a> <a
+				href="/shop/shopcart">장바구니</a> <a href="#">내 계정</a>
+		</nav>
+	</header>
+	<div class="container">
+		<h1>장바구니</h1>
+
+		<table>
+			<thead>
+				<tr>
+					<th>상품코드</th>
+					<th>상품명</th>
+					<th>수량</th>
+					<th>금액</th>
+					<th>총액</th>
+					<th>삭제</th>
+				</tr>
+			</thead>
+			<tbody id="cart-items">
+				<!-- JavaScript로 동적 데이터가 삽입될 예정 -->
+			</tbody>
+		</table>
+
+		<div class="cart-summary">
+			총액: <span id="total-amount">0</span> 원
+		</div>
+		<br>
+		<div class="checkout-form">
+			<h3>배송 정보 입력</h3>
+			<form id="checkout-form" action="/shop/shopcartpay" method="post"
+				name="form1">
+				<input type="hidden" id="cart-data" name="cart-data"> 
+				<label for="receivename">받는사람</label> 	<input type="text" id="receivename"	name="receivename" required> 
+				<label for="baddress">주소</label> <input type="text" id="baddress" name="baddress" required> 
+				<label for="bphone">전화번호</label> <input type="tel" id="bphone" 	name="bphone" required> 
+				<label for="email">이메일</label>
+				<div class="email-input-container">
+					<input type="email" id="email" name="email" required
+						placeholder="이메일"> @ <select id="email-domain"
+						name="email-domain">
+						<option value="" selected="selected">-이메일 선택-</option>
+						<option value="naver.com">naver.com</option>
+						<option value="daum.net">daum.net</option>
+						<option value="nate.com">nate.com</option>
+						<option value="hotmail.com">hotmail.com</option>
+						<option value="yahoo.com">yahoo.com</option>
+						<option value="empas.com">empas.com</option>
+						<option value="korea.com">korea.com</option>
+						<option value="dreamwiz.com">dreamwiz.com</option>
+						<option value="gmail.com">gmail.com</option>
+						<option value="etc">직접입력</option>
+					</select> <input type="text" id="custom-domain" name="custom-domain"
+						placeholder="직접 입력" style="display: none;">
+				</div>
+				<label for="bpayment">결제 방법:</label> <select id="bpayment"
+					name="bpayment">
+					<option value="credit-card">신용카드</option>
+					<option value="bank-transfer">계좌이체</option>
+					<option value="paypal">페이팔</option>
+				</select>
+			</form>
+		</div>
+
+
+		<div style="text-align: center; margin-top: 30px;">
+
+			<button type="button" onclick="confirm_cartbuy()">결제하기</button>
+		</div>
+	</div>
+
+	<script>
+    function confirm_cartbuy(){
+    	var frm = document.form1;
+		if (confirm("정말 구매하시겠습니까?")) {
+			let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+	        document.getElementById('cart-data').value = JSON.stringify(cart);
+	        let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+	        let totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+	       
+	        const name = document.getElementById('receivename').value;
+			const address = document.getElementById('baddress').value;
+			const phone = document.getElementById('bphone').value;
+			const eamil = document.getElementById('email').value;
+			const emaildomain = document.getElementById('email-domain').value;
+			const payment = document.getElementById('bpayment').value;
+	        
+			if (name && address && phone && eamil && emaildomain && payment) {
+				
+				alert("총 "+totalQuantity+" 개의 총 상품 금액은 "+totalAmount + "원 입니다.\n"+"받는사람: "+name+"\n"+"배송지 :"+address+"\n"
+						+"전화번호 :"+phone+"\n"+"이메일: "+eamil+"@"+emaildomain+"\n"+"결제방법: "+payment)
+			} else {
+				alert('모든 필드를 입력해 주세요.');
+				return;
+			}
+			
+			frm.submit();
+
+		} else
+			return;
+    	
+	}
+		
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartTableBody = document.getElementById('cart-items');
+            let cartItems = JSON.parse(sessionStorage.getItem('cart')) || [];
+            let totalAmount = 0;
+	
+            function renderCart() {
+                cartTableBody.innerHTML = '';
+                totalAmount = 0;
+
+                cartItems.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    const itemTotal = item.price * item.quantity;
+                    totalAmount += itemTotal;
+
+                    row.innerHTML = `
+                        <td>${item.code}</td>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.price.toLocaleString()} 원</td>
+                        <td>${itemTotal.toLocaleString()} 원</td>
+                        <td><span class="delete-button" data-index="${index}">삭제</span></td>
+                    `;
+                    cartTableBody.appendChild(row);
+                });
+
+                document.getElementById('total-amount').textContent = totalAmount.toLocaleString();
+
+                document.querySelectorAll('.delete-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        deleteFromCart(index);
+                    });
+                });
+            }
+
+            function deleteFromCart(index) {
+                if (confirm("정말 삭제하시겠습니까?")) {
+                    if (cartItems[index].quantity > 1) {
+                        cartItems[index].quantity--;
+                    } else {
+                        cartItems.splice(index, 1);
+                    }
+                    sessionStorage.setItem('cart', JSON.stringify(cartItems));
+                    renderCart();
+                }
+            }
+
+        
+
+          
+
+            // 초기 장바구니 렌더링
+            renderCart();
+            window.addEventListener('beforeunload', function(event) {
+                localStorage.clear(); // localStorage의 모든 데이터를 삭제합니다.
+            });
+        });
+    </script>
+    <style>
+header {
+	background-color: #333;
+	color: #fff;
+	padding: 10px 0;
+	text-align: center;
+}
+
+header h1 {
+	margin: 0;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f8f8f8;
+	margin: 0;
+	padding: 0;
+}
+
+nav {
+	display: flex;
+	justify-content: space-between;
+	background-color: #444;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	width: 100%;
+}
+
+nav a {
+	color: white;
+	padding: 14px 20px;
+	text-decoration: none;
+	display: inline-block;
+}
+
+nav a:hover {
+	background-color: #575757;
+}
+
+.container {
+	max-width: 800px;
+	margin: 50px auto;
+	padding: 20px;
+	background-color: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+}
+
+h1 {
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+th, td {
+	padding: 15px;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #f4f4f4;
+}
+
+.cart-summary {
+	text-align: right;
+	margin-top: 20px;
+	font-size: 18px;
+}
+
+.total {
+	font-weight: bold;
+}
+
+.delete-button {
+	color: #e74c3c;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.delete-button:hover {
+	color: #c0392b;
+}
+
+button {
+	padding: 10px 20px;
+	background-color: #27ae60;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+button:hover {
+	background-color: #219150;
+}
+
+.clear-cart-button {
+	background-color: #c0392b;
+}
+
+.clear-cart-button:hover {
+	background-color: #a93226;
+}
+
+.checkout-form {
+	border: 1px solid #ddd;
+	padding: 15px;
+	background-color: #f9f9f9;
+}
+
+.checkout-form form {
+	display: flex;
+	flex-direction: column;
+}
+
+.checkout-form label {
+	margin-top: 10px;
+}
+
+.checkout-form input, .checkout-form select {
+	padding: 10px;
+	margin-top: 5px;
+	font-size: 16px;
+}
+
+.checkout-form button {
+	margin-top: 20px;
+	padding: 10px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+.checkout-form button:hover {
+	background-color: #0056b3;
+}
+</style>
+</body>
+</html>

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.EcoCamper.entity.User;
 
-@Repository
 public interface UserRepository extends JpaRepository<User, String>{
 	Optional<User> findById(String id);
 	Page<User> findAll(Pageable pageable);

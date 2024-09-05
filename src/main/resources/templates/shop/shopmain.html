@@ -6,433 +6,437 @@
 <title>나의 쇼핑몰</title>
 <style>
 body {
-   font-family: Arial, sans-serif;
-   margin: 0;
-   padding: 0;
-   background-color: #f4f4f4;
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f4f4f4;
 }
 
 header {
-   background-color: #333;
-   color: white;
-   padding: 10px 0;
-   text-align: center;
-   position: fixed;
-   top: 0;
-   left: 0;
-   z-index: 1000;
-   width: 100%;
+	background-color: #333;
+	color: white;
+	padding: 10px 0;
+	text-align: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	width: 100%;
 }
 
 nav {
-   display: flex;
-   /*justify-content: center;*/
-   justify-content: space-between;
-   background-color: #444;
-   position: fixed;
-   top: 0;
-   left: 0;
-   z-index: 1000;
-   width: 100%;
+	display: flex;
+	/*justify-content: center;*/
+	justify-content: space-between;
+	background-color: #444;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	width: 100%;
 }
 
 nav .top_mypage {
-   justify-content: flex-end;
+	justify-content: flex-end;
 }
 
 nav a {
-   color: white;
-   padding: 14px 20px;
-   text-decoration: none;
-   display: inline-block;
+	color: white;
+	padding: 14px 20px;
+	text-decoration: none;
+	display: inline-block;
 }
 
 nav a:hover {
-   background-color: #575757;
+	background-color: #575757;
 }
 
 .slider {
-   position: relative;
-   max-width: 100%;
-   margin: auto;
-   overflow: hidden;
-   border: 2px solid #ddd;
-   border-radius: 10px;
-   margin-top: 40px;
-   height: 500px;
+	position: relative;
+	max-width: 100%;
+	margin: auto;
+	overflow: hidden;
+	border: 2px solid #ddd;
+	border-radius: 10px;
+	margin-top: 40px;
+	height: 500px;
 }
 
 .slides {
-   display: flex;
-   transition: transform 0.5s ease-in-out;
+	display: flex;
+	transition: transform 0.5s ease-in-out;
 }
 
 .slide {
-   min-width: 100%;
-   min-height: 100%;
-   box-sizing: border-box;
+	min-width: 100%;
+	min-height: 100%;
+	box-sizing: border-box;
 }
 
 .slide img {
-   width: 70%;
-   vertical-align: middle;
-   height: 70%;
-   margin: auto;
+	width: 70%;
+	vertical-align: middle;
+	height: 70%;
+	margin: auto;
 }
 
 .prev, .next {
-   cursor: pointer;
-   position: absolute;
-   top: 50%;
-   width: auto;
-   padding: 16px;
-   margin-top: -22px;
-   color: white;
-   font-weight: bold;
-   font-size: 18px;
-   border-radius: 3px;
-   user-select: none;
-   background-color: rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	width: auto;
+	padding: 16px;
+	margin-top: -22px;
+	color: white;
+	font-weight: bold;
+	font-size: 18px;
+	border-radius: 3px;
+	user-select: none;
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .prev {
-   left: 0;
+	left: 0;
 }
 
 .next {
-   right: 0;
+	right: 0;
 }
 
 .product-container {
-   padding: 20px;
-   max-width: 1200px;
-   margin: auto;
+	padding: 20px;
+	max-width: 1200px;
+	margin: auto;
 }
 
 .product {
-   border: 1px solid #ddd;
-   border-radius: 5px;
-   margin-bottom: 20px;
-   background-color: #fff;
-   overflow: hidden;
-   text-align: center;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	margin-bottom: 20px;
+	background-color: #fff;
+	overflow: hidden;
+	text-align: center;
 }
 
 .product img {
-   width: 100%;
-   height: auto;
+	width: 100%;
+	height: auto;
 }
 
 .productinfo {
-   padding: 15px;
+	padding: 15px;
 }
 
 .productinfo h2 {
-   margin: 0;
-   font-size: 1.5em;
+	margin: 0;
+	font-size: 1.5em;
 }
 
 .productinfo p {
-   margin: 10px 0;
+	margin: 10px 0;
 }
 
 .productinfo .price {
-   font-size: 1.2em;
-   color: #e60012;
+	font-size: 1.2em;
+	color: #e60012;
 }
 
 .productinfo button {
-   padding: 10px 20px;
-   background-color: #4CAF50;
-   color: white;
-   border: none;
-   border-radius: 5px;
-   cursor: pointer;
+	padding: 10px 20px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
 }
 
 .productinfo button:hover {
-   background-color: #45a049;
+	background-color: #45a049;
 }
 
 footer {
-   background-color: #333;
-   color: white;
-   text-align: center;
-   padding: 10px;
-   position: fixed;
-   bottom: 0;
-   width: 100%;
+	background-color: #333;
+	color: white;
+	text-align: center;
+	padding: 10px;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
 }
 
 .cart {
-   position: fixed;
-   top: 10px;
-   right: 10px;
-   background-color: #4CAF50;
-   color: white;
-   padding: 10px 20px;
-   border-radius: 5px;
-   cursor: pointer;
-   margin-top: 50px;
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 50px;
 }
 
 .cart:hover {
-   background-color: #45a049;
+	background-color: #45a049;
 }
 </style>
 </head>
 <body>
-   <header>
-      <nav>
-         <div>
-            <a href="/shop/shopmain">쇼핑몰</a>
-         </div>
-         <div>
-            <a href="#products1">대여</a> <a href="#products2">친환경캠핑장비</a> <a
-               href="#products3">일반캠핑장비</a>
-         </div>
+	<header>
+		<nav>
+			<div>
+				<a href="/shop/shopmain">쇼핑몰</a>
+			</div>
+			<div>
+				<a href="#products1">대여</a> <a href="#products2">친환경캠핑장비</a> <a
+					href="#products3">일반캠핑장비</a>
+			</div>
 
-         <!-- 그림 모형 -->
-         <div class="top_mypage" align="right">
-            <a href="/shop/shopsearch" class="eSearch"><svg
-                  xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                  fill="none" viewbox="0 0 24 24" class="icon" role="img">
-                  <path stroke="#000" stroke-linecap="round" stroke-linejoin="round"
-                     stroke-width="1.5"
-                     d="M11 19c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z"></path>
-                  <path stroke="#000" stroke-linejoin="round" stroke-width="1.5"
-                     d="M22 22l-5-5"></path></svg></a> <a href="/shop/shopmember"><svg
-                  xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                  fill="none" viewbox="0 0 24 24" class="icon" role="img">
-                  <circle cx="11.5" cy="6.5" r="3.75" stroke="#000"
-                     stroke-width="1.5"></circle>
-                  <path stroke="#000" stroke-width="1.5"
-                     d="M1.78 21.25c.382-4.758 4.364-8.5 9.22-8.5h1c4.856 0 8.838 3.742 9.22 8.5H1.78z"></path></svg></a>
-            <a href="/shop/shopcart"
-               class="xans-element- xans-layout xans-layout-orderbasketcount "><svg
-                  xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                  fill="none" viewbox="0 0 24 24" class="icon" role="img">
-               <path fill="#000"
-                     d="M23.073 22.253l-1.946-14.31c-.04-.38-.368-.667-.758-.667h-3.656v-1.74c0-2.543-2.115-4.613-4.713-4.613-2.599 0-4.713 2.07-4.713 4.613v1.74H3.63c-.39 0-.717.288-.758.667L.927 22.253c-.022.21.047.42.192.577.144.157.35.247.566.247h20.63c.216 0 .421-.09.566-.247.145-.157.214-.366.192-.576zM8.81 5.537c0-1.72 1.431-3.122 3.19-3.122 1.758 0 3.19 1.401 3.19 3.122v1.74H8.81v-1.74zm-6.28 16.05l1.786-12.82h2.97v1.644c0 .412.342.746.762.746.421 0 .762-.334.762-.746V8.767h6.38v1.643c0 .412.34.746.761.746.42 0 .762-.334.762-.746V8.767h2.97l1.786 12.819H2.53z"></path></svg><span
-               class="count displaynone EC-Layout_Basket-count-display"><span
-                  class="EC-Layout-Basket-count"></span></span> </a>
-         </div>
-      </nav>
-   </header>
+			<!-- 그림 모형 -->
+			<div class="top_mypage" align="right">
+				<a href="/shop/shopsearch" class="eSearch"><svg
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+						fill="none" viewbox="0 0 24 24" class="icon" role="img">
+						<path stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+							stroke-width="1.5"
+							d="M11 19c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z"></path>
+						<path stroke="#000" stroke-linejoin="round" stroke-width="1.5"
+							d="M22 22l-5-5"></path></svg></a> <a href="/shop/shopmember"><svg
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+						fill="none" viewbox="0 0 24 24" class="icon" role="img">
+						<circle cx="11.5" cy="6.5" r="3.75" stroke="#000"
+							stroke-width="1.5"></circle>
+						<path stroke="#000" stroke-width="1.5"
+							d="M1.78 21.25c.382-4.758 4.364-8.5 9.22-8.5h1c4.856 0 8.838 3.742 9.22 8.5H1.78z"></path></svg></a>
+				<a href="/shop/shopcart"
+					class="xans-element- xans-layout xans-layout-orderbasketcount "><svg
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+						fill="none" viewbox="0 0 24 24" class="icon" role="img">
+					<path fill="#000"
+							d="M23.073 22.253l-1.946-14.31c-.04-.38-.368-.667-.758-.667h-3.656v-1.74c0-2.543-2.115-4.613-4.713-4.613-2.599 0-4.713 2.07-4.713 4.613v1.74H3.63c-.39 0-.717.288-.758.667L.927 22.253c-.022.21.047.42.192.577.144.157.35.247.566.247h20.63c.216 0 .421-.09.566-.247.145-.157.214-.366.192-.576zM8.81 5.537c0-1.72 1.431-3.122 3.19-3.122 1.758 0 3.19 1.401 3.19 3.122v1.74H8.81v-1.74zm-6.28 16.05l1.786-12.82h2.97v1.644c0 .412.342.746.762.746.421 0 .762-.334.762-.746V8.767h6.38v1.643c0 .412.34.746.761.746.42 0 .762-.334.762-.746V8.767h2.97l1.786 12.819H2.53z"></path></svg><span
+					class="count displaynone EC-Layout_Basket-count-display"><span
+						class="EC-Layout-Basket-count"></span></span> </a>
+			</div>
+		</nav>
+	</header>
 
-   <!-- 장바구니 태그 -->
-   <div class="cart" onclick="showCart()">
-      장바구니 (<span id="cart-count">0</span>)
-   </div>
+	<!-- 장바구니 태그 -->
+	<div class="cart" onclick="showCart()">
+		장바구니 (<span id="cart-count">0</span>)
+	</div>
 
-   <!-- 슬라이드 화면 -->
-   <div class="slider">
-      <div class="slides">
-         <div class="slide">
-            <a href="/shop/shopview?pcode=0001"> <img
-               src="../images/cleaner.jpg" width="100" height="100"></a>
-         </div>
-         <div class="slide">
-            <a href="/shop/shopview?pcode=0002"> <img
-               src="../images/roll.jpg" width="100" height="100">
-            </a>
-         </div>
-         <div class="slide">
-            <a href="/shop/shopview?pcode=0003"> <img
-               src="../images/water.jpg" width="100" height="100">
-            </a>
-         </div>
-      </div>
-      <a class="prev" onclick="prevSlide()">&#10094;</a> <a class="next"
-         onclick="nextSlide()">&#10095;</a>
-   </div>
+	<!-- 슬라이드 화면 -->
+	<div class="slider">
+		<div class="slides">
+			<div class="slide">
+				<a href="/shop/shopview?pcode=0001"> <img
+					src="../images/cleaner.jpg" width="100" height="100"></a>
+			</div>
+			<div class="slide">
+				<a href="/shop/shopview?pcode=0002"> <img
+					src="../images/roll.jpg" width="100" height="100">
+				</a>
+			</div>
+			<div class="slide">
+				<a href="/shop/shopview?pcode=0003"> <img
+					src="../images/water.jpg" width="100" height="100">
+				</a>
+			</div>
+		</div>
+		<a class="prev" onclick="prevSlide()">&#10094;</a> <a class="next"
+			onclick="nextSlide()">&#10095;</a>
+	</div>
 
-   <!-- 상품 진열 -->
-   <div class="product-container" id="products1">
-      <h2>자사 대여상품 목록</h2>
+	<!-- 상품 진열 -->
+	<div class="product-container" id="products1">
+		<h2>자사 대여상품 목록</h2>
 
-      <!-- pcode 로 href에 공유걸어서 view 에서 db 데이터 불러오고 th:data-code 등 dto로 받아서 장바구니에 저장한다. -->
+		<!-- pcode 로 href에 공유걸어서 view 에서 db 데이터 불러오고 th:data-code 등 dto로 받아서 장바구니에 저장한다. -->
 
-      <div class="product">
-         <a href="/shop/shopview?pcode=0001"> <img
-            src="https://via.placeholder.com/400x300?text=제품1" alt="제품1"></a>
-         <div class="productinfo" data-code="0001" data-name="세제"
-            data-price="25000" data-img="cleaner.jpg">
-            <a href="/shop/shopview?pcode=0001"><h2>자사 대여상품</h2></a>
-            <p>대여상품입니다</p>
-            <p class="price">₩25,000</p>
-            <button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
-         </div>
-      </div>
+		<div class="product">
+			<a href="/shop/shopview?pcode=0001"> <img
+				src="https://via.placeholder.com/400x300?text=제품1" alt="제품1"></a>
+			<div class="productinfo" data-code="0001" data-name="세제"
+				data-price="25000" data-img="cleaner.jpg">
+				<a href="/shop/shopview?pcode=0001"><h2>자사 대여상품</h2></a>
+				<p>대여상품입니다</p>
+				<p class="price">₩25,000</p>
+				<button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
+			</div>
+		</div>
 
-      <div class="product">
-         <a href="/shop/shopview?pcode=0001"> <img
-            src="https://via.placeholder.com/400x300?text=제품2" alt="제품2"></a>
-         <div class="productinfo" data-code="0002" data-name="휴지"
-            data-price="50000" data-img="roll.jpg">
-            <a href="/shop/shopview?pcode=0001"><h2>자사 대여상품</h2></a>
-            <p>대여상품입니다</p>
-            <p class="price">₩30,000</p>
-            <button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
-         </div>
-      </div>
+		<div class="product">
+			<a href="/shop/shopview?pcode=0001"> <img
+				src="https://via.placeholder.com/400x300?text=제품2" alt="제품2"></a>
+			<div class="productinfo" data-code="0002" data-name="휴지"
+				data-price="50000" data-img="roll.jpg">
+				<a href="/shop/shopview?pcode=0001"><h2>자사 대여상품</h2></a>
+				<p>대여상품입니다</p>
+				<p class="price">₩30,000</p>
+				<button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
+			</div>
+		</div>
 
-      <!-- 추가적인 제품들을 여기에 삽입 -->
-   </div>
-   <div class="product-container" id="products2">
-      <h2>친환경캠핑장비 목록</h2>
+		<!-- 추가적인 제품들을 여기에 삽입 -->
+	</div>
+	<div class="product-container" id="products2">
+		<h2>친환경캠핑장비 목록</h2>
 
-      <div class="product">
-         <a href="/shop/shopview?pcode=0001"> <img
-            src="https://via.placeholder.com/400x300?text=제품1" alt="제품1"></a>
-         <div class="productinfo">
-            <a href="/shop/shopview?pcode=0001"><h2>친환경캠핑장비</h2></a>
-            <p>친환경캠핑장비입니다. 훌륭한 제품입니다.</p>
-            <p class="price">₩25,000</p>
-            <button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
-         </div>
-      </div>
+		<div class="product">
+			<a href="/shop/shopview?pcode=0001"> <img
+				src="https://via.placeholder.com/400x300?text=제품1" alt="제품1"></a>
+			<div class="productinfo">
+				<a href="/shop/shopview?pcode=0001"><h2>친환경캠핑장비</h2></a>
+				<p>친환경캠핑장비입니다. 훌륭한 제품입니다.</p>
+				<p class="price">₩25,000</p>
+				<button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
+			</div>
+		</div>
 
-      <div class="product">
-         <a href="/shop/shopview?pcode=0001"> <img
-            src="https://via.placeholder.com/400x300?text=제품2" alt="제품2"></a>
-         <div class="productinfo">
-            <a href="/shop/shopview?pcode=0001"><h2>친환경캠핑장비</h2></a>
-            <p>친환경캠핑장비입니다. 훌륭한 제품입니다.</p>
-            <p class="price">₩30,000</p>
-            <button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
-         </div>
-      </div>
+		<div class="product">
+			<a href="/shop/shopview?pcode=0001"> <img
+				src="https://via.placeholder.com/400x300?text=제품2" alt="제품2"></a>
+			<div class="productinfo">
+				<a href="/shop/shopview?pcode=0001"><h2>친환경캠핑장비</h2></a>
+				<p>친환경캠핑장비입니다. 훌륭한 제품입니다.</p>
+				<p class="price">₩30,000</p>
+				<button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
+			</div>
+		</div>
 
-      <!-- 추가적인 제품들을 여기에 삽입 -->
-   </div>
-   <div class="product-container" id="products3">
-      <h2>일반캠핑장비 목록</h2>
+		<!-- 추가적인 제품들을 여기에 삽입 -->
+	</div>
+	<div class="product-container" id="products3">
+		<h2>일반캠핑장비 목록</h2>
 
-      <div class="product">
-         <a href="/shop/shopview?pcode=0001"> <img
-            src="https://via.placeholder.com/400x300?text=제품1" alt="제품1"></a>
-         <div class="productinfo" data-name="0001" data-price="25000"
-            data-img="roll.jpg">
-            <a href="/shop/view?pcode=0001"><h2>일반캠핑장비</h2></a>
-            <p>일반캠핑장비입니다. 훌륭한 제품입니다.</p>
-            <p class="price">₩25,000</p>
-            <button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
-         </div>
-      </div>
+		<div class="product">
+			<a href="/shop/shopview?pcode=0001"> <img
+				src="https://via.placeholder.com/400x300?text=제품1" alt="제품1"></a>
+			<div class="productinfo" data-name="0001" data-price="25000"
+				data-img="roll.jpg">
+				<a href="/shop/view?pcode=0001"><h2>일반캠핑장비</h2></a>
+				<p>일반캠핑장비입니다. 훌륭한 제품입니다.</p>
+				<p class="price">₩25,000</p>
+				<button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
+			</div>
+		</div>
 
-      <div class="product">
-         <a href="/shop/shopview?pcode=0001"> <img
-            src="https://via.placeholder.com/400x300?text=제품2" alt="제품2"></a>
-         <div class="productinfo">
-            <a href="/shop/view?pcode=0001"><h2>일반캠핑장비</h2></a>
-            <p>일반캠핑장비입니다. 훌륭한 제품입니다.</p>
-            <p class="price">₩30,000</p>
-            <button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
-         </div>
-      </div>
+		<div class="product">
+			<a href="/shop/shopview?pcode=0001"> <img
+				src="https://via.placeholder.com/400x300?text=제품2" alt="제품2"></a>
+			<div class="productinfo">
+				<a href="/shop/view?pcode=0001"><h2>일반캠핑장비</h2></a>
+				<p>일반캠핑장비입니다. 훌륭한 제품입니다.</p>
+				<p class="price">₩30,000</p>
+				<button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
+			</div>
+		</div>
 
-      <!-- 추가적인 제품들을 여기에 삽입 -->
-   </div>
+		<!-- 추가적인 제품들을 여기에 삽입 -->
+	</div>
 
-   <footer>
-      <!-- <p>&copy; 2024 나의 쇼핑몰. 모든 권리 보유.</p> -->
-   </footer>
+	<footer>
+		<!-- <p>&copy; 2024 나의 쇼핑몰. 모든 권리 보유.</p> -->
+	</footer>
 
-   <script>
+	<script>
 /* 슬라이드 화면 */
-      let slideIndex = 0;
-      showSlides();
+		let slideIndex = 0;
+		showSlides();
 
-      function showSlides() {
-         let slides = document.getElementsByClassName("slide");
-         for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-         }
-         slideIndex++;
-         if (slideIndex > slides.length) {
-            slideIndex = 1
-         }
-         slides[slideIndex - 1].style.display = "block";
-         setTimeout(showSlides, 3000); // Change image every 3 seconds
-      }
+		function showSlides() {
+			let slides = document.getElementsByClassName("slide");
+			for (let i = 0; i < slides.length; i++) {
+				slides[i].style.display = "none";
+			}
+			slideIndex++;
+			if (slideIndex > slides.length) {
+				slideIndex = 1
+			}
+			slides[slideIndex - 1].style.display = "block";
+			setTimeout(showSlides, 3000); // Change image every 3 seconds
+		}
 
-      function prevSlide() {
-         let slides = document.getElementsByClassName("slide");
-         slideIndex--;
-         if (slideIndex < 1) {
-            slideIndex = slides.length
-         }
-         for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-         }
-         slides[slideIndex - 1].style.display = "block";
-      }
+		function prevSlide() {
+			let slides = document.getElementsByClassName("slide");
+			slideIndex--;
+			if (slideIndex < 1) {
+				slideIndex = slides.length
+			}
+			for (let i = 0; i < slides.length; i++) {
+				slides[i].style.display = "none";
+			}
+			slides[slideIndex - 1].style.display = "block";
+		}
 
-      function nextSlide() {
-         let slides = document.getElementsByClassName("slide");
-         slideIndex++;
-         if (slideIndex > slides.length) {
-            slideIndex = 1
-         }
-         for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-         }
-         slides[slideIndex - 1].style.display = "block";
-      }
-      
-/* 장바구니 저장 */
-      
-         let cartCount = 0;
-      
-       
+		function nextSlide() {
+			let slides = document.getElementsByClassName("slide");
+			slideIndex++;
+			if (slideIndex > slides.length) {
+				slideIndex = 1
+			}
+			for (let i = 0; i < slides.length; i++) {
+				slides[i].style.display = "none";
+			}
+			slides[slideIndex - 1].style.display = "block";
+		}
+		
+/* 장바구니 저장 및 업데이트 */
+		function addToCart(event) {
+			event.preventDefault();  // 기본 동작 방지
 
-      function addToCart() {
-         cartCount++;
-         document.getElementById('cart-count').innerText = cartCount;
-      }
-      
-      function showCart() {
-         location.href='/shop/shopcart';
-      }
-      
-       document.addEventListener('DOMContentLoaded', function() {
-      let cartItems = JSON.parse(sessionStorage.getItem('cart')) || [];
-        let totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-        document.getElementById('cart-count').textContent = totalQuantity;
-      
+			// 제품 정보를 가져옴
+			const productinfoDiv = event.target.closest('.productinfo');  // 상위 .productinfo 찾기
+			const code = productinfoDiv.getAttribute('data-code');
+			const name = productinfoDiv.getAttribute('data-name');
+			const img = productinfoDiv.getAttribute('data-img');
+			const price = parseFloat(productinfoDiv.getAttribute('data-price'));
+			const quantity = 1;  // 기본 수량
 
-       document.querySelectorAll('.add-to-cart').forEach(button => {
-               button.addEventListener('click', function() {
-                   const productinfoDiv = this.parentElement;
-                   const code = productinfoDiv.getAttribute('data-code');
-                   const name = productinfoDiv.getAttribute('data-name');
-                   const img = productinfoDiv.getAttribute('data-img');
-                   const price = parseFloat(productinfoDiv.getAttribute('data-price'));
-                   const quantity = 1;  // 기본 수량
+			// 기존 장바구니 데이터 불러오기
+			let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
 
-                   // 기존 장바구니 데이터 불러오기
-                   let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+			// 상품이 이미 장바구니에 있는지 확인
+			const existingProductIndex = cart.findIndex(item => item.code === code);
+			if (existingProductIndex > -1) {
+				// 상품이 이미 장바구니에 있을 경우 수량을 증가
+				cart[existingProductIndex].quantity += quantity;
+			} else {
+				// 새 상품 추가
+				cart.push({ code, name, img, price, quantity });
+			}
 
-                   // 상품이 이미 장바구니에 있는지 확인
-                   const existingProductIndex = cart.findIndex(item => item.name === name);
-                   if (existingProductIndex > -1) {
-                       // 상품이 이미 장바구니에 있을 경우 수량을 증가
-                       cart[existingProductIndex].quantity += quantity;
-                   } else {
-                       // 새 상품 추가
-                       cart.push({code, name, img, price, quantity });
-                   }
+			// sessionStorage에 저장
+			sessionStorage.setItem('cart', JSON.stringify(cart));
 
-                   // sessionStorage에 저장
-                   sessionStorage.setItem('cart', JSON.stringify(cart));
+			// 장바구니 카운트 업데이트
+			updateCartCount();
 
-                   // 확인 메시지
-                   alert(name + '이(가) 장바구니에 추가되었습니다!');
-               });
-           });
-         });
-   </script>
+			// 확인 메시지
+			alert(name + '이(가) 장바구니에 추가되었습니다!');
+		}
+
+		function updateCartCount() {
+			// 장바구니 아이템 수량 계산
+			let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+			let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+			document.getElementById('cart-count').textContent = totalQuantity;
+		}
+
+		function showCart() {
+			location.href = '/shop/shopcart';
+		}
+
+		// 페이지 로드 시 장바구니 카운트 초기화
+		document.addEventListener('DOMContentLoaded', function() {
+			updateCartCount();
+
+			document.querySelectorAll('.add-to-cart').forEach(button => {
+				button.removeEventListener('click', addToCart);  // 기존 이벤트 리스너 제거
+				button.addEventListener('click', addToCart);
+			});
+		});
+	</script>
 </body>
 </html>
 

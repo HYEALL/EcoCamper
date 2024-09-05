@@ -46,12 +46,10 @@
    					<input type="hidden" id="productname" name="productname" th:value="${dto.pname}">
    					<input type="hidden" id="pcode" name="pcode" th:value="${dto.pcode}">
    					
-					<label for="receivename">받는사람</label> <input type="text"
-						id="receivename" name="receivename" required> <label
-						for="baddress">주소</label> <input type="text" id="baddress"
-						name="baddress" required> <label for="bphone">전화번호</label>
-					<input type="tel" id="bphone" name="bphone" required> <label
-						for="email">이메일</label>
+					<label for="receivename">받는사람</label> <input type="text" id="receivename" name="receivename" required> 
+					<label for="baddress">주소</label> <input type="text" id="baddress"	name="baddress" required> 
+					<label for="bphone">전화번호</label>	<input type="tel" id="bphone" name="bphone" required> 
+					<label for="email">이메일</label>
 					<div class="email-input-container">
 						<input type="email" id="email" name="email" required
 							placeholder="이메일"> @ <select id="email-domain"
@@ -94,30 +92,33 @@
 <script type="text/javascript">
 	function confirm_buy() {
 		var frm = document.form1;
-		if (confirm("정말 구매하시겠습니까?")) {
-
-			// Extract form data
-			const name = document.getElementById('receivename').value;
-			const address = document.getElementById('baddress').value;
-			const phone = document.getElementById('bphone').value;
-			const eamil = document.getElementById('email').value;
-			const emaildomain = document.getElementById('email-domain').value;
-			const payment = document.getElementById('bpayment').value;
-
-			// Simple form validation (can be expanded)
-			if (name && address && phone && eamil && payment) {
-				alert(`주문이 완료되었습니다!\n상품: [[${dto.pname}]] \n금액: [[${productprice}]] 원\n이름: ${name}\n주소: ${address}\n전화번호: ${phone}\n이메일: ${email}@${emaildomain}\n결제 방법: ${payment}`);
-				// Here you can add code to send the data to the server
-			} else {
-				alert('모든 필드를 입력해 주세요.');
+		
+		
+			if (confirm("정말 구매하시겠습니까?")) {
+	
+				// Extract form data
+				const name = document.getElementById('receivename').value;
+				const address = document.getElementById('baddress').value;
+				const phone = document.getElementById('bphone').value;
+				const eamil = document.getElementById('email').value;
+				const emaildomain = document.getElementById('email-domain').value;
+				const payment = document.getElementById('bpayment').value;
+	
+				// Simple form validation (can be expanded)
+				if (name && address && phone && eamil && emaildomain && payment) {
+					alert(`주문이 완료되었습니다!\n상품: [[${dto.pname}]] \n금액: [[${productprice}]] 원\n받는사람: ${name}\n배송지: ${address}\n전화번호: ${phone}\n이메일: ${email}@${emaildomain}\n결제 방법: ${payment}`);
+					// Here you can add code to send the data to the server
+				} else {
+					alert('모든 필드를 입력해 주세요.');
+					return;
+				}
+				
+				frm.submit();
+				/* location.href = `shopbuy?pcode=[[${dto.pcode}]]*/
+	
+			} else
 				return;
-			}
-			
-			frm.submit();
-			/* location.href = `shopbuy?pcode=[[${dto.pcode}]]*/
-
-		} else
-			return;
+	
 
 	}
 
