@@ -31,6 +31,7 @@ public class User implements UserDetails {
 	@Id
 	private String id;
 	private String pwd;
+	@Temporal(TemporalType.DATE)
 	private Date age;
 	private String gender;
 	private String email;
