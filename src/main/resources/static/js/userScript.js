@@ -149,12 +149,9 @@ function login() {
 		},
 		body: JSON.stringify(userDTO)
 	})
-		.then(response => response.json())
+		.then(response => response.text())
 		.then(data => {
-			console.log(data);
-			if (data.token) {
-				// 로그인 성공 시 리다이렉션
-				//localStorage.setItem('token', data.token);
+			if (data === "Login Success") {
 				window.location.href = '/index'; // index로 이동
 			} else {
 				alert('회원 정보가 틀렸습니다. 다시 입력하세요');

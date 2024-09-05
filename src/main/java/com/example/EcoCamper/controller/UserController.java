@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.EcoCamper.dto.UserDTO;
-import com.example.EcoCamper.dto.UserResponseDTO;
 import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.UserService;
@@ -44,8 +44,9 @@ public class UserController {
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	// 로그인
+	@ResponseBody
 	@PostMapping(value = "/login")
-	public ResponseEntity<?> login(@RequestBody UserDTO userDTO, HttpServletResponse response) {
+	public String login(@RequestBody UserDTO userDTO, HttpServletResponse response) {
 		User user = service.login(userDTO.getId(), userDTO.getPwd(), passwordEncoder);
 
 		if (user != null) {
@@ -61,13 +62,11 @@ public class UserController {
 			response.setHeader("Set-Cookie", cookie.toString());
 
 			System.out.println("login" + token);
-			final UserDTO responseUserDTO = UserDTO.builder().id(user.getId()).token(token).age(user.getAge())
-					.name(user.getName()).build();
-			return ResponseEntity.ok().body(responseUserDTO);
+			return "Login Success";
 
 		} else {
-			UserResponseDTO responseDTO = UserResponseDTO.builder().error("Login failed.").build();
-			return ResponseEntity.badRequest().body(responseDTO);
+			//UserResponseDTO responseDTO = UserResponseDTO.builder().error("Login failed.").build();
+			return "Login Failed";
 		}
 
 	}
