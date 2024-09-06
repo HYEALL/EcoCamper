@@ -8,28 +8,38 @@ import org.springframework.stereotype.Service;
 import com.example.EcoCamper.dao.FeedDAO;
 import com.example.EcoCamper.dto.FeedDTO;
 import com.example.EcoCamper.entity.Feed;
-import com.example.EcoCamper.entity.Likes;
+
 
 @Service
 public class FeedService {
 
 	@Autowired
 	FeedDAO dao;
-
+	
 	public boolean feedWritePhoto(FeedDTO dto) {
 		return dao.feedWritePhoto(dto);
 	}
 
 	public boolean feedWriteVideo(FeedDTO dto) {
-
+		
 		return dao.feedWriteVideo(dto);
 	}
-
-	public List<FeedDTO> getAllFeeds() {
-
-		return dao.findAll();
-
-	}
-
-
+	
+	 public List<FeedDTO> getAllFeeds() {
+		 
+	    return dao.findAll();
+	    
+	    }
+	 
+	 public Feed feedView(int seq) {
+			
+		 return dao.feedView(seq);
+		
+		}
+	 
+	 public boolean feedDelete(int seq) {
+		 return dao.feedDelete(seq);
+	 }
+	
+	
 }

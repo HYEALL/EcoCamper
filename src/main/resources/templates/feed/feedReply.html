@@ -1,0 +1,62 @@
+<body>
+<body>
+    <h1>댓글 목록</h1>
+    <div id="comments-section">
+        <!-- 댓글이 여기 동적으로 삽입됩니다 -->
+    </div>
+
+    <div>
+        <h2>댓글 작성</h2>
+        <form id="comment-form">
+            <label for="writer">작성자:</label>
+            <input type="text" id="writer" name="writer" required>
+            <br>
+            <label for="content">내용:</label>
+            <textarea id="content" name="content" required></textarea>
+            <br>
+            <button type="submit">댓글 달기</button>
+        </form>
+    </div>
+
+    <script>
+        // 댓글 작성 시 처리
+        document.getElementById('comment-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // 폼 제출 방지
+            const writer = document.getElementById('writer').value;
+            const content = document.getElementById('content').value;
+
+            // 댓글 서버에 POST 요청
+            fetch('/replies', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ writer, content, logtime: new Date() })
+            }).then(response => response.json())
+              .then(data => {
+                  console.log('댓글이 추가되었습니다:', data);
+                  loadComments(); // 댓글 목록 새로고침
+              });
+        });
+
+        // 모든 댓글 로드
+        function loadComments() {
+            fetch('/replies')
+                .then(response => response.json())
+                .then(data => {
+                    const commentsSection = document.getElementById('comments-section');
+                    commentsSection.innerHTML = '';
+                    data.forEach(comment => {
+                        const div = document.createElement('div');
+                        div.innerHTML = `<strong>${comment.writer}</strong>: ${comment.content} <em>${new Date(comment.logtime).toLocaleString()}</em>`;
+                        commentsSection.appendChild(div);
+                    });
+                });
+        }
+
+        // 페이지 로드 시 댓글 불러오기
+        loadComments();
+    </script>
+</body>
+
+</body>

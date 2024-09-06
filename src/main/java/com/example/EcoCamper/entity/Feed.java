@@ -1,7 +1,8 @@
 package com.example.EcoCamper.entity;
 
+import java.util.Arrays;
 import java.util.Date;
-
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,15 +23,13 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Feed {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJECT_SEQUENCE_GENERATOR")
-    @SequenceGenerator(name = "PROJECT_SEQUENCE_GENERATOR", sequenceName = "seq", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FEED_SEQUENCE_GENERATOR")
+    @SequenceGenerator(name = "FEED_SEQUENCE_GENERATOR", sequenceName = "seq", initialValue = 1, allocationSize = 1)
 	private int seq;
 	private String id;
 	private String outdoor;
 	private String feed_subject;
 	private String feed_content;
-	private int good;
-	private int good_num;
 	private int hit;
 	private String place;
 	private String feed_tag;
@@ -40,4 +39,8 @@ public class Feed {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date logtime;
 
+	
+	  public List<String> getImageFileNames() {
+		    return Arrays.asList(feed_file.split(","));
+		    }
 }

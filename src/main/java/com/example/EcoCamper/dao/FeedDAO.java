@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.EcoCamper.dto.FeedDTO;
 import com.example.EcoCamper.entity.Feed;
-import com.example.EcoCamper.entity.Likes;
 import com.example.EcoCamper.repository.FeedRepository;
 
 
@@ -19,21 +18,21 @@ import com.example.EcoCamper.repository.FeedRepository;
 @Repository
 public class FeedDAO {
 	@Autowired 
-	FeedRepository feedRepository;
+	FeedRepository repository;
 	
 	public boolean feedWritePhoto(FeedDTO dto) {
 		
-		return feedRepository.save(dto.toEntity()) != null;
+		return repository.save(dto.toEntity()) != null;
 	}
 	// 작성
 	
 	public boolean feedWriteVideo(FeedDTO dto) {
 		
-		return feedRepository.save(dto.toEntity()) != null;
+		return repository.save(dto.toEntity()) != null;
 	}
 	
 	public List<FeedDTO> findAll() {
-        return feedRepository.findAllByOrderByLogtimeDesc().stream()
+        return repository.findAllByOrderByLogtimeDesc().stream()
             .map(project -> {
             	FeedDTO dto = new FeedDTO();
             	dto.setSeq(project.getSeq());
@@ -41,8 +40,6 @@ public class FeedDAO {
                 dto.setOutdoor(project.getOutdoor());
                 dto.setFeed_subject(project.getFeed_subject());
                 dto.setFeed_content(project.getFeed_content());
-                dto.setGood(project.getGood());
-                dto.setGood_num(project.getGood_num());
                 dto.setHit(project.getHit());
                 dto.setPlace(project.getPlace());
                 dto.setFeed_tag(project.getFeed_tag());
@@ -53,9 +50,23 @@ public class FeedDAO {
                 return dto;
             })
             .collect(Collectors.toList());
-    }
-
-
+    
+	}
 	
+	public Feed feedView(int seq) {
+		
+		return repository.findById(seq).orElse(null);
+
+	}
+	
+	public boolean feedDelete(int seq) {
+		
+		Feed feed = repository.findById(seq).orElse(null);
+		if(feed != null) {
+			repository.deleteById(seq);
+		}
+		
+		return !repository.existsById(seq);
+		}
 	
 }

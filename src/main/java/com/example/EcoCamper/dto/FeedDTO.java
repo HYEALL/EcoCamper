@@ -17,8 +17,6 @@ public class FeedDTO {
 	    private String outdoor;
 	    private String feed_subject;
 	    private String feed_content;
-	    private int good;
-	    private int good_num;
 	    private int hit;
 	    private String place;
 	    private String feed_tag;
@@ -28,7 +26,7 @@ public class FeedDTO {
 	    private Date logtime;
 
 	    public Feed toEntity() {
-	        return new Feed(seq, id, outdoor, feed_subject, feed_content, good, good_num, hit, place, feed_tag, goods, feed_file, feed_type, logtime);
+	        return new Feed(seq, id, outdoor, feed_subject, feed_content, hit, place, feed_tag, goods, feed_file, feed_type, logtime);
 	    }
 	    
 	 // 파일 이름 문자열을 리스트로 변환

@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
+
 
 import com.example.EcoCamper.dto.FeedDTO;
-import com.example.EcoCamper.entity.Likes;
+import com.example.EcoCamper.entity.Feed;
 import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.FeedService;
-import com.example.EcoCamper.service.LikesService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,9 +28,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class FeedController {
 	@Autowired
-	FeedService feedService;
-	@Autowired
-	LikesService likesService;
+	FeedService service;
+
 	@Value("${project.upload.path}")
 	private String uploadpath;
 	
@@ -100,7 +98,7 @@ public class FeedController {
 	    dto.setLogtime(new Date());
 	    dto.setFeed_type("img");
 
-	    boolean result = feedService.feedWritePhoto(dto);
+	    boolean result = service.feedWritePhoto(dto);
 	    model.addAttribute("result", result);
 
 	    return "feed/feedWritePh";
@@ -144,7 +142,7 @@ public class FeedController {
 		dto.setId(userId);
 
 	    // DB 저장
-	    boolean result = feedService.feedWriteVideo(dto);
+	    boolean result = service.feedWriteVideo(dto);
 
 	    // 데이터 공유
 	    model.addAttribute("result", result);
@@ -154,29 +152,57 @@ public class FeedController {
 	}
 	
 	@GetMapping("feed/feedList")
-	public String feedList(Model model, HttpServletRequest request) {
-		String token = tokenProvider.resolveTokenFromCookie(request);
-		String userId = tokenProvider.validateAndGetUserId(token);
-		List<FeedDTO> list = feedService.getAllFeeds();
-		List<Likes> likesList = likesService.findByUser_id(userId);
-		System.out.println("list = "+list);
-		model.addAttribute("list", list);
-		model.addAttribute("likesList", likesList);
-		System.out.println("likelist = " + likesList);
-		model.addAttribute("userId", userId);
-		return "feed/feedList";
-	}
-	
-	@GetMapping("feed/messageWriteForm")
-	public String messageWriteForm(Model model) {
+	   public String feedList(Model model, HttpServletRequest request) {
 		
-		return "feed/messageWriteForm";
+	      String token = tokenProvider.resolveTokenFromCookie(request);
+	      String userId = tokenProvider.validateAndGetUserId(token);
+	      List<FeedDTO> list =service.getAllFeeds();
+	      
+	      System.out.println("list = "+list);
+	      model.addAttribute("list", list);
+	      model.addAttribute("userId", userId);
+	      return "feed/feedList";
+	   }
+	
+	@GetMapping("feed/feedReply")
+	public String messageWriteForm(Model model, HttpServletRequest request) {
+		String token = tokenProvider.resolveTokenFromCookie(request);
+	    String userId = tokenProvider.validateAndGetUserId(token);
+	     
+	    int seq = Integer.parseInt(request.getParameter("seq"));
+	    
+	    model.addAttribute("userId", userId);
+	    model.addAttribute("seq", seq);
+		return "feed/feedReply";
+		
 	}
 	
 	@GetMapping("feed/feedView")
-	public String feedView(Model model) {
+	public String feedView(Model model, HttpServletRequest request) {
+		 String token = tokenProvider.resolveTokenFromCookie(request);
+	     String userId = tokenProvider.validateAndGetUserId(token);
+		
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		Feed feed = service.feedView(seq);
+		System.out.println("feed =" + feed);
+		model.addAttribute("userId", userId);
+		model.addAttribute("feed", feed);
+	    model.addAttribute("seq", seq);
 	
 		return "feed/feedView";
+	}
+	
+	@GetMapping("feed/feedDelete")
+	public String feedDelete(Model model, HttpServletRequest request) {
+		String token = tokenProvider.resolveTokenFromCookie(request);
+	    String userId = tokenProvider.validateAndGetUserId(token);
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		boolean result = service.feedDelete(seq);
+		
+		model.addAttribute("result", result);
+		model.addAttribute("userId", userId);
+		
+		return "feed/feedDelete";
 	}
 	
 	

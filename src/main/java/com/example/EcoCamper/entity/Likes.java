@@ -25,5 +25,6 @@ public class Likes {
 
     @Column(name = "review_id")
     private int reviewId; // 리뷰 번호
-    private String user_id; // 사용자 ID
+    @Column(name = "user_id")
+    private String userId;
 }
