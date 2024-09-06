@@ -117,7 +117,6 @@ function inputCheck() {
 		frm.addr.focus();
 		return false;
 	}
-
 	frm.submit();
 }
 
@@ -145,7 +144,6 @@ function login() {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			//'Authorization': 'Bearer ' + localStorage.getItem('token'),
 		},
 		body: JSON.stringify(userDTO)
 	})
@@ -179,7 +177,31 @@ function checkId() {
 		window.open("/user/checkId?id=" + sId, "", "width=450 height=200")
 	}
 }
+function checkIdClose(id) {
+	opener.inputForm.id.value = id;
+	opener.inputForm.checkIdOk.value = "true";
+	opener.inputForm.id.readOnly = true;
+	window.close();
+	opener.inputForm.pwd.focus();
+}
 
+function incheckId() { // checkId form 입력 체크
+	var sId = document.writeForm.id.value.trim();
+	if (sId == "") {
+		alert("먼저 아이디를 입력하세요.");
+		document.writeForm.id.focus();
+		return false;
+	} else if (sId.length < 4) {
+		alert("아이디를 4글자 이상 입력하세요.");
+		frm.id.focus();
+		return false;
+	} else if (!checkEngNumber(sId)) {
+		alert("아이디를 영문 대소문자, 숫자만 입력하세요.");
+		frm.id.focus();
+		return false;
+	}
+	document.writeForm.submit();
+}
 function sendNumber() { // 인증메일 발송 클릭시
 	var frm = document.inputForm;
 	if (frm.checkEmailOk.value == "true") {
@@ -232,7 +254,7 @@ function confirmNumber() { // 인증하기 클릭시
 			alert(response);
 			if (response === "이메일 인증이 완료되었습니다.") {
 				frm.checkEmailOk.value = "true";
-				frm.email.disabled = true;
+				frm.email.readOnly = true;
 			}
 		},
 	});

@@ -21,7 +21,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class UserDTO {
-	private String token;
 	private String name;
 	private String id;
 	private String pwd;

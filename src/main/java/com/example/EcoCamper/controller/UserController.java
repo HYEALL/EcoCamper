@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.EcoCamper.dto.UserDTO;
@@ -127,6 +128,7 @@ public class UserController {
 		}
 		userDTO.setRole("USER");
 		User user = service.join(userDTO);
+		
 		model.addAttribute("user", user);
 		return "/user/join";
 	}
