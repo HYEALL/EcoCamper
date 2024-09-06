@@ -157,7 +157,7 @@ function login() {
 		})
 		.catch(error => console.error('Error:', error));
 }
-function enterKey() {
+function enterKeyLogin() {
 	if (window.event.keyCode == 13) {
 		login();
 	}
