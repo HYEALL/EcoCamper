@@ -157,7 +157,11 @@ function login() {
 		})
 		.catch(error => console.error('Error:', error));
 }
-
+function enterKey() {
+	if (window.event.keyCode == 13) {
+		login();
+	}
+}
 function checkId() {
 	var sId = document.inputForm.id.value;
 	if (sId == "") {
@@ -223,7 +227,7 @@ function sendNumber() { // 인증 메일 발송 클릭 시
 	}
 
 	document.querySelector("#mail_number").style.display = "";
-	
+
 	// 서버에 POST 요청을 보내 이메일로 인증번호를 전송
 	fetch('/mail', {
 		method: 'POST',
