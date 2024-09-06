@@ -202,7 +202,7 @@ function incheckId() { // checkId form 입력 체크
 	}
 	document.writeForm.submit();
 }
-function sendNumber() { // 인증메일 발송 클릭시
+function sendNumber() {
 	var frm = document.inputForm;
 	if (frm.checkEmailOk.value == "true") {
 		alert("이미 이메일 인증을 완료했습니다.");
@@ -222,42 +222,48 @@ function sendNumber() { // 인증메일 발송 클릭시
 		return false;
 	}
 
-	$("#mail_number").css("display", "");
-	$.ajax({
-		url: "/mail",
-		type: "post",
-		dataType: "text",
-		data: {
-			"mail": $("#email").val() // email 값 param으로 전달
+	document.querySelector("#mail_number").style.display = "";
+
+	fetch('/mail', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
 		},
-		success: function(response) {
-			alert(response);
-		},
-	});
+		body: 'mail=' + encodeURIComponent(frm.email.value)
+	})
+		.then(response => response.text())
+		.then(data => {
+			alert(data);
+		})
+		.catch(error => console.error('Error:', error));
 }
-function confirmNumber() { // 인증하기 클릭시
+
+function confirmNumber() {
 	var frm = document.inputForm;
-	var validNumber = $("#valid_number").val();
+	var validNumber = document.querySelector("#valid_number").value;
 	if (frm.checkEmailOk.value == "true") {
 		alert("이미 이메일 인증을 완료했습니다.");
 		frm.email.focus();
 		return false;
 	}
-	$.ajax({
-		url: "/confirm",
-		type: "post",
-		dataType: "text",
-		data: {
-			"valid_number": validNumber // 입력한 인증번호 param으로 전달
+
+	fetch('/confirm', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
 		},
-		success: function(response) {
-			alert(response);
-			if (response === "이메일 인증이 완료되었습니다.") {
+		body: 'valid_number=' + encodeURIComponent(validNumber)
+	})
+		.then(response => response.text())
+		.then(data => {
+			alert(data);
+			if (data === "이메일 인증이 완료되었습니다.") {
 				frm.checkEmailOk.value = "true";
 				frm.email.readOnly = true;
 			}
-		},
-	});
+		})
+		.catch(error => console.error('Error:', error));
 }
+
 
 
