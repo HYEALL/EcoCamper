@@ -1,5 +1,7 @@
 package com.example.EcoCamper.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +18,17 @@ public class ShopReviewService {
 	public ShopReview write(ShopReviewDTO dto) {
 		return dao.write(dto);
 	}
+	
+	public List<ShopReview> reveiwList(int startNum, int endNum,String pcode) {
+		return dao.reveiwList(startNum, endNum, pcode);
+	}
+	
+	public int getTotal(String pcode) {
+		return dao.getTotal(pcode);
+	}
+	
+	public boolean shopReviewDelete(int shopreviewseq){
+		return dao.shopReviewDelete(shopreviewseq);
+	}
+	
 }

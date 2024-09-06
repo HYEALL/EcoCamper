@@ -125,7 +125,7 @@ button:hover {
 		<nav>
 			<a href="/shop/shopmain">홈</a>
 			<a href="#">카테고리</a>
-			<a href="/shop/shopcart">장바구니</a>
+			<a href="#" onclick="confirm_orderList()">주문내역</a>
 			<a href="#">내 계정</a>
 		</nav>
 	</header>
@@ -140,7 +140,7 @@ button:hover {
 					<th>수량</th>
 					<th>금액</th>
 					<th>총액</th>
-					<th>삭제</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody id="cart-items">
@@ -160,18 +160,31 @@ button:hover {
 	</div>
 
 	<script>
+	function confirm_orderList(){
+		if("[[${userId}]]" != "" ){
+			location.href="/shop/shopOerderList"	
+		}else {
+			alert("로그인 후 주문내역 열람이 가능합니다.")
+			if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
+			    
+		}
+	}
+	
 	function confirm_cartbuy (){
 		
-		if("[[${userId}]]" != null ){
+		if("[[${userId}]]" != "" ){
 			// 장바구니 아이템 수량 계산
 			let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
 			let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+			if(totalQuantity == 0) {
+				alert("장바구니가 비었습니다.")
+			} else {
+				alert("총 "+totalQuantity+" 개의 상품이 선택 되었습니다.")
+				location.href = `shopcartbuy`;
+			}
 			
 			
-			alert("총 "+totalQuantity+" 개의 상품이 선택 되었습니다.")
-			
-	
-		    location.href = `shopcartbuy`;
+		    
 		
 		}else {
 			alert("로그인 후 구매 가능합니다.")

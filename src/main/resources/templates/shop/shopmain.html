@@ -60,6 +60,8 @@ nav a:hover {
 	border-radius: 10px;
 	margin-top: 40px;
 	height: 500px;
+    align-items: center;      /* 세로 중앙 정렬 */
+    justify-content: center;  /* 가로 중앙 정렬 */
 }
 
 .slides {
@@ -71,13 +73,15 @@ nav a:hover {
 	min-width: 100%;
 	min-height: 100%;
 	box-sizing: border-box;
+    justify-content: center;  /* 가로 중앙 정렬 */
+    align-items: center;      /* 세로 중앙 정렬 */
 }
 
 .slide img {
 	width: 70%;
-	vertical-align: middle;
-	height: 70%;
-	margin: auto;
+    height: 70%;
+    object-fit: cover;
+	
 }
 
 .prev, .next {
@@ -192,16 +196,17 @@ footer {
 					href="#products3">일반캠핑장비</a>
 			</div>
 
-			<!-- 그림 모형 -->
+		<!-- 그림 모형 -->
 			<div class="top_mypage" align="right">
-				<a href="/shop/shopsearch" class="eSearch"><svg
+				<a href="/shop/shopAllList" class="eSearch"><svg
 						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 						fill="none" viewbox="0 0 24 24" class="icon" role="img">
 						<path stroke="#000" stroke-linecap="round" stroke-linejoin="round"
 							stroke-width="1.5"
 							d="M11 19c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z"></path>
 						<path stroke="#000" stroke-linejoin="round" stroke-width="1.5"
-							d="M22 22l-5-5"></path></svg></a> <a href="/shop/shopmember"><svg
+							d="M22 22l-5-5"></path></svg></a> 
+				<a href="#" onclick="confirm_orderList()"><svg
 						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 						fill="none" viewbox="0 0 24 24" class="icon" role="img">
 						<circle cx="11.5" cy="6.5" r="3.75" stroke="#000"
@@ -381,7 +386,22 @@ footer {
 			slides[slideIndex - 1].style.display = "block";
 		}
 		
+	
+		
+		function confirm_orderList(){
+			if("[[${userId}]]" != "" ){
+				location.href="/shop/shopOerderList"	
+			}else {
+				alert("로그인 후 주문내역 열람이 가능합니다.")
+				if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
+				    
+			}
+		}
+		
+		
+		
 /* 장바구니 저장 및 업데이트 */
+
 		function addToCart(event) {
 			event.preventDefault();  // 기본 동작 방지
 

@@ -1,5 +1,7 @@
 package com.example.EcoCamper.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +16,21 @@ public class ShopReviewDAO {
 	
 	public ShopReview write(ShopReviewDTO dto)  {
 		return shopReviewRepository.save(dto.toEntity());
+	}
+
+	public List<ShopReview> reveiwList(int startNum, int endNum, String pcode){
+		return shopReviewRepository.findbyStartNumAndEndNum(startNum, endNum, pcode);
+	}
+	
+	public int getTotal(String pcode) {
+		return (int) shopReviewRepository.countByShopreviewpcode(pcode);
+	}
+	
+	public boolean shopReviewDelete(int shopreviewseq){
+		ShopReview shopReview=shopReviewRepository.findById(shopreviewseq).orElse(null);
+		if(shopReview !=null) {
+			shopReviewRepository.delete(shopReview);
+		}
+		return !shopReviewRepository.existsById(shopreviewseq);
 	}
 }

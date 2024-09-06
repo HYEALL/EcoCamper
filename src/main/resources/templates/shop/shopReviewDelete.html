@@ -7,11 +7,12 @@
 
 	window.onload = function(){
 		setTimeout(function(){
-		if("[[${result}]]" != null){
-			alert("리뷰가 작성되었습니다.")
+		if("[[${result}]]" == "true"){
+			alert("정상적으로 선택하신 리뷰가 삭제되었습니다.")
+			sessionStorage.removeItem('cart')
 			location.href = "/shop/shopview?pcode=[[${pcode}]]";
 		}else{
-			alert("리뷰 작성에 실패하였습니다.")
+			alert("선택하신 리뷰 삭제에 실패하였습니다.")
 			history.back();
 		}		
 		},100);

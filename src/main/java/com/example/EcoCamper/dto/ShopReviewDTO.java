@@ -12,15 +12,15 @@ import lombok.ToString;
 @Data
 @ToString
 public class ShopReviewDTO {
-	private String shopreviewpcode ;
 	private int shopreviewseq ;
+	private String shopreviewpcode ;
 	private String shopreviewid ;
 	private String shopreviewcontent ;
-    private int shopreviewhit ;
+    private int rating;
     @Temporal(TemporalType.DATE)
     private Date logtime ;
     
     public ShopReview toEntity() {
-		return new ShopReview(shopreviewpcode, shopreviewseq, shopreviewid, shopreviewcontent, shopreviewhit, logtime);
+		return new ShopReview(shopreviewseq, shopreviewpcode, shopreviewid, shopreviewcontent, rating, logtime);
 	}
 }

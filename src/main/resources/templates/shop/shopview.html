@@ -13,8 +13,8 @@
 	<header>
 		<h1>쇼핑몰</h1>
 		<nav>
-			<a href="/shop/shopmain">홈</a> <a href="#">카테고리</a> <a href="#">장바구니</a>
-			<a href="#">내 계정</a>
+			<a href="/shop/shopmain">홈</a> <a href="#">카테고리</a> <a
+				href="/shop/shopcart">장바구니</a> <a href="#">내 계정</a>
 		</nav>
 	</header>
 	<div class="cart" onclick="showCart()">
@@ -46,48 +46,100 @@
 						<option>10</option>
 					</select>
 				</div>
-				<p></p>
-				<button onclick="addToCart()" class="add-to-cart">장바구니에
-					담기&ensp;(1개씩 추가)</button>
-				<p></p>
-				<button id="" onclick="confirm_buy()" style="width: 127px;">회원
-					구매하기</button>
-				&ensp;
-				<button id="" onclick="confirm_buy()" style="width: 140px;">비회원
-					구매하기</button>
+				<div style="">
+					<p></p>
+					<button onclick="addToCart()" class="add-to-cart">장바구니에
+						담기&ensp;(1개씩 추가)</button>
+					<p></p>
+					<button id="" onclick="confirm_buy()" style="width: 127px;">회원
+						구매하기</button>
+					&ensp;
+
+				</div>
 			</div>
 		</section>
 
 		<section class="product-reviews">
 			<div class="reviews-header">
-			<h3>상품 리뷰</h3>	<button id="" onclick="review()" style="width: 100px; ">리뷰남기기</button>
+				<h3>상품 리뷰</h3>
+				<button id="" onclick="review()" style="width: 100px;">리뷰남기기</button>
 			</div>
-			
-			<div id="reviewForm" style="display:none;">
+
+			<div id="reviewForm" style="display: none;" align="center">
 				<p>고객님의 따뜻한 상품 후기를 남겨주세요</p>
-				
-				<form action="/shop/shopReview" name="form1" method="post" style="width: 600px;">
-					<input type="hidden" id="pcode" name="pcode" th:value="${dto.pcode}">
-					
-					<textarea id="reviewText" name="reviewText" placeholder="여기에 리뷰를 입력하여 주세요~" oninput="autoResize()"></textarea>
+
+				<form action="/shop/shopReview" name="form1" method="post"
+					style="width: 600px;">
+					<input type="hidden" id="pcode" name="pcode"
+						th:value="${dto.pcode}">
+					<div class="star_rating">
+						<span class="star on" value="1"> </span> <span class="star on"
+							value="2"> </span> <span class="star on" value="3"> </span> <span
+							class="star on" value="4"> </span> <span class="star on"
+							value="5"> </span> <input type="hidden" name="rating" value="5">
+					</div>
+					<textarea id="reviewText" name="reviewText"
+						placeholder="이곳에 한줄 리뷰를 남겨주세요" oninput="autoResize()"></textarea>
 					<br>
 					<div align="right">
-					<input type="button" value="리뷰쓰기"  onclick="submitReview()">
+						<button onclick="submitReview()">리뷰쓰기</button>
 					</div>
-				
+
 				</form>
 			</div>
-			
-			<div class="review_list">	
-				<p>
-					<strong>사용자1:</strong> 상품이 정말 좋습니다! 강력히 추천합니다.
-				</p>
-			</div>
-			<div class="review_list">
-				<p>
-					<strong>사용자2:</strong> 가격이 조금 비싸지만 품질이 좋아요.
-				</p>
-			</div>
+			<th:block th:if="${!list.isEmpty()}">
+				<div class="review_Text">
+					<table class="review_list" th:each="reviewdto : ${list}"
+						style="width: 100%">
+						<tr class="review_item" th:data-seq="${reviewdto.shopreviewseq}"
+							th:data-id="${reviewdto.shopreviewid}">
+							<td class="review_author" th:text="${reviewdto.shopreviewid}"></td>
+							<td class="review_rating"><th:block
+									th:each="i : ${#numbers.sequence(1, reviewdto.rating)}">
+									<span class="star on" th:value="${i}"></span>
+								</th:block> <th:block th:if="${reviewdto.rating < 5}">
+									<th:block
+										th:each="i : ${#numbers.sequence(reviewdto.rating+1, 5)}">
+										<span class="star" th:value="${i}"></span>
+									</th:block>
+								</th:block></td>
+							<td class="review_content"
+								th:text="${reviewdto.shopreviewcontent}"></td>
+							<td class="review_date" th:text="${reviewdto.logtime}"></td>
+							<td class="review_delete"><button
+									th:onclick="deleteReview([[${reviewdto.shopreviewseq}]], [[${reviewdto.shopreviewid}]])">리뷰삭제</button></td>
+						</tr>
+					</table>
+
+					<div align="center">
+						<p>
+							<th:block th:if="${ startPage > 3}">
+						[<a
+									th:href="@{/shop/shopview(pcode=${pcode},pg=${ startPage-1 })}"
+									class="paging">이전</a>]
+						</th:block>
+							<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
+								<th:block th:if="${ pg==num }">
+									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
+										class="currentPaging">[[${ num }]]</a>]
+								</th:block>
+								<th:block th:if="${ pg!=num }">
+									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
+										class="paging">[[${ num }]]</a>] 
+								</th:block>
+							</th:block>
+							<th:block th:if="${endPage < totalP}">
+							[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ endPage+1 })}"
+									class="paging">다음</a>]
+						</th:block>
+
+						</p>
+					</div>
+				</div>
+			</th:block>
+			<th:block th:if="${list.isEmpty()}">
+				<p>리뷰가 없습니다. 고객님의 상품 후기를 남겨주세요</p>
+			</th:block>
 		</section>
 	</main>
 	<footer>
@@ -99,18 +151,41 @@
 </html>
 
 <script type="text/javascript">
+
+	function deleteReview(reviewseq, reviewid) {
+		if("[[${userId}]]" != "" ){
+			if("[[${userId}]]"== reviewid){
+				if(confirm("작성하신 리뷰를 정말 삭제하시겠습니까?")){
+					location.href="/shop/shopReviewDelete?shopreviewseq="+reviewseq+"&pcode="+"[[${dto.pcode}]]"					
+				}
+			}else{
+				alert("리뷰 작성자만 삭제가 가능합니다.")
+			}
+			
+			
+			
+		}else {
+			alert("로그인 후 리뷰 삭제가 가능합니다.")
+			if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
+			    
+		}
+		
+	}
+	
 	
 	function review() {
-		if("[[${userId}]]" != null ){
+		if("[[${order}]]" == "true"){
 			const reviewForm = document.getElementById('reviewForm');
 			reviewForm.style.display = 'block';
 			document.querySelector('.product-details').style.width = '100%';
 			document.querySelector('.product-reviews').style.width = '100%';
 			
-		}else {
+		} else if("[[${userId}]]" == "" ) {
 			alert("로그인 후 리뷰 작성이 가능합니다.")
 			if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
 			    
+		} else {
+			alert("상품 구매 후 리뷰를 작성해주세요.")
 		}
 	}
 	
@@ -125,13 +200,13 @@
 			}else {return;}
 		} else {
 			alert('리뷰를 입력하세요.');
+			return;
 		}
 		frm.submit();
 	}
 	
 	function confirm_buy() {
-				
-		if("[[${userId}]]" != null ){
+		if("[[${userId}]]" != "" ){
 			    // Select 요소에서 선택된 값 가져오기
 			    const productqty = document.getElementById('productqty').value;
 			    
@@ -150,16 +225,8 @@
 			    
 	} 
 			
-	let cartCount = 0;
+	
 
-	function addToCart() {
-		cartCount++;
-		document.getElementById('cart-count').innerText = cartCount;
-	}
-
-	function showCart() {
-		location.href = '/shop/shopcart';
-	}
 	
 /* 장바구니 저장 및 업데이트 */
 	function addToCart(event) {
@@ -207,15 +274,42 @@
 		location.href = '/shop/shopcart';
 	}
 
-	// 페이지 로드 시 장바구니 카운트 초기화
+
 	document.addEventListener('DOMContentLoaded', function() {
 		updateCartCount();
-
+		// 페이지 로드 시 장바구니 카운트 초기화
 		document.querySelectorAll('.add-to-cart').forEach(button => {
 			button.removeEventListener('click', addToCart);  // 기존 이벤트 리스너 제거
 			button.addEventListener('click', addToCart);
+
 		});
+		// 별점 나타내기
+		document.querySelectorAll('.star_rating > .star').forEach(function(star) {
+		    star.addEventListener('click', function() {
+		    	
+		        const siblings = star.parentNode.children;
+		        
+		        // 모든 별의 'on' 클래스를 제거
+		        for (let i = 0; i < siblings.length; i++) {
+		            siblings[i].classList.remove('on');
+		        }
+		        
+		        // 클릭한 별과 그 이전 별들에 'on' 클래스 추가
+		        star.classList.add('on'); // 클릭한 별
+		        document.form1.rating.value = star.getAttribute('value');
+		        let prevStar = star.previousElementSibling;
+		        
+		        while (prevStar) { // 이전 별들
+		            prevStar.classList.add('on');
+		            prevStar = prevStar.previousElementSibling;
+		        }
+		        
+		    });
+		});
+
+
 	});
+
 </script>
 
 
@@ -268,23 +362,118 @@ main {
 	padding: 20px;
 	max-width: 1200px;
 	margin: 0 auto;
-}
-.reviews-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px; /* 하단 간격 조정 */
+	height: auto;
 }
 
- #reviewText {
-        width: 600px;
-        overflow-y: hidden; /* 스크롤바 숨기기 */
-        resize: none; /* 사용자가 크기 조정 못하게 */
-        line-height: 1.5; /* 줄 간격 */
-    }
+.reviews-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px; /* 하단 간격 조정 */
+}
+
+#reviewText {
+	width: 600px;
+	overflow-y: hidden; /* 스크롤바 숨기기 */
+	resize: none; /* 사용자가 크기 조정 못하게 */
+	line-height: 1.5; /* 줄 간격 */
+}
+
+.review_list {
+	border-bottom: 1px solid #ddd;
+	padding: 10px 0;
+	border-collapse: collapse;
+}
+
+.review_item {
+	border: 1px;
+	padding: 5px;
+	transition: background-color 0.3s, border-radius 0.3s;
+	/* 부드러운 효과를 위한 트랜지션 */
+}
+
+.review_item td {
+	border: 1px;
+	padding: 5px;
+	transition: background-color 0.3s, border-radius 0.3s;
+	/* 부드러운 효과를 위한 트랜지션 */
+}
+
+.review_item:hover {
+	background-color: #f0f0f0; /* 마우스 오버 시 배경 색상 */
+	border-radius: 8px; /* 모서리 둥글게 설정 */
+	background-image: url('../images/wastebasket.png');
+	background-repeat: no-repeat; /* 이미지 반복 방지 */
+	background-position: center right; /* 이미지 위치 */
+	background-size: 28px; /* 이미지 크기 */
+	opacity: 0.65; /* 흐릿하게 보이도록 투명도 조절 */
+}
+
+.review_author {
+	width: 150px; /* 작성자 칼럼의 너비 설정 */
+	text-align: center;
+	white-space: nowrap;
+}
+
+.review_rating {
+	width: 100px;
+	white-space: nowrap;
+}
+
+.review_content {
+	width: auto; /* 내용 칼럼의 너비 설정 */
+}
+
+.review_date {
+	width: 20px; /* 날짜 칼럼의 너비 설정 */
+	font-size: 14px;
+	white-space: nowrap; /*내용이 한줄 넘쳐도 한줄로 고정*/
+}
+
+.review_delete {
+	width: 13%;
+}
+
+.currentPaging {
+	color: red;
+	text-decoration: underline;
+}
+
+.paging {
+	color: blue;
+	text-decoration: none;
+}
+
+#subjectA:link {
+	color: black;
+	text-decoration: none;
+}
+
+#subjectA:visited {
+	color: black;
+	text-decoration: none;
+}
+
+#subjectA:active {
+	color: black;
+	text-decoration: none;
+}
+
+#subjectA:hover {
+	color: green;
+	text-decoration: underline;
+}
+
 .product-details {
 	display: flex;
 	margin-bottom: 30px;
+	height: auto;
+}
+
+.product-reviews {
+	border-top: 1px solid #ddd;
+	padding-top: 20px;
+	height: 35%;
 }
 
 .product-image img {
@@ -316,20 +505,11 @@ button {
 	color: #fff;
 	border: none;
 	cursor: pointer;
+	border-radius: 5px;
 }
 
 button:hover {
 	background-color: #0056b3;
-}
-
-.product-reviews {
-	border-top: 1px solid #ddd;
-	padding-top: 20px;
-}
-
-.review_list {
-	border-bottom: 1px solid #ddd;
-	padding: 10px 0;
 }
 
 footer {
@@ -364,6 +544,54 @@ select {
 
 .cart:hover {
 	background-color: #45a049;
+}
+
+.star_rating {
+	width: 100%;
+	box-sizing: border-box;
+	margin-bottom: 3px;
+}
+
+.star_rating .star {
+	width: 30px;
+	height: 30px;
+	margin-right: 8px;
+	display: inline-block;
+	background-image: url("../images/non-star.png");
+	background-size: 100%;
+	box-sizing: border-box;
+}
+
+.star_rating .star.on {
+	width: 30px;
+	height: 30px;
+	margin-right: .8px;
+	display: inline-block;
+	background-image: url("../images/star.png");
+	background-size: 100%;
+	box-sizing: border-box;
+	background-size: 100%;
+}
+
+.review_item .star {
+	width: 13px;
+	height: 13px;
+	margin-right: 1px;
+	display: inline-block;
+	background-image: url("../images/non-star.png");
+	background-size: 100%;
+	box-sizing: border-box;
+}
+
+.review_item .star.on {
+	width: 13px;
+	height: 13px;
+	margin-right: 1px;
+	display: inline-block;
+	background-image: url("../images/star.png");
+	background-size: 100%;
+	box-sizing: border-box;
+	background-size: 100%;
 }
 </style>
 

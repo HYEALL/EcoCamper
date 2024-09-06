@@ -5,13 +5,13 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.EcoCamper.dao.ShopReviewDAO;
 import com.example.EcoCamper.dto.ShopReviewDTO;
 import com.example.EcoCamper.entity.ShopReview;
 import com.example.EcoCamper.jwt.TokenProvider;
-import com.example.EcoCamper.service.ShopReviewService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ShopReviewController {
 	
 	@Autowired
-	ShopReviewService service;
+	ShopReviewDAO service_re;
 	
 	@Autowired
 	private TokenProvider tokenProvider;
@@ -32,7 +32,7 @@ public class ShopReviewController {
 		
 		String reviewtext=request.getParameter("reviewText");
 		String pcode = request.getParameter("pcode");
-		
+		int rating = Integer.parseInt(request.getParameter("rating"));
 		/*
 		System.out.println(pcode);
 		System.out.println(userId);
@@ -42,17 +42,35 @@ public class ShopReviewController {
 		dto.setShopreviewpcode(pcode);
 		dto.setShopreviewid(userId);
 		dto.setShopreviewcontent(reviewtext);
-		dto.setShopreviewhit(0);
+		dto.setRating(rating);
 		dto.setLogtime(new Date());
 		
-		System.out.println(dto);
-		ShopReview result=service.write(dto);
-		System.out.println("result"+result);
+		//System.out.println(dto);
+		ShopReview result=service_re.write(dto);
+		//System.out.println("result"+result);
 		
 		model.addAttribute("result",result);
+		model.addAttribute("pcode",pcode);
 		model.addAttribute("dto",dto);
 		
 		return "/shop/shopReview";
 	}
+	
+	@GetMapping("/shop/shopReviewDelete")
+	public String shopReviewDelete(HttpServletRequest request,Model model) {
+		int shopreviewseq=Integer.parseInt(request.getParameter("shopreviewseq"));
+		String pcode=request.getParameter("pcode");
+		
+		//System.out.println(pcode);
+		boolean result=service_re.shopReviewDelete(shopreviewseq);
+		//System.out.println(result);
+		
+		model.addAttribute("result",result);
+		model.addAttribute("pcode",pcode);
+		
+		return "/shop/shopReviewDelete";
+	}
+	
+	
 	
 }

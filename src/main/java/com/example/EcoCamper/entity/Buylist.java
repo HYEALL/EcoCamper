@@ -26,10 +26,9 @@ public class Buylist {
 								initialValue = 1, allocationSize = 1)
 	private int		buyseq;
 	private String  buyid;
-	private String  productname;
+	private String  productcode;
 	private int		productqty;
 	private int		productprice ;
-	private String  buyername;
 	private String  receivename;
 	private String  baddress;
 	private String  bphone;

@@ -14,10 +14,9 @@ import lombok.ToString;
 public class BuylistDTO {
 	private int		buyseq;
 	private String  buyid;
-	private String  productname;
+	private String  productcode;
 	private int		productqty;
 	private int		productprice ;
-	private String  buyername;
 	private String  receivename;
 	private String  baddress;
 	private String  bphone;
@@ -26,6 +25,6 @@ public class BuylistDTO {
 	private Date    logtime;
 	
 	public Buylist toEntity() {
-		return new Buylist(buyseq, buyid, productname, productqty, productprice, buyername, receivename, baddress, bphone, bpayment, logtime);
+		return new Buylist(buyseq, buyid, productcode, productqty, productprice, receivename, baddress, bphone, bpayment, logtime);
 	}
 }

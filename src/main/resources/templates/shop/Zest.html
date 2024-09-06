@@ -3,36 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품 페이지</title>
+    <title>주문 내역</title>
+    <link rel="stylesheet" href="styles.css"> <!-- CSS 스타일 추가 -->
     <style>
-        /* 간단한 스타일링 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: 50px auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f8f8;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .order-status {
+            color: green;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <h1>상품 페이지</h1>
-    <div>
-        <p>상품 A - 10,000원</p>
-        <button onclick="addToCart('상품 A', 10000)">장바구니에 추가</button>
-    </div>
-    <div>
-        <p>상품 B - 20,000원</p>
-        <button onclick="addToCart('상품 B', 20000)">장바구니에 추가</button>
-    </div>
 
-    <script>
-        function addToCart(name, price) {
-            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-            const itemIndex = cartItems.findIndex(item => item.name === name);
+<div class="container">
+    <h1>주문 내역</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>주문 번호</th>
+                <th>상품 이름</th>
+                <th>상품 코드</th>
+                <th>수량</th>
+                <th>가격</th>
+                <th>주문 상태</th>
+                <th>주문 날짜</th>
+                <th>배송지</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 샘플 주문 데이터 -->
+            <tr>
+                <td>ORD12345</td>
+                <td>스마트폰</td>
+                <td>P001</td>
+                <td>1</td>
+                <td>₩1,000,000</td>
+                <td><span class="order-status">배송 중</span></td>
+                <td>2023-09-01</td>
+                <td>서울특별시 강남구</td>
+            </tr>
+            <tr>
+                <td>ORD12346</td>
+                <td>노트북</td>
+                <td>P002</td>
+                <td>1</td>
+                <td>₩1,500,000</td>
+                <td><span class="order-status">배송 완료</span></td>
+                <td>2023-09-02</td>
+                <td>서울특별시 종로구</td>
+            </tr>
+            <!-- 더 많은 주문 데이터를 여기 추가할 수 있습니다 -->
+        </tbody>
+    </table>
 
-            if (itemIndex > -1) {
-                cartItems[itemIndex].quantity += 1;
-            } else {
-                cartItems.push({ name, price, quantity: 1 });
-            }
+    <a href="shop.html" class="button">계속 쇼핑하기</a>
+</div>
 
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
-            alert(`${name}이(가) 장바구니에 추가되었습니다.`);
-        }
-    </script>
 </body>
 </html>
