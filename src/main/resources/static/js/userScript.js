@@ -202,7 +202,7 @@ function incheckId() { // checkId form 입력 체크
 	}
 	document.writeForm.submit();
 }
-function sendNumber() {
+function sendNumber() { // 인증 메일 발송 클릭 시
 	var frm = document.inputForm;
 	if (frm.checkEmailOk.value == "true") {
 		alert("이미 이메일 인증을 완료했습니다.");
@@ -223,22 +223,23 @@ function sendNumber() {
 	}
 
 	document.querySelector("#mail_number").style.display = "";
-
+	
+	// 서버에 POST 요청을 보내 이메일로 인증번호를 전송
 	fetch('/mail', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		},
-		body: 'mail=' + encodeURIComponent(frm.email.value)
+		body: 'mail=' + encodeURIComponent(frm.email.value) // 이메일 주소를 URL 인코딩하여 전송
 	})
-		.then(response => response.text())
+		.then(response => response.text()) // 응답을 텍스트 형식으로 처리
 		.then(data => {
-			alert(data);
+			alert(data); // 서버 응답 메시지를 알림창으로 표시
 		})
-		.catch(error => console.error('Error:', error));
+		.catch(error => console.error('Error:', error)); // 에러가 발생할 경우 콘솔에 로그 출력
 }
 
-function confirmNumber() {
+function confirmNumber() { // 인증하기 클릭 시
 	var frm = document.inputForm;
 	var validNumber = document.querySelector("#valid_number").value;
 	if (frm.checkEmailOk.value == "true") {
@@ -246,19 +247,19 @@ function confirmNumber() {
 		frm.email.focus();
 		return false;
 	}
-
+	// 서버에 POST 요청을 보내 인증번호를 확인
 	fetch('/confirm', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		},
-		body: 'valid_number=' + encodeURIComponent(validNumber)
+		body: 'valid_number=' + encodeURIComponent(validNumber)  // 인증번호를 URL 인코딩하여 전송
 	})
 		.then(response => response.text())
 		.then(data => {
-			alert(data);
+			alert(data); // 서버 응답 메시지를 알림창으로 표시
 			if (data === "이메일 인증이 완료되었습니다.") {
-				frm.checkEmailOk.value = "true";
+				frm.checkEmailOk.value = "true";  // 이메일 인증 완료 상태로 설정
 				frm.email.readOnly = true;
 			}
 		})
