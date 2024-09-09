@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.EcoCamper.dao.BuylistDAO;
 import com.example.EcoCamper.dto.BuylistDTO;
+import com.example.EcoCamper.dto.OrderlistDTO;
 import com.example.EcoCamper.entity.Buylist;
 
 @Service
-public class BuylistService {
+public class BuylistSevice {
 	
 	@Autowired
 	private BuylistDAO dao;
@@ -23,16 +24,24 @@ public class BuylistService {
 		return dao.cartpay(dto);
 	}
 	
-	public List<Buylist> orderList(int startNum, int endNum,String userId) {
-		return dao.orderList(startNum, endNum, userId);
+	public List<OrderlistDTO> orderList(String userId) {
+		return dao.orderList( userId);
 	}
-	
 	
 	public int getTotal(String userId) {
 		return dao.getTotal(userId);
 	}
+	
+	public int orderAllsum(String userId) {
+		return dao.orderAllsum(userId);
+	}
+	
 	public Boolean findByPcodeAndBuyId(String pcode, String buyId) {
 		return dao.findByPcodeAndBuyId(pcode, buyId);
 		
+	}
+	
+	public boolean shopOrderListDelete(String[] buyseqArray) {
+	 return dao.shopOrderListDelete(buyseqArray);
 	}
 }

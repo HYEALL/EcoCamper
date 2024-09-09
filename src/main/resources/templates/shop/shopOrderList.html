@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>장바구니</title>
+<style>
+header {
+	background-color: #333;
+	color: #fff;
+	padding: 10px 0;
+	text-align: center;
+}
+
+header h1 {
+	margin: 0;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f8f8f8;
+	margin: 0;
+	padding: 0;
+}
+
+nav {
+	display: flex;
+	justify-content: space-between;
+	background-color: #444;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	width: 100%;
+}
+
+nav a {
+	color: white;
+	padding: 14px 20px;
+	text-decoration: none;
+	display: inline-block;
+}
+
+nav a:hover {
+	background-color: #575757;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 50px auto;
+	padding: 20px;
+	background-color: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+
+}
+
+h1 {
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+th, td {
+	padding: 15px;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #f4f4f4;
+}
+
+.cart-summary {
+	text-align: right;
+	margin-top: 20px;
+	font-size: 18px;
+}
+
+.total {
+	font-weight: bold;
+}
+
+.delete-button {
+	color: #e74c3c;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.delete-button:hover {
+	color: #c0392b;
+}
+
+button {
+	padding: 10px 20px;
+	background-color: #27ae60;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+button:hover {
+	background-color: #219150;
+}
+
+.order_cancel {
+	background-color: #c0392b;
+}
+
+.order_cancel:hover {
+	background-color: #a93226;
+}
+
+
+
+
+.order-items  {
+	 border: 1px;
+  	 padding: 5px;
+     transition: background-color 0.3s, border-radius 0.3s;
+     
+}
+.order-items:hover {
+      background-color: #EAEAEA; /* 마우스 오버 시 배경 색상 */
+      border-radius: 8px; /* 모서리 둥글게 설정 */
+      opacity: 0.85;
+}
+ 
+</style>
+</head>
+<body>
+	<header>
+		<h1>쇼핑몰</h1>
+		<nav>
+			<a href="/shop/shopmain">홈</a>
+			<a href="#">카테고리</a>
+			<a href="/shop/shopcart">장바구니</a>
+			<a href="#">내 계정</a>
+		</nav>
+	</header>
+	<div class="container">
+		<h1>주문내역</h1>
+
+		<table>
+			<thead>
+				<tr>
+					<th>선택</th>
+					<th>주문번호</th>
+					<th>상품명</th>
+					<th>수량</th>
+					<th>총액</th>
+					<th>주문날짜</th>
+					<th>받는사람</th>
+					<th>배송지</th>
+				</tr>
+			</thead>
+			<tbody class="order-list">
+				<tr class="order-items" th:each="orderdto : ${list}">
+					<td><input type="checkbox" th:data-buyseq="${orderdto.buyseq}" 
+											 th:data-pcode="${orderdto.productcode}" 
+											 th:data-pname="${orderdto.pname}" 
+											 class="order-checkbox"></td>
+					<td th:text="${orderdto.buyseq }"></td>
+					<td th:text="${orderdto.pname }"></td>
+					<td th:text="${orderdto.productqty }"></td>
+					<td th:text="${orderdto.productprice }"></td>
+					<td th:text="${orderdto.logtime }"></td>
+					<td th:text="${orderdto.receivename }"></td>
+					<td th:text="${orderdto.baddress}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="cart-summary">
+			총액: <span id="total-amount">[[${orderAllsum}]]</span> 원
+			
+		</div>
+
+		<div style="text-align: center; margin-top: 30px;">
+			<button id="order_cancel" class="order_cancel" onclick="order_cancel()">주문취소</button>
+			<button id="checkout-button" onclick="go_review()">상품리뷰달기</button>
+			
+			
+			
+		</div>
+	</div>
+	
+    <!-- 폼 추가 위치 -->
+    <form id="order-cancel-form" action="/shop/shopbuyListDelete" method="post" style="display: none;">
+        <input type="hidden" name="buyseqs" id="buyseqs">
+    </form>
+
+	<script>
+		function go_review() {
+			const checkedCheckboxes = document.querySelectorAll('.order-checkbox:checked');
+			if (checkedCheckboxes.length > 1) {
+		        alert('리뷰는 한 상품에 대해서만 작성할 수 있습니다.');
+		        return;
+		    }else if (checkedCheckboxes.length == 0){
+		        alert('리뷰 작성하실 상품을 선택해주세요.');
+		        return;
+		    }else if (checkedCheckboxes.length == 1){
+		    	const  pcode = checkedCheckboxes[0].getAttribute('data-pcode');
+		    	const  pname = checkedCheckboxes[0].getAttribute('data-pname');
+		    	if(confirm(pname+" 상품 리뷰 작성을 위해 화면을 이동하시겠습니까?")){
+		    		location.href='/shop/shopview?pcode='+pcode;
+		    	}
+		    }
+			
+		}
+		function order_cancel() {
+			const checkedCheckboxes = document.querySelectorAll('.order-checkbox:checked');
+			if (checkedCheckboxes.length == 0){
+				alert('주문취소하실 상품은 선택해주세요.');
+				return;
+			}else {
+				var qty=checkedCheckboxes.length;
+				if(confirm(qty+' 건의 주문상품을 선택하셨습니다. 정말 취소하시겠습니까?')){
+					const buyseqArray = [];
+				    checkedCheckboxes.forEach(checkbox => {
+				        buyseqArray.push(checkbox.getAttribute('data-buyseq'));
+				    });
+				    // 폼의 숨겨진 입력 필드에 buyseqArray 값을 설정
+				    const buyseqsInput = document.getElementById('buyseqs');
+				    buyseqsInput.value = buyseqArray.join(',');
+				    document.getElementById('order-cancel-form').submit();
+				}
+				
+			}
+		}
+		
+    </script>
+</body>
+</html>

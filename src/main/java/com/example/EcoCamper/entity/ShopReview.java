@@ -29,7 +29,7 @@ public class ShopReview {
 	private String shopreviewpcode ;
 	private String shopreviewid ;
 	private String shopreviewcontent ;
-    private int rating;
+    private int rating ;
     @Temporal(TemporalType.DATE)
     private Date logtime ;
 }

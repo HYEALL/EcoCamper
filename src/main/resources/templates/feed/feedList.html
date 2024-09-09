@@ -472,6 +472,7 @@
                         	
                             <img src="../images/non-fire.png" class="like-icon" alt="Like Icon">
                         </button>
+                         <span class="like-count" id="like-count"></span>
                         
                   
             <button class="comment-button" th:onclick="feedReply([[${feed.seq}]])">
@@ -479,6 +480,8 @@
         		<img src="../images/talk.png" class="comment-icon" alt="Comment Icon">
         		
     		</button>
+    		
+    		<span class="comment-count" id="comment-count"></span>
         </div>
 
                 <div class="feed-details">

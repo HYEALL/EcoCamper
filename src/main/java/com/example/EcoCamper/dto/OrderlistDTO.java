@@ -1,0 +1,44 @@
+package com.example.EcoCamper.dto;
+
+import java.util.Date;
+
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.Data;
+import lombok.ToString;
+
+@Data
+@ToString
+public class OrderlistDTO {
+	private int		buyseq;
+	private String  buyid;
+	private String  productcode;
+	private int		productqty;
+	private int		productprice ;
+	private String  receivename;
+	private String  baddress;
+	private String  bphone;
+	private String  bpayment;
+	@Temporal(TemporalType.DATE)
+	private Date    logtime;
+	private String pname;
+	
+	
+	public OrderlistDTO(int buyseq, String buyid, String productcode, int productqty, int productprice,
+			String receivename, String baddress, String bphone, String bpayment, Date logtime, String pname) {
+		super();
+		this.buyseq = buyseq;
+		this.buyid = buyid;
+		this.productcode = productcode;
+		this.productqty = productqty;
+		this.productprice = productprice;
+		this.receivename = receivename;
+		this.baddress = baddress;
+		this.bphone = bphone;
+		this.bpayment = bpayment;
+		this.logtime = logtime;
+		this.pname = pname;
+	}
+	
+	
+}

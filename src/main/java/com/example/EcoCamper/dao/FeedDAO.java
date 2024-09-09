@@ -69,4 +69,30 @@ public class FeedDAO {
 		return !repository.existsById(seq);
 		}
 	
+	public boolean feedUpdate(FeedDTO dto, int seq) {
+		boolean result = false;
+		Feed feed = repository.findById(seq).orElse(null);
+		if(feed != null) {
+			feed.setSeq(dto.getSeq());
+			feed.setId(dto.getId());
+			feed.setOutdoor(dto.getOutdoor());
+			feed.setFeed_subject(dto.getFeed_subject());
+			feed.setFeed_content(dto.getFeed_content());
+			feed.setHit(dto.getHit());
+			feed.setPlace(dto.getPlace());
+			feed.setFeed_tag(dto.getFeed_tag());
+			feed.setGoods(dto.getGoods());
+			feed.setFeed_file(dto.getFeed_file());
+			feed.setFeed_type(dto.getFeed_type());
+			feed.setLogtime(dto.getLogtime());
+            repository.save(feed);
+            
+            result = true;
+            
+        	return result;	
+		} else {
+			return result;
+		}
+	}
+	
 }

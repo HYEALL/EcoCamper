@@ -10,17 +10,47 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-	<header>
-		<h1>쇼핑몰</h1>
-		<nav>
-			<a href="/shop/shopmain">홈</a> <a href="#">카테고리</a> <a
-				href="/shop/shopcart">장바구니</a> <a href="#">내 계정</a>
+	<nav>
+			<div>
+				<a href="/shop/shopmain">쇼핑몰</a>
+			</div>
+			<div>
+				<a href="#products1"></a> <a href="#products2"></a> <a
+					href="#products3"></a>
+			</div>
+
+		<!-- 그림 모형 -->
+			<div class="top_mypage" align="right">
+				<a href="/shop/shopAllList" class="eSearch"><svg
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+						fill="none" viewbox="0 0 24 24" class="icon" role="img">
+						<path stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+							stroke-width="1.5"
+							d="M11 19c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z"></path>
+						<path stroke="#000" stroke-linejoin="round" stroke-width="1.5"
+							d="M22 22l-5-5"></path></svg></a> 
+				<a href="#" onclick="confirm_orderList()"><svg
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+						fill="none" viewbox="0 0 24 24" class="icon" role="img">
+						<circle cx="11.5" cy="6.5" r="3.75" stroke="#000"
+							stroke-width="1.5"></circle>
+						<path stroke="#000" stroke-width="1.5"
+							d="M1.78 21.25c.382-4.758 4.364-8.5 9.22-8.5h1c4.856 0 8.838 3.742 9.22 8.5H1.78z"></path></svg></a>
+				<a href="/shop/shopcart"
+					class="xans-element- xans-layout xans-layout-orderbasketcount "><svg
+						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+						fill="none" viewbox="0 0 24 24" class="icon" role="img">
+					<path fill="#000"
+							d="M23.073 22.253l-1.946-14.31c-.04-.38-.368-.667-.758-.667h-3.656v-1.74c0-2.543-2.115-4.613-4.713-4.613-2.599 0-4.713 2.07-4.713 4.613v1.74H3.63c-.39 0-.717.288-.758.667L.927 22.253c-.022.21.047.42.192.577.144.157.35.247.566.247h20.63c.216 0 .421-.09.566-.247.145-.157.214-.366.192-.576zM8.81 5.537c0-1.72 1.431-3.122 3.19-3.122 1.758 0 3.19 1.401 3.19 3.122v1.74H8.81v-1.74zm-6.28 16.05l1.786-12.82h2.97v1.644c0 .412.342.746.762.746.421 0 .762-.334.762-.746V8.767h6.38v1.643c0 .412.34.746.761.746.42 0 .762-.334.762-.746V8.767h2.97l1.786 12.819H2.53z"></path></svg><span
+					class="count displaynone EC-Layout_Basket-count-display"><span
+						class="EC-Layout-Basket-count"></span></span> </a>
+			</div>
 		</nav>
-	</header>
 	<div class="cart" onclick="showCart()">
 		장바구니 (<span id="cart-count">0</span>)
 	</div>
 	<main>
+	<div class="container">
 		<section class="product-details">
 			<div class="product-image">
 				<img th:src="@{/images/}+${dto.pimg}" alt="상품 이미지">
@@ -54,7 +84,7 @@
 					<button id="" onclick="confirm_buy()" style="width: 127px;">회원
 						구매하기</button>
 					&ensp;
-
+					
 				</div>
 			</div>
 		</section>
@@ -65,7 +95,7 @@
 				<button id="" onclick="review()" style="width: 100px;">리뷰남기기</button>
 			</div>
 
-			<div id="reviewForm" style="display: none;" align="center">
+			<div id="reviewForm" style="display: none;">
 				<p>고객님의 따뜻한 상품 후기를 남겨주세요</p>
 
 				<form action="/shop/shopReview" name="form1" method="post"
@@ -88,11 +118,12 @@
 				</form>
 			</div>
 			<th:block th:if="${!list.isEmpty()}">
-				<div class="review_Text">
-					<table class="review_list" th:each="reviewdto : ${list}"
+			<div class="review_Text">
+				<table class="review_list" th:each="reviewdto : ${list}"
 						style="width: 100%">
 						<tr class="review_item" th:data-seq="${reviewdto.shopreviewseq}"
-							th:data-id="${reviewdto.shopreviewid}">
+												th:data-id="${reviewdto.shopreviewid}">
+												
 							<td class="review_author" th:text="${reviewdto.shopreviewid}"></td>
 							<td class="review_rating"><th:block
 									th:each="i : ${#numbers.sequence(1, reviewdto.rating)}">
@@ -111,36 +142,38 @@
 						</tr>
 					</table>
 
-					<div align="center">
-						<p>
-							<th:block th:if="${ startPage > 3}">
-						[<a
-									th:href="@{/shop/shopview(pcode=${pcode},pg=${ startPage-1 })}"
-									class="paging">이전</a>]
-						</th:block>
-							<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
-								<th:block th:if="${ pg==num }">
-									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
-										class="currentPaging">[[${ num }]]</a>]
-								</th:block>
-								<th:block th:if="${ pg!=num }">
-									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
-										class="paging">[[${ num }]]</a>] 
-								</th:block>
-							</th:block>
-							<th:block th:if="${endPage < totalP}">
-							[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ endPage+1 })}"
-									class="paging">다음</a>]
-						</th:block>
 
-						</p>
-					</div>
+				<div align="center">
+					<p>
+						<th:block th:if="${ startPage > 3}">
+						[<a
+								th:href="@{/shop/shopview(pcode=${pcode},pg=${ startPage-1 })}"
+								class="paging">이전</a>]
+						</th:block>
+						<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
+							<th:block th:if="${ pg==num }">
+									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
+									class="currentPaging">[[${ num }]]</a>]
+								</th:block>
+							<th:block th:if="${ pg!=num }">
+									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
+									class="paging">[[${ num }]]</a>] 
+								</th:block>
+						</th:block>
+						<th:block th:if="${endPage < totalP}">
+							[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ endPage+1 })}"
+								class="paging">다음</a>]
+						</th:block>
+						
+					</p>
 				</div>
-			</th:block>
-			<th:block th:if="${list.isEmpty()}">
-				<p>리뷰가 없습니다. 고객님의 상품 후기를 남겨주세요</p>
-			</th:block>
+			</div>
+		</th:block>
+		<th:block th:if="${list.isEmpty()}">
+			<p>리뷰가 없습니다. 고객님의 상품 후기를 남겨주세요</p>
+		</th:block>
 		</section>
+	</div>
 	</main>
 	<footer>
 		<!-- <p>&copy; 2024 나의 쇼핑몰. 모든 권리 보유.</p> -->
@@ -151,6 +184,15 @@
 </html>
 
 <script type="text/javascript">
+function confirm_orderList(){
+	if("[[${userId}]]" != "" ){
+		location.href="/shop/shopOrderList"	
+	}else {
+		alert("로그인 후 주문내역 열람이 가능합니다.")
+		if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
+		    
+	}
+}
 
 	function deleteReview(reviewseq, reviewid) {
 		if("[[${userId}]]" != "" ){
@@ -188,6 +230,7 @@
 			alert("상품 구매 후 리뷰를 작성해주세요.")
 		}
 	}
+	
 	
 	
 	function submitReview() {
@@ -274,15 +317,15 @@
 		location.href = '/shop/shopcart';
 	}
 
-
+	// 페이지 로드 시 장바구니 카운트 초기화
 	document.addEventListener('DOMContentLoaded', function() {
 		updateCartCount();
-		// 페이지 로드 시 장바구니 카운트 초기화
+
 		document.querySelectorAll('.add-to-cart').forEach(button => {
 			button.removeEventListener('click', addToCart);  // 기존 이벤트 리스너 제거
 			button.addEventListener('click', addToCart);
-
 		});
+		
 		// 별점 나타내기
 		document.querySelectorAll('.star_rating > .star').forEach(function(star) {
 		    star.addEventListener('click', function() {
@@ -307,9 +350,11 @@
 		    });
 		});
 
-
+		
+		
+		
+		
 	});
-
 </script>
 
 
@@ -365,6 +410,16 @@ main {
 	height: auto;
 }
 
+.container {
+	max-width: 1200px;
+	min-height: 800px;
+	margin: 50px auto;
+	padding: 20px;
+	background-color: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+}
+
 .reviews-header {
 	display: flex;
 	justify-content: space-between;
@@ -412,11 +467,6 @@ main {
 .review_author {
 	width: 150px; /* 작성자 칼럼의 너비 설정 */
 	text-align: center;
-	white-space: nowrap;
-}
-
-.review_rating {
-	width: 100px;
 	white-space: nowrap;
 }
 
@@ -546,6 +596,10 @@ select {
 	background-color: #45a049;
 }
 
+.review_rating {
+	width: 100px;
+	white-space: nowrap;
+}
 .star_rating {
 	width: 100%;
 	box-sizing: border-box;
@@ -593,6 +647,7 @@ select {
 	box-sizing: border-box;
 	background-size: 100%;
 }
+
 </style>
 
 

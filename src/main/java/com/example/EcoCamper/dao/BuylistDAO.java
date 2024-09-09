@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.EcoCamper.dto.BuylistDTO;
+import com.example.EcoCamper.dto.OrderlistDTO;
 import com.example.EcoCamper.entity.Buylist;
 import com.example.EcoCamper.repository.BuylistRepository;
 
@@ -24,13 +25,17 @@ public class BuylistDAO {
 		return buylistRepository.save(dto.toEntity());
 	}
 	
-	public List<Buylist> orderList(int startNum, int endNum,String userId) {
-		return buylistRepository.findbyStartNumAndEndNum(startNum, endNum, userId);
+	public List<OrderlistDTO> orderList(String userId) {
+		return buylistRepository.findByUserIdwithPname(userId);
 	}
 	
 	
 	public int  getTotal(String userId) {
 		return (int) buylistRepository.countByBuyid(userId);
+	}
+	
+	public int orderAllsum(String userId) {
+		return (int)buylistRepository.sumProductPriceByUserId(userId);
 	}
 	
 	public Boolean findByPcodeAndBuyId(String pcode, String buyId) {
@@ -42,4 +47,16 @@ public class BuylistDAO {
 		}
 		
 	}
+	
+	public boolean shopOrderListDelete(String[] buyseqArray) {
+		System.out.println(buyseqArray);
+		boolean result=false;
+		if(buyseqArray != null) {
+			buylistRepository.deleteByBuyseqIn(buyseqArray);
+			 result=true;
+		}
+		
+		return result;
+	}
+	
 }

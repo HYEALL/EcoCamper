@@ -27,8 +27,8 @@ public class LikesDAO {
 
 
     // 특정 리뷰에 대한 좋아요 수 가져오기
-    public int countLikesByReview_id(int review_id) {
-        return repository.countByReviewId(review_id);
+    public int countLikesByReview_id(int reviewId) {
+        return repository.countByReviewId(reviewId);
     }
     
     // 특정 사용자가 피드를 좋아요 했는지 확인

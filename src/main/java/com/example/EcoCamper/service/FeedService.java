@@ -41,5 +41,8 @@ public class FeedService {
 		 return dao.feedDelete(seq);
 	 }
 	
+	 public boolean feedUpdate(FeedDTO dto, int seq) {
+		 return dao.feedUpdate(dto, seq);
+	 }
 	
 }

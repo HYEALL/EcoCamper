@@ -8,6 +8,7 @@
 	    likeButtons.forEach(function(button) {
 	        var reviewId = button.getAttribute('data-review-id');
 
+	        // 페이지 로드 시 좋아요 상태와 개수를 가져옴
 	        fetch(`/isLiked/${reviewId}?userId=${userId}`)
 	            .then(response => response.json())
 	            .then(isLiked => {
@@ -29,8 +30,12 @@
 	                likeIcon.src = '../images/non-fire.png';
 	                button.dataset.liked = "false";
 	            });
-	    });
 
+	        // 좋아요 개수 가져오기
+	        updateLikeCount(reviewId);
+	    });
+	    
+	    // 스와이퍼 초기화
 	    var swiperContainers = document.querySelectorAll('.swiper-container');
 	    swiperContainers.forEach(function(container) {
 	        var slides = container.querySelectorAll('.swiper-slide');
@@ -53,13 +58,21 @@
 	        }
 	    });
 
+	    function updateLikeCount(reviewId) {
+	        fetch(`/count/${reviewId}`)
+	            .then(response => response.json())
+	            .then(count => {
+	                document.getElementById('like-count').textContent = count;
+	            })
+	            .catch(error => console.error('Error:', error));
+	    }
+
 	    document.querySelectorAll('.like-button').forEach(function(button) {
 	        button.addEventListener('click', function() {
 	            var likeIcon = button.querySelector('.like-icon');
 	            var isLiked = button.dataset.liked === "true";
 	            var reviewId = button.getAttribute('data-review-id');
 	            var userId = document.body.dataset.userId;
-	            var likesNum = button.dataset.likes_num;
 
 	            if (!userId) {
 	                console.error('사용자 ID가 설정되지 않았습니다.');
@@ -77,20 +90,20 @@
 	                body: JSON.stringify({ review_id: parseInt(reviewId), user_id: userId })
 	            })
 	            .then(response => response.text())
-	            .then(data => {
+	            .then(() => {
 	                if (isLiked) {
 	                    likeIcon.src = '../images/non-fire.png';
 	                    button.dataset.liked = "false";
-	                    delete button.dataset.likes_num;
 	                } else {
 	                    likeIcon.src = '../images/fire.png';
 	                    button.dataset.liked = "true";
-	                    button.dataset.likes_num = data;
 	                }
+	                updateLikeCount(reviewId); // 좋아요 수 업데이트
 	            })
 	            .catch(error => console.error('Error:', error));
 	        });
 	    });
+
 
 	    document.getElementById('submit-reply').addEventListener('click', function() {
 	        var content = document.getElementById('reply-content').value;
@@ -130,17 +143,17 @@
 	        var isAuthor = reply.writer === userId;
 
 	        replyElement.innerHTML = `
-	        	<div class="reply-content-container">
-	            <div class="reply-content">
-	                <p><strong>${reply.writer}</strong>: ${reply.content}</p>
-	                <p class="reply-date">${new Date(reply.logtime).toLocaleString()}</p>
+	            <div class="reply-content-container">
+	                <div class="reply-content">
+	                    <p><strong>${reply.writer}</strong>: ${reply.content}</p>
+	                    <p class="reply-date">${new Date(reply.logtime).toLocaleString()}</p>
+	                </div>
+	                <div class="reply-actions">
+	                    ${isAuthor ? `<button class="delete-reply" data-reply-id="${reply.num}">
+	                                    <img src="../images/cancel.png" class="delete-reply-icon" alt="Delete-reply Icon">
+	                                  </button>` : ''}
+	                </div>
 	            </div>
-	            <div class="reply-actions">
-	                ${isAuthor ? `<button class="delete-reply" data-reply-id="${reply.num}">
-	                                <img src="../images/cancel.png" class="delete-reply-icon" alt="Delete-reply Icon">
-	                              </button>` : ''}
-	            </div>
-	        </div>
 	        `;
 	        // 댓글 삭제 버튼에 클릭 이벤트 리스너 추가
 	        var deleteButton = replyElement.querySelector('.delete-reply');
@@ -170,10 +183,11 @@
 	        })
 	        .catch(error => console.error('Error:', error));
 	    }
-	    
+
 	    function updateReplyCount() {
 	        var replyCount = document.querySelectorAll('.reply').length;
-	        document.getElementById('comment-count').textContent = replyCount;
+	        document.getElementById('reply-count').textContent = replyCount; // 댓글 개수 업데이트
+	        document.getElementById('comment-count').textContent = replyCount; // 댓글 개수 업데이트
 	    }
 
 	    function loadReplies() {
@@ -454,7 +468,17 @@ body {
     height: 50%; /* 이미지 크기를 줄이기 */
     object-fit: contain;
 }
+.comment-count {
+    font-size: 16px; /* 댓글 수 글자 크기 조정 */
+    margin-left: -10px; /* 댓글 수와 버튼 사이의 간격 조정 */
+    margin-bottom: -20px;
+}
 
+.like-count {
+    font-size: 16px; /* 댓글 수 글자 크기 조정 */
+    margin-left: -3Wpx; /* 댓글 수와 버튼 사이의 간격 조정 */
+    margin-bottom: -20px;
+}
 
 </style>
 </head>
@@ -512,7 +536,9 @@ body {
             <button class="like-button" data-liked="false" th:data-review-id="${feed.seq}">
                 <img src="../images/non-fire.png" class="like-icon" alt="Like Icon">
             </button>
-            <button class="comment-button" onclick="">
+             <span class="like-count" id="like-count"></span>
+             
+            <button class="comment-button">
                 <img src="../images/talk.png" class="comment-icon" alt="Comment Icon">
             </button>
             <span class="comment-count" id="comment-count"></span>
@@ -520,12 +546,18 @@ body {
         </div>
         
         <div class="choose-button-container">
-            <button class="delete-button" th:onclick="location.href = 'feedDelete?seq=[[${seq}]]'">
+            <button class="delete-button" th:if="${userId == feed.id}" th:onclick="location.href = 'feedDelete?seq=[[${seq}]]'">
                 <img src="../images/trash.png" class="delete-icon" alt="Delete Icon">
             </button>
-            <button class="modify-button" onclick="location.href = 'feedModifyForm'">
-                <img src="../images/modify.png" class="modify-icon" alt="Modify Icon">
-            </button>
+              <button class="modify-button" th:if="${userId == feed.id} and ${feed.feed_type == 'video'}" th:onclick="location.href = 'feedModifyFormVideo?seq=[[${seq}]]'">
+        <img src="../images/modify.png" class="modify-icon" alt="Modify Icon">
+    </button>
+    
+    <!-- feed.type이 'photo'인 경우 수정 버튼 -->
+    <button class="modify-button" th:if="${userId == feed.id} and ${feed.feed_type == 'img'}" th:onclick="location.href = 'feedModifyFormPh?seq=[[${seq}]]'">
+        <img src="../images/modify.png" class="modify-icon" alt="Modify Icon">
+    </button>
+
         </div>
     </div>
     </div>

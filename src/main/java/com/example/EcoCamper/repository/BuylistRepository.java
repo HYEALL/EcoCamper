@@ -7,16 +7,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.example.EcoCamper.dto.OrderlistDTO;
 import com.example.EcoCamper.entity.Buylist;
 
 public interface BuylistRepository extends JpaRepository<Buylist, Integer>{
-	@Query(value = "select *from (select rownum rn, tt.*from"
-			   + " (select * from Buylist where buyid=:userId order by logtime desc) tt)"
-			   + "  where rn >=:startNum and rn <=:endNum", nativeQuery = true)
-	List<Buylist> findbyStartNumAndEndNum(@Param("startNum")int startNum,@Param("endNum")int endNum,@Param("userId")String userId);
+	@Query("SELECT new com.example.EcoCamper.dto.OrderlistDTO(b.buyseq, b.buyid, b.productcode, b.productqty, b.productprice, b.receivename, b.baddress, b.bphone, b.bpayment, b.logtime, s.pname) "
+	           + "FROM Buylist b "
+	           + "JOIN Shop s ON b.productcode = s.pcode "
+	           + "WHERE b.buyid = :userId "
+	           + "ORDER BY b.buyseq DESC")
+	List<OrderlistDTO> findByUserIdwithPname(@Param("userId")String userId);
 
-	  long countByBuyid(String userId);
+	@Query(value = "SELECT SUM(productprice) FROM Buylist WHERE buyid = :userId", nativeQuery = true)
+	int sumProductPriceByUserId(@Param("userId") String userId);
+
+	long countByBuyid(String userId);
 	
+	boolean deleteByBuyseqIn(String[] buyseqArray);
 	
 	List<Buylist> findByProductcodeAndBuyid(String pcode, String buyId);
 }

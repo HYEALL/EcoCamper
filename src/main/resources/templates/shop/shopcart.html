@@ -46,7 +46,7 @@ nav a:hover {
 }
 
 .container {
-	max-width: 800px;
+	max-width: 1200px;
 	margin: 50px auto;
 	padding: 20px;
 	background-color: #fff;
@@ -162,7 +162,7 @@ button:hover {
 	<script>
 	function confirm_orderList(){
 		if("[[${userId}]]" != "" ){
-			location.href="/shop/shopOerderList"	
+			location.href="/shop/shopOrderList"	
 		}else {
 			alert("로그인 후 주문내역 열람이 가능합니다.")
 			if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"

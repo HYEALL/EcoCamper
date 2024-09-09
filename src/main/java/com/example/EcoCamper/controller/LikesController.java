@@ -38,11 +38,11 @@ public class LikesController {
 	        return ResponseEntity.ok("좋아요가 삭제되었습니다.");
 	    }
 
-	    // 특정 리뷰의 좋아요 수를 가져오는 엔드포인트
-	    @GetMapping("/count/{review_id}")
-	    public int getLikeCount(@PathVariable int review_id) {
-	        return service.getLikeCount(review_id);
-	    }
+	 @GetMapping("/count/{reviewId}")
+	 public ResponseEntity<Integer> getLikeCount(@PathVariable("reviewId") int reviewId) {
+	     int count = service.getLikeCount(reviewId);
+	     return ResponseEntity.ok(count);
+	 }
 	    
 	    @GetMapping("/isLiked/{reviewId}")
 	    public ResponseEntity<Boolean> isLiked(
