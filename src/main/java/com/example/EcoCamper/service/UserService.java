@@ -43,4 +43,9 @@ public class UserService {
 		return dao.getTotalA();
 	}
 	
+	public boolean userModify(UserDTO dto) {
+		return dao.userModify(dto);
+	}
+	
+	
 }

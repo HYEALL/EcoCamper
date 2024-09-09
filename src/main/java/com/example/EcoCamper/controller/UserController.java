@@ -73,8 +73,9 @@ public class UserController {
 	}
 
 	@GetMapping("/loginForm")
-	public String loginForm() {
-		return "/user/loginForm";
+	public String loginForm(Model model) {
+		model.addAttribute("req", "/user/loginForm");
+		return "/index";
 	}
 
 	// 아이디 중복 체크
@@ -108,8 +109,9 @@ public class UserController {
 	}
 
 	@GetMapping("/joinForm")
-	public String joinForm() {
-		return "/user/joinForm";
+	public String joinForm(Model model) {
+		model.addAttribute("req", "/user/joinForm");
+		return "/index";
 	}
 
 	@PostMapping("/join")
@@ -143,35 +145,52 @@ public class UserController {
 		return "/menu";
 
 	}
-
 	@GetMapping("/myPage")
-	public String myPage(Model model, HttpServletRequest request) {
+	public String myPage(@RequestParam(value = "mp", required = false) String mp, Model model, HttpServletRequest request ) {
 		String token = tokenProvider.resolveTokenFromCookie(request); // 쿠키에서 token 가져오기
-		String userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
-		if (userId != null) {
-			User user = service.getUser(userId);
-			model.addAttribute("user", user);
-
-			return "/user/myPage";
+		String userId = null;
+		if (token != null) {
+			userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
+			if(userId != null) {
+				User user = service.getUser(userId);
+				model.addAttribute("user", user);
+				model.addAttribute("req", "/user/myPage");
+				model.addAttribute("mp", mp);
+				return "/index";
+			} else {
+				model.addAttribute("req", "/user/loginForm");
+				return "/index";
+			}
 		} else {
-			return "index";
+			model.addAttribute("req", "/user/loginForm");
+			return "/index";
 		}
 
 	}
 	
-	@GetMapping("/user/edit")
-	public String edit(Model model, HttpServletRequest request) {
+	@GetMapping("/user/editForm")
+	public String editForm(Model model, HttpServletRequest request) {
 		String token = tokenProvider.resolveTokenFromCookie(request); // 쿠키에서 token 가져오기
 		String userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
 		if (userId != null) {
 			User user = service.getUser(userId);
+			System.out.println(user);
 			model.addAttribute("user", user);
-
-			return "/user/edit";
+			model.addAttribute("req", "/user/editForm");
+			return "/index";
 		} else {
-			return "index";
+			return "/index";
 		}
 
 	}
+	
+	@PostMapping("/edit")
+	public String edit(UserDTO userDTO, Model model, HttpServletRequest request) {
+		
+		boolean result = service.userModify(userDTO);
+		model.addAttribute("result", result);
+		return "/user/edit";
+	}
+
 
 }

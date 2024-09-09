@@ -33,6 +33,7 @@ public class Buylist {
 	private String  baddress;
 	private String  bphone;
 	private String  bpayment;
+	private String  bcancel ;
 	@Temporal(TemporalType.DATE)
 	private Date    logtime;
 }

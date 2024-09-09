@@ -1,10 +1,306 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-모든상품
-</body>
-</html>
+<style>
+main {
+	padding: 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+	margin-top: 30px;
+}
+
+.container {
+	max-width: 2000px;
+	margin: 50px auto;
+	padding: 20px;
+	background-color: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+
+}
+h1 {
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+th, td {
+	padding: 15px;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #f4f4f4;
+}
+
+.cart-summary {
+	text-align: right;
+	margin-top: 20px;
+	font-size: 18px;
+}
+
+.total {
+	font-weight: bold;
+}
+
+.delete-button {
+	color: #e74c3c;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.delete-button:hover {
+	color: #c0392b;
+}
+
+button {
+	padding: 10px 20px;
+	background-color: #27ae60;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+button:hover {
+	background-color: #219150;
+}
+
+.order_cancel {
+	background-color: #c0392b;
+}
+
+.order_cancel:hover {
+	background-color: #a93226;
+}
+
+.order-items {
+	border: 1px;
+	padding: 5px;
+	transition: background-color 0.3s, border-radius 0.3s;
+}
+
+.order-items:hover {
+	background-color: #EAEAEA; /* 마우스 오버 시 배경 색상 */
+	border-radius: 8px; /* 모서리 둥글게 설정 */
+	opacity: 0.85;
+}
+
+.search-bar {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.search-bar input {
+	width: 50%;
+	padding: 10px;
+	font-size: 16px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.product-list {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 20px;
+}
+
+.product-item {
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 10px;
+	background: #fff;
+	text-align: center;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-item img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 8px;
+}
+
+.product-item h2 {
+	font-size: 18px;
+	margin: 10px 0;
+}
+
+.product-item p {
+	font-size: 16px;
+	color: #555;
+}
+
+.product-item .price {
+	font-size: 20px;
+	color: #333;
+	margin: 10px 0;
+}
+.product-item img {
+	width: 100%;
+	height: 150px;
+	object-fit: cover;
+	border-radius: 8px;
+}
+.pagination {
+	margin: 20px 0;
+	text-align: center;
+}
+
+.pagination a {
+	padding: 10px 15px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #333;
+	margin: 0 5px;
+}
+
+.pagination a.active {
+	background: #333;
+	color: #fff;
+}
+
+
+.cart {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 50px;
+}
+
+.cart:hover {
+	background-color: #45a049;
+}
+
+</style>
+	<div class="cart" onclick="showCart()">
+		장바구니 (<span id="cart-count">0</span>)
+	</div>
+	<main>
+		<div class="header">
+			<h1>전체 상품</h1>
+		</div>
+		<div class="container">
+			<div class="search-bar">
+				<input type="text" id="search" placeholder="상품 검색..."
+					onkeyup="filterProducts()">
+			</div>
+			<div id="product-list" class="product-list">
+				<div class="product-item" th:each="shopdto : ${list}"
+									     th:data-code="${shopdto.pcode}"
+										 th:data-name="${shopdto.pname}" 
+										 th:data-price="${shopdto.pprice}"
+										 th:data-img="${shopdto.pimg}">
+					<img alt="상품이미지" th:src="@{/images/}+${shopdto.pimg}">
+					<h2>[[${shopdto.pname}]]</h2>
+					<p>[[${shopdto.ptype}]]</p>
+					<div class="price">[[${shopdto.pprice}]]</div>
+					<button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
+				</div>
+			</div>
+			<br><br>
+			<div class="pagination" id="pagination">
+				<a href="#">&laquo; 이전</a> <a href="#" class="active">1</a> <a
+					href="#">2</a> <a href="#">3</a> <a href="#">다음 &raquo;</a>
+			</div>
+		</div>
+
+
+	</main>
+	<script>
+	
+	function confirm_orderList(){
+		if("[[${userId}]]" != "" ){
+			location.href="/shop/shopOrderList"	
+		}else {
+			alert("로그인 후 주문내역 열람이 가능합니다.")
+			if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
+			    
+		}
+	}
+
+	 function filterProducts() {
+		 if (event.key === 'Enter') {
+	 
+         const searchTerm = document.getElementById('search').value.toLowerCase();
+         const allProducts = document.querySelectorAll('.product-item');
+         
+	         allProducts.forEach(product => {
+	             const productName = product.getAttribute('data-name').toLowerCase();
+	
+	             // 검색어가 상품명이나 상품 타입에 포함되면 보이고, 아니면 숨김
+	             if (productName.includes(searchTerm)) {
+	                 product.style.display = 'block';
+	             } else {
+	                 product.style.display = 'none';
+	             }
+        	 });
+		}
+	
+	 }
+	/* 장바구니 저장 및 업데이트 */
+	function addToCart(event) {
+		event.preventDefault();  // 기본 동작 방지
+
+		// 제품 정보를 가져옴
+		const productinfoDiv = event.target.closest('.product-item');  // 상위 .productinfo 찾기
+		const code = productinfoDiv.getAttribute('data-code');
+		const name = productinfoDiv.getAttribute('data-name');
+		const img = productinfoDiv.getAttribute('data-img');
+		const price = parseFloat(productinfoDiv.getAttribute('data-price'));
+		const quantity = 1;  // 기본 수량
+
+		// 기존 장바구니 데이터 불러오기
+		let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+
+		// 상품이 이미 장바구니에 있는지 확인
+		const existingProductIndex = cart.findIndex(item => item.code === code);
+		if (existingProductIndex > -1) {
+			// 상품이 이미 장바구니에 있을 경우 수량을 증가
+			cart[existingProductIndex].quantity += quantity;
+		} else {
+			// 새 상품 추가
+			cart.push({ code, name, img, price, quantity });
+		}
+
+		// sessionStorage에 저장
+		sessionStorage.setItem('cart', JSON.stringify(cart));
+
+		// 장바구니 카운트 업데이트
+		updateCartCount();
+
+		// 확인 메시지
+		alert(name + '이(가) 장바구니에 추가되었습니다!');
+	}
+
+	function updateCartCount() {
+		// 장바구니 아이템 수량 계산
+		let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+		let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+		document.getElementById('cart-count').textContent = totalQuantity;
+	}
+
+	function showCart() {
+		location.href = '/shop/shopcart';
+	}
+
+	// 페이지 로드 시 장바구니 카운트 초기화
+	document.addEventListener('DOMContentLoaded', function() {
+		updateCartCount();
+
+		document.querySelectorAll('.add-to-cart').forEach(button => {
+			button.removeEventListener('click', addToCart);  // 기존 이벤트 리스너 제거
+			button.addEventListener('click', addToCart);
+		});
+	});
+  </script>

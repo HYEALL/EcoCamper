@@ -51,11 +51,12 @@ public class BuylistController {
 
 	@PostMapping("/shop/shoppay")
 	public String pay(HttpServletRequest request, Model model, HttpSession session) {
-
 		String token = tokenProvider.resolveTokenFromCookie(request);
-		System.out.println("token : " + token);
-		String userId = tokenProvider.validateAndGetUserId(token);
-
+		//System.out.println("token : " + token);
+		String userId = null;
+		if(token != null) {
+			userId = tokenProvider.validateAndGetUserId(token);
+		}
 		User user = service_user.getUser(userId);
 		// System.out.println(userId);
 
@@ -95,6 +96,7 @@ public class BuylistController {
 		dto.setBaddress(baddress);
 		dto.setBphone(bphone);
 		dto.setBpayment(bpayment);
+		dto.setBcancel("N");
 		dto.setLogtime(new Date());
 
 		Buylist result = service_buy.pay(dto);
@@ -107,10 +109,12 @@ public class BuylistController {
 
 	@PostMapping("/shop/shopcartpay")
 	public String shopcartpay(HttpServletRequest request, Model model, HttpSession session) {
-
 		String token = tokenProvider.resolveTokenFromCookie(request);
-		System.out.println("token : " + token);
-		String userId = tokenProvider.validateAndGetUserId(token);
+		//System.out.println("token : " + token);
+		String userId = null;
+		if(token != null) {
+			userId = tokenProvider.validateAndGetUserId(token);
+		}
 
 		User user = service_user.getUser(userId);
 
@@ -148,7 +152,9 @@ public class BuylistController {
 					dto.setReceivename(receivename);
 					dto.setBaddress(baddress);
 					dto.setBphone(bphone);
+					dto.setBcancel("N");
 					dto.setBpayment(bpayment);
+					
 					dto.setLogtime(new Date());
 	
 					// DTO 출력 또는 필요한 작업 수행
@@ -174,8 +180,11 @@ public class BuylistController {
 	@GetMapping("/shop/shopOrderList")
 	public String orderList(HttpServletRequest request,Model model) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
-		System.out.println("token : " + token);
-		String userId = tokenProvider.validateAndGetUserId(token);
+		//System.out.println("token : " + token);
+		String userId = null;
+		if(token != null) {
+			userId = tokenProvider.validateAndGetUserId(token);
+		}
 		
 		int pg = 1;
 
@@ -218,13 +227,45 @@ public class BuylistController {
 	@PostMapping("/shop/shopOrderListDelete")
 	public String shopbuyListDelete(HttpServletRequest request, Model model) {
 		String buyseqs=request.getParameter("buyseqs");
+		String pcodes=request.getParameter("pcodes");
+		String productqtys=request.getParameter("productqtys");
+		
 		//System.out.println(buyseqs);
+		//System.out.println(pcodes);
+		//System.out.println(productqtys);
+		
+		
 		String[] buyseqArray = buyseqs.split(",");
 		
-		//System.out.println(buyseqArray);
 		boolean result=service_buy.shopOrderListDelete(buyseqArray);
 		
 		model.addAttribute("result",result);
+		
+		//주문취소시 다시 재고 중가 시켜야함
+		String[] pcodeArray = pcodes.split(",");
+	    String[] productqtyArray = productqtys.split(",");
+		for (int i = 0; i < pcodeArray.length; i++) {
+			String pcode = pcodeArray[i];
+	        int productqty = Integer.parseInt(productqtyArray[i]);
+	        
+	        //System.out.println(pcode+productqty);
+	        
+	        Shop shopdto = service_shop.view(pcode);
+	        //System.out.println(shopdto);
+	        int bal = shopdto.getPqty() + productqty ;
+			int salse=shopdto.getPhit();
+			salse-=productqty;
+			shopdto.setPhit(salse);
+			shopdto.setPqty(bal);
+			//System.out.println(shopdto);
+	        
+			Shop cancelresult=service_shop.save(shopdto);
+		}
+		
+	    
+	    
+	    
+	    
 		
 		return "/shop/shopOrderListDelete";
 	}

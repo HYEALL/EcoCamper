@@ -162,7 +162,8 @@ public class FeedController {
 	      System.out.println("list = "+list);
 	      model.addAttribute("list", list);
 	      model.addAttribute("userId", userId);
-	      return "feed/feedList";
+	      model.addAttribute("req", "/feed/feedList");
+	      return "/index";
 	   }
 	
 	@GetMapping("feed/feedReply")
@@ -172,7 +173,10 @@ public class FeedController {
 	     
 	    int seq = Integer.parseInt(request.getParameter("seq"));
 	    
+	    Feed feed = service.feedView(seq);
+	    
 	    model.addAttribute("userId", userId);
+	    model.addAttribute("feed", feed);
 	    model.addAttribute("seq", seq);
 		return "feed/feedReply";
 		
@@ -208,15 +212,17 @@ public class FeedController {
 	
 	@GetMapping("feed/feedModifyFormPh")
 	public String boardModifyFormPh(Model model, @RequestParam("seq") int seq) {
-	    Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
+		
+		
+		Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
 	    model.addAttribute("feed", feed);
+	    model.addAttribute("seq", seq);
 	    return "feed/feedModifyFormPh"; // JSP 파일의 경로
 	}
 	
 	@GetMapping("feed/feedModifyFormVoD")
-	public String boardModifyFormVoD(Model model, HttpServletRequest request) {
-		int seq = Integer.parseInt(request.getParameter("seq"));
-
+	public String boardModifyFormVoD(Model model,  @RequestParam("seq") int seq) {
+		
 		// 한줄 데이터 불러오기
 		Feed feed = service.feedView(seq);
 		
@@ -227,12 +233,9 @@ public class FeedController {
 		return "feed/feedModifyFormVoD";
 	}
 	
+
 	
-	
-	
-	
-	
-	@PostMapping("feed/feedModifyForm")
+	@PostMapping("feed/feedModifyPh")
 	public String feedModifyFormPh(FeedDTO dto, Model model, HttpServletRequest request,
 	        @RequestParam("feed_file1[]") List<MultipartFile> uploadFiles) {
 		File uploadDir = new File(uploadpath);
@@ -258,7 +261,7 @@ public class FeedController {
 	                } catch (IOException e) {
 	                    e.printStackTrace();
 	                    model.addAttribute("result", false); // 실패 시 결과를 모델에 추가
-	                    return "feed/feedWritePh";
+	                    return "feed/feedModifyPh";
 	                }
 	            } else {
 	                // 중복된 파일 처리 (선택 사항): 이미 존재하는 경우 처리 로직 추가
@@ -279,10 +282,60 @@ public class FeedController {
 
 	    boolean result = service.feedUpdate(dto, seq);
 	    model.addAttribute("result", result);
+	    model.addAttribute("seq", seq);
 		
-		return "feed/feedModifyFormPh";
+		return "feed/feedModifyPh";
 	}
 
+	
+	@PostMapping("feed/feedModifyVoD")
+	public String feedModifyVoD(FeedDTO dto, Model model, HttpServletRequest request,
+	        @RequestParam("feed_file1") MultipartFile uploadFile) {
+	    // 데이터 처리
+	    System.out.println("dto = " + dto);
+
+	    // 파일 이름 처리
+	    String fileName = uploadFile.getOriginalFilename();
+	    File file = new File(uploadpath, fileName);
+	    dto.setFeed_file(fileName); // 파일 이름을 DTO의 video 필드에 설정
+	    dto.setLogtime(new Date());
+	    dto.setFeed_type("video");
+
+	    // 중복된 파일 확인: 동일한 이름과 크기를 가진 파일이 이미 존재하는지 체크
+	    boolean check = file.exists() && file.length() == uploadFile.getSize();
+
+	    if (!check) {
+	        if (!fileName.isEmpty()) {
+	            // 파일 저장
+	            try {
+	                uploadFile.transferTo(file);
+	            } catch (IllegalStateException | IOException e) {
+	                e.printStackTrace();
+	                model.addAttribute("result", false); // 실패 시 결과를 모델에 추가
+	                return "feed/feedMoidfyVoD";
+	            }
+	        }
+	    } else {
+	        // 중복된 파일 처리 (선택 사항): 이미 존재하는 경우 처리 로직 추가
+	        System.out.println("already: " + fileName);
+	    }
+
+	    // 세션에서 사용자 ID 가져오기
+	    String token = tokenProvider.resolveTokenFromCookie(request);
+		String userId = tokenProvider.validateAndGetUserId(token);
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		dto.setId(userId);
+
+	    // DB 저장
+		boolean result = service.feedUpdate(dto, seq);
+
+	    // 데이터 공유
+	    model.addAttribute("result", result);
+	    model.addAttribute("seq", seq);
+
+	    // 뷰 파일 선택
+	    return "feed/feedModifyVoD";
+	}
 	
 	
 }

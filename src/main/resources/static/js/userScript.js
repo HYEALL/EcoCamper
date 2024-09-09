@@ -119,7 +119,54 @@ function inputCheck() {
 	}
 	frm.submit();
 }
+function editCheck() {
+	var frm = document.inputForm;
+	if (!frm.name.value) {
+		alert("이름을 입력하세요.");
+		frm.name.focus();
+		return false;
+	}
+	if (!frm.pwd.value) {
+		alert("비밀번호를 입력하세요");
+		frm.pwd.focus();
+		return false;
+	}
+	if (!frm.repwd.value) {
+		alert("재확인을 입력하세요");
+		frm.repwd.focus();
+		return false;
+	}
+	if (frm.pwd.value != frm.repwd.value) {
+		alert("비밀번호가 틀림니다.");
+		frm.repwd.value = "";
+		frm.repwd.focus();
+		return false;
+	}
+	if (!frm.gender.value) {
+		alert("성별을 입력하세요");
+		frm.gender.focus();
+		return false;
+	}
+	if (!frm.tel.value) {
+		alert("핸드폰 번호를 입력하세요");
+		frm.tel.focus();
+		return false;
+	}
+	var phonePattern = /^010-\d{4}-\d{4}$/;
 
+	// 폰번호 검사
+	if (!phonePattern.test(frm.tel.value)) {
+		alert("올바른 폰번호 형식 (010-0000-0000)을 입력하세요.");
+		frm.phone.focus();
+		return false;
+	}
+	if (!frm.addr.value) {
+		alert("주소를 입력하세요");
+		frm.addr.focus();
+		return false;
+	}
+	frm.submit();
+}
 function login() {
 	var frm = document.form1;
 

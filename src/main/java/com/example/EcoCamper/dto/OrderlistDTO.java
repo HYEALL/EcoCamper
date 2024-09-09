@@ -19,13 +19,15 @@ public class OrderlistDTO {
 	private String  baddress;
 	private String  bphone;
 	private String  bpayment;
+	private String  bcancel ;
 	@Temporal(TemporalType.DATE)
 	private Date    logtime;
 	private String pname;
 	
 	
 	public OrderlistDTO(int buyseq, String buyid, String productcode, int productqty, int productprice,
-			String receivename, String baddress, String bphone, String bpayment, Date logtime, String pname) {
+			String receivename, String baddress, String bphone, String bpayment, String bcancel, Date logtime,
+			String pname) {
 		super();
 		this.buyseq = buyseq;
 		this.buyid = buyid;
@@ -36,9 +38,12 @@ public class OrderlistDTO {
 		this.baddress = baddress;
 		this.bphone = bphone;
 		this.bpayment = bpayment;
+		this.bcancel = bcancel;
 		this.logtime = logtime;
 		this.pname = pname;
 	}
 	
+	
+
 	
 }

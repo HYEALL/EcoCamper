@@ -1,62 +1,238 @@
-<body>
-<body>
-    <h1>댓글 목록</h1>
-    <div id="comments-section">
-        <!-- 댓글이 여기 동적으로 삽입됩니다 -->
-    </div>
-
-    <div>
-        <h2>댓글 작성</h2>
-        <form id="comment-form">
-            <label for="writer">작성자:</label>
-            <input type="text" id="writer" name="writer" required>
-            <br>
-            <label for="content">내용:</label>
-            <textarea id="content" name="content" required></textarea>
-            <br>
-            <button type="submit">댓글 달기</button>
-        </form>
-    </div>
 
     <script>
-        // 댓글 작성 시 처리
-        document.getElementById('comment-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // 폼 제출 방지
-            const writer = document.getElementById('writer').value;
-            const content = document.getElementById('content').value;
+    document.addEventListener('DOMContentLoaded', function() {
+        var userId = document.body.dataset.userId;
 
-            // 댓글 서버에 POST 요청
-            fetch('/replies', {
+        document.getElementById('submit-reply').addEventListener('click', function() {
+            var content = document.getElementById('reply-content').value;
+            var seq = this.getAttribute('data-feed-id');
+
+            if (!content) {
+                alert('댓글을 입력하세요.');
+                return;
+            }
+
+            fetch('/reply', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ writer, content, logtime: new Date() })
-            }).then(response => response.json())
-              .then(data => {
-                  console.log('댓글이 추가되었습니다:', data);
-                  loadComments(); // 댓글 목록 새로고침
-              });
+                body: JSON.stringify({
+                    seq: parseInt(seq),
+                    writer: userId,
+                    content: content
+                })
+            })
+            .then(response => response.json())
+            .then(reply => {
+                addReplyToDOM(reply);
+                document.getElementById('reply-content').value = '';
+                updateReplyCount();
+            })
+            .catch(error => console.error('Error:', error));
         });
 
-        // 모든 댓글 로드
-        function loadComments() {
-            fetch('/replies')
-                .then(response => response.json())
-                .then(data => {
-                    const commentsSection = document.getElementById('comments-section');
-                    commentsSection.innerHTML = '';
-                    data.forEach(comment => {
-                        const div = document.createElement('div');
-                        div.innerHTML = `<strong>${comment.writer}</strong>: ${comment.content} <em>${new Date(comment.logtime).toLocaleString()}</em>`;
-                        commentsSection.appendChild(div);
-                    });
+        function addReplyToDOM(reply) {
+            var repliesContainer = document.querySelector('.replies');
+            var replyElement = document.createElement('div');
+            replyElement.className = 'reply';
+            var isAuthor = reply.writer === userId;
+
+            replyElement.innerHTML = `
+                <div class="reply-content-container">
+                    <div class="reply-content">
+                        <p><strong>${reply.writer}</strong>: ${reply.content}</p>
+                        <p class="reply-date">${new Date(reply.logtime).toLocaleString()}</p>
+                    </div>
+                    <div class="reply-actions">
+                        ${isAuthor ? `<button class="delete-reply" data-reply-id="${reply.num}">
+                                        <img src="../images/cancel.png" class="delete-reply-icon" alt="Delete-reply Icon">
+                                      </button>` : ''}
+                    </div>
+                </div>
+            `;
+            var deleteButton = replyElement.querySelector('.delete-reply');
+            if (deleteButton) {
+                deleteButton.addEventListener('click', function() {
+                    deleteReply(deleteButton);
                 });
+            }
+
+            repliesContainer.appendChild(replyElement);
         }
 
-        // 페이지 로드 시 댓글 불러오기
-        loadComments();
-    </script>
-</body>
+        function deleteReply(button) {
+            var replyId = button.getAttribute('data-reply-id');
+            fetch(`/deleteReply/${replyId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(() => {
+                button.closest('.reply').remove();
+                updateReplyCount();
+            })
+            .catch(error => console.error('Error:', error));
+        }
 
-</body>
+        function updateReplyCount() {
+            var replyCount = document.querySelectorAll('.reply').length;
+            document.getElementById('reply-count').textContent = replyCount;
+        }
+
+        function loadReplies() {
+            var seq = document.getElementById('submit-reply').getAttribute('data-feed-id');
+
+            fetch(`/replies/${seq}`)
+                .then(response => response.json())
+                .then(replies => {
+                    if (Array.isArray(replies)) {
+                        var replyCount = replies.length;
+                        document.getElementById('reply-count').textContent = replyCount;
+
+                        replies.forEach(reply => {
+                            addReplyToDOM(reply);
+                        });
+                    } else {
+                        console.error('Expected an array of replies, but got:', replies);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        loadReplies();
+    });
+    </script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .replies {
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        max-width: 800px;
+    }
+
+    .reply {
+        margin-top: 15px;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        background-color: #fafafa;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+    }
+
+    .reply:hover {
+        background-color: #f0f0f0;
+    }
+
+    .reply-date {
+        font-size: 12px;
+        color: #888;
+        margin-top: 5px;
+    }
+
+    .reply-content-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .reply-content {
+        flex: 1; /* 댓글 내용이 가능한 공간을 모두 차지하도록 설정 */
+        margin-right: 10px;
+    }
+
+    .reply-actions {
+        display: flex;
+        align-items: center;
+    }
+
+    .delete-reply {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s, transform 0.2s;
+        width: 35px; /* 버튼 너비를 조정 */
+        height: 35px; /* 버튼 높이를 조정 */
+    }
+
+    .delete-reply:hover {
+        background-color: rgba(255, 0, 0, 0.1); /* 호버 시 배경색 */
+    }
+
+    .delete-reply:active {
+        transform: scale(0.9); /* 클릭 시 버튼 크기 축소 */
+    }
+
+    .delete-reply-icon {
+        width: 60%; /* 이미지 크기를 조정 */
+        height: 60%; /* 이미지 크기를 조정 */
+        object-fit: contain;
+    }
+
+    .comment-count, .like-count {
+        font-size: 16px; /* 댓글 수 글자 크기 조정 */
+        color: #555;
+    }
+
+    .reply-section {
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        max-width: 800px;
+    }
+
+    #reply-content {
+        width: calc(100% - 22px); /* 텍스트 영역 너비 조정 */
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    #submit-reply {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    #submit-reply:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+<body th:data-user-id="${userId}">
+    <div class="replies">
+        <span id="reply-count"></span>개의 댓글
+        <!-- 댓글이 여기에 동적으로 추가됨 -->
+    </div>
+
+    <div class="reply-section">
+        <textarea id="reply-content" placeholder="댓글을 작성하세요"></textarea>
+        <button id="submit-reply" th:data-feed-id="${seq}">댓글 작성</button>
+    </div>

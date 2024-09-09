@@ -2,7 +2,7 @@ create table usertable(
     name varchar2(30) not null,
     id varchar2(30) primary key,
     pwd varchar2(30) not null,
-    age number default(0) not null,
+    age date not null,
     gender varchar2(30) not null,
     email varchar2(30) not null,
     tel varchar2(30) not null,
@@ -11,69 +11,103 @@ create table usertable(
     role varchar2(20) not null
 );
 select * from usertable;
-delete usertable where id='eun';
+delete usertable where id='asdasf';
 update usertable set role='ADMIN' where id='admin';
+ALTER TABLE usertable
+MODIFY age date;
+
 -- abcdefg9876 gil
 commit;
 drop table usertable purge;
-------------------------
-------------------------
-create table buylist(
+-----------------------------
+create table Shop_Review(
+    shopreviewseq number not null,
+    shopreviewpcode varchar2(30) not null,  --외래키설정
+    shopreviewid varchar2(30) not null, --외래키설정
+    shopreviewcontent varchar2(4000) not null,
+    shopreviewhit number default 0,
+    logtime date default sysdate,
+    
+    foreign key (shopreviewid) references  usertable(id),
+    foreign key (shopreviewpcode) references  Shop(pcode)    
+);
+create SEQUENCE seq_Shop_Review NOCACHE NOCYCLE;
+drop SEQUENCE seq_Shop_Review;
+select *from user_sequences;
+
+drop table Shop_Review purge;
+select*from Shop_Review;
+insert into Shop_Review values (seq_Shop_Review.nextval,'0001','euneun','친환경휴지',0,sysdate);
+delete Shop_Review where shopreviewid='hong';
+
+select shopreviewseq, shopreviewid, shopreviewcontent, shopreviewhit, 
+            to_char(logtime,'YYYY.MM.DD')as logtime from 
+             (select rownum rn, tt.*from
+             (select * from ShopReview order by logtime desc) tt)
+              where rn >=1 and rn <=5;
+
+commit;
+---------------------------------------------------
+create table Buylist(
     buyseq number not null,  
-    buyid varchar2(50) not null,
-    productname  varchar2(50) not null,
+    buyid varchar2(50) not null, --외래키설정
+   -- productname  varchar2(50) not null, -- pcode로 받아와서 넣어라
+    productcode varchar2(50) not null, --외래키설정
     productqty  number,
     productprice  number,
-    buyername   varchar2(50) not null,
+   -- buyername   varchar2(50) not null, -- id 로  받아와서 넣어라?
     receivename varchar2(50) not null,
     baddress varchar2(50) not null,
     bphone  varchar2(50) not null,
     bpayment varchar2(50) not null,
-    logtime date default sysdate
+    bcancel varchar2(50) default 'N',
+    logtime date default sysdate,
+    
+    foreign key (buyid) references  usertable(id),
+    foreign key (productcode) references  Shop(pcode)
 );
+drop table Buylist purge;
 
-
-
-drop table buylist purge;
-insert into buylist values(seq_buylist.nextval,'123','세제',1,5000,'park','lee',
+insert into Buylist values(seq_Buylist.nextval,'euneun','0002',1,5000,'곽은성', 
                             '서울','010','신용',sysdate);
-insert into buylist values(seq_buylist.nextval,'123','세제',1,10000,'park','lee',
-                            '서울','010','신용',sysdate);
-select * from buylist;
+insert into Buylist values(seq_Buylist.nextval,'euneun','0001',1,10000,'곽은성', '서울','010','신용',sysdate);
+select*from Buylist;
 
-delete buylist where buyid='은성';
-create SEQUENCE seq_buylist NOCACHE NOCYCLE;
-drop SEQUENCE seq_buylist;
-select * from user_sequences;
+delete Buylist where buyername='홍';
+
+create SEQUENCE seq_Buylist NOCACHE NOCYCLE;
+drop SEQUENCE seq_Buylist;
+select *from user_sequences;
 
 commit;
 
----------------------------------------------------
-create table shop(
-    --id  varchar2(30) not null,
+----------------------------------------------------
+create table Shop(
+    
     pcode varchar2(30) primary key,
     pname  varchar2(50) not null,
     ptype varchar2(50),
     pprice number,
-    pqty number,
-    phit number default 0,
+    pqty number,                --재고수량
+    phit number default 0,      --판매수량
     pimg varchar2(200),                   -- 파일명
     logtime date default sysdate            -- 작성일
 );
 
-drop table shop purge;
+drop table Shop purge;
 
-insert into shop values ('0001','친환경세제','자사',3000,2000,0,'cleaner.jpg',sysdate);
-insert into shop values ('0002','친환경휴지','자사',10000,2000,0,'roll.jpg',sysdate);
-insert into shop values ('0003','물아이스팩','자사',4000,5000,0,'water.jpg',sysdate);
-select*from shop;
-select * from shop where pcode='0001' and pname='친환경세제';
-select * from shop where pcode='0001';
-delete shop where productcode='0001';
+insert into Shop values ('0001','친환경세제','자사',3000,2000,0,'cleaner.jpg',sysdate);
+insert into Shop values ('0002','친환경휴지','자사',10000,2000,0,'roll.jpg',sysdate);
+insert into Shop values ('0003','물아이스팩','자사',4000,5000,0,'water.jpg',sysdate);
+select*from Shop;
+select * from Shop where pcode='0001' and pname='친환경세제';
+select * from Shop where pcode='0001';
+delete Shop where productcode='0001';
 
 commit;
 
-------------------
+
+-----------------------------
 -- 테이블 생성
 CREATE TABLE place_main (
     place_seq NUMBER PRIMARY KEY,               -- 장소 고유번호, key값
@@ -439,15 +473,15 @@ create table likes (
     foreign key (review_id) references feed(seq),
     foreign key (user_id) references  usertable(id)
 );
-
+insert into likes values(2, 4, 'eun');
 select count review_id from likes where review_id = 1;
-
+select * from likes;
    -- 시퀀스 객체 생성
 create sequence likes_num nocycle nocache;
 -- 시퀀스 삭제
-drop sequence seq;
-
-
+drop sequence likes_num;
+delete likes where review_id=5;
+commit;
 -- 테이블 생성
 create table feed (
     seq number primary key,
@@ -466,11 +500,11 @@ create table feed (
    logtime date default sysdate -- 작성일
   
 );
+select * from feed;
 -- 시퀀스 객체 생성
 create sequence seq nocycle nocache;
 -- 시퀀스 삭제
 drop sequence seq;
 commit;
-
+drop table feed purge;
 ---------------------
---------------------

@@ -13,7 +13,7 @@ import com.example.EcoCamper.entity.Feed;
 
 
 public interface FeedRepository extends JpaRepository<Feed, Integer> {
-
+	
 	List<Feed> findAllByOrderByLogtimeDesc();
 	
 }

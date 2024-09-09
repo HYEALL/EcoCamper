@@ -1,56 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>나의 쇼핑몰</title>
 <style>
-body {
-	font-family: Arial, sans-serif;
-	margin: 0;
-	padding: 0;
-	background-color: #f4f4f4;
-}
-
-header {
-	background-color: #333;
-	color: white;
-	padding: 10px 0;
-	text-align: center;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	width: 100%;
-}
-
-nav {
-	display: flex;
-	/*justify-content: center;*/
-	justify-content: space-between;
-	background-color: #444;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	width: 100%;
-}
-
-nav .top_mypage {
-	justify-content: flex-end;
-}
-
-nav a {
-	color: white;
-	padding: 14px 20px;
-	text-decoration: none;
-	display: inline-block;
-}
-
-nav a:hover {
-	background-color: #575757;
-}
-
 .slider {
 	position: relative;
 	max-width: 100%;
@@ -58,8 +6,10 @@ nav a:hover {
 	overflow: hidden;
 	border: 2px solid #ddd;
 	border-radius: 10px;
-	margin-top: 40px;
-	height: 500px;
+	margin-top: 55px;
+	height: 800px;
+	height: 50vh; /* 브라우저 창 높이에 대한 비율로 설정 */
+	display: flex; /* 가로 중앙 정렬 */
     align-items: center;      /* 세로 중앙 정렬 */
     justify-content: center;  /* 가로 중앙 정렬 */
 }
@@ -67,19 +17,22 @@ nav a:hover {
 .slides {
 	display: flex;
 	transition: transform 0.5s ease-in-out;
+	width: 65%; /*슬라이더 안에서 사진이 가로의 몇퍼센트를 차지하냐 여백을 35%준다는말*/
+	
 }
 
 .slide {
 	min-width: 100%;
 	min-height: 100%;
 	box-sizing: border-box;
+	display: flex; /* 가로 중앙 정렬 */
     justify-content: center;  /* 가로 중앙 정렬 */
     align-items: center;      /* 세로 중앙 정렬 */
 }
 
 .slide img {
-	width: 70%;
-    height: 70%;
+	width: 100%;
+    height: 100%;
     object-fit: cover;
 	
 }
@@ -158,16 +111,6 @@ nav a:hover {
 	background-color: #45a049;
 }
 
-footer {
-	background-color: #333;
-	color: white;
-	text-align: center;
-	padding: 10px;
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-}
-
 .cart {
 	position: fixed;
 	top: 10px;
@@ -184,52 +127,6 @@ footer {
 	background-color: #45a049;
 }
 </style>
-</head>
-<body>
-	<header>
-		<nav>
-			<div>
-				<a href="/shop/shopmain">쇼핑몰</a>
-			</div>
-			<div>
-				<a href="#products1">대여</a> <a href="#products2">친환경캠핑장비</a> <a
-					href="#products3">일반캠핑장비</a>
-			</div>
-
-		<!-- 그림 모형 -->
-			<div class="top_mypage" align="right">
-				<a href="/shop/shopAllList" class="eSearch"><svg
-						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-						fill="none" viewbox="0 0 24 24" class="icon" role="img">
-						<path stroke="#000" stroke-linecap="round" stroke-linejoin="round"
-							stroke-width="1.5"
-							d="M11 19c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z"></path>
-						<path stroke="#000" stroke-linejoin="round" stroke-width="1.5"
-							d="M22 22l-5-5"></path></svg></a> 
-				<a href="#" onclick="confirm_orderList()"><svg
-						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-						fill="none" viewbox="0 0 24 24" class="icon" role="img">
-						<circle cx="11.5" cy="6.5" r="3.75" stroke="#000"
-							stroke-width="1.5"></circle>
-						<path stroke="#000" stroke-width="1.5"
-							d="M1.78 21.25c.382-4.758 4.364-8.5 9.22-8.5h1c4.856 0 8.838 3.742 9.22 8.5H1.78z"></path></svg></a>
-				<a href="/shop/shopcart"
-					class="xans-element- xans-layout xans-layout-orderbasketcount "><svg
-						xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-						fill="none" viewbox="0 0 24 24" class="icon" role="img">
-					<path fill="#000"
-							d="M23.073 22.253l-1.946-14.31c-.04-.38-.368-.667-.758-.667h-3.656v-1.74c0-2.543-2.115-4.613-4.713-4.613-2.599 0-4.713 2.07-4.713 4.613v1.74H3.63c-.39 0-.717.288-.758.667L.927 22.253c-.022.21.047.42.192.577.144.157.35.247.566.247h20.63c.216 0 .421-.09.566-.247.145-.157.214-.366.192-.576zM8.81 5.537c0-1.72 1.431-3.122 3.19-3.122 1.758 0 3.19 1.401 3.19 3.122v1.74H8.81v-1.74zm-6.28 16.05l1.786-12.82h2.97v1.644c0 .412.342.746.762.746.421 0 .762-.334.762-.746V8.767h6.38v1.643c0 .412.34.746.761.746.42 0 .762-.334.762-.746V8.767h2.97l1.786 12.819H2.53z"></path></svg><span
-					class="count displaynone EC-Layout_Basket-count-display"><span
-						class="EC-Layout-Basket-count"></span></span> </a>
-			</div>
-		</nav>
-	</header>
-
-	<!-- 장바구니 태그 -->
-	<div class="cart" onclick="showCart()">
-		장바구니 (<span id="cart-count">0</span>)
-	</div>
-
 	<!-- 슬라이드 화면 -->
 	<div class="slider">
 		<div class="slides">
@@ -340,9 +237,6 @@ footer {
 		<!-- 추가적인 제품들을 여기에 삽입 -->
 	</div>
 
-	<footer>
-		<!-- <p>&copy; 2024 나의 쇼핑몰. 모든 권리 보유.</p> -->
-	</footer>
 
 	<script>
 /* 슬라이드 화면 */

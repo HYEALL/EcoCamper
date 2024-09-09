@@ -1,5 +1,7 @@
 package com.example.EcoCamper.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,4 +22,11 @@ public class ShopService {
 		return dao.buy(pcode);
 	}
 	
+	public Shop save(Shop shopdto) {
+		return dao.save(shopdto);
+	}
+	
+	 public List<Shop> getAllShops() {
+	        return dao.getAllShops();
+	    }
 }

@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>장바구니</title>
 
-</head>
-<body>
-	<header>
-		<h1>쇼핑몰</h1>
-		<nav>
-			<a href="/shop/shopmain">홈</a> <a href="#">카테고리</a> <a
-				href="/shop/shopcart">장바구니</a> <a href="#">내 계정</a>
-		</nav>
-	</header>
 	<div class="container">
 		<h1>장바구니</h1>
 
@@ -45,25 +30,7 @@
 				<label for="receivename">받는사람</label> 	<input type="text" id="receivename"	name="receivename" required> 
 				<label for="baddress">주소</label> <input type="text" id="baddress" name="baddress" required> 
 				<label for="bphone">전화번호</label> <input type="tel" id="bphone" 	name="bphone" required> 
-				<label for="email">이메일</label>
-				<div class="email-input-container">
-					<input type="email" id="email" name="email" required
-						placeholder="이메일"> @ <select id="email-domain"
-						name="email-domain">
-						<option value="" selected="selected">-이메일 선택-</option>
-						<option value="naver.com">naver.com</option>
-						<option value="daum.net">daum.net</option>
-						<option value="nate.com">nate.com</option>
-						<option value="hotmail.com">hotmail.com</option>
-						<option value="yahoo.com">yahoo.com</option>
-						<option value="empas.com">empas.com</option>
-						<option value="korea.com">korea.com</option>
-						<option value="dreamwiz.com">dreamwiz.com</option>
-						<option value="gmail.com">gmail.com</option>
-						<option value="etc">직접입력</option>
-					</select> <input type="text" id="custom-domain" name="custom-domain"
-						placeholder="직접 입력" style="display: none;">
-				</div>
+			
 				<label for="bpayment">결제 방법:</label> <select id="bpayment"
 					name="bpayment">
 					<option value="무통장입금">무통장입금</option>
@@ -93,14 +60,12 @@
 	        const name = document.getElementById('receivename').value;
 			const address = document.getElementById('baddress').value;
 			const phone = document.getElementById('bphone').value;
-			const eamil = document.getElementById('email').value;
-			const emaildomain = document.getElementById('email-domain').value;
 			const payment = document.getElementById('bpayment').value;
 	        
-			if (name && address && phone && eamil && emaildomain && payment) {
+			if (name && address && phone  && payment) {
 				
 				alert("총 "+totalQuantity+" 개의 총 상품 금액은 "+totalAmount + "원 입니다.\n"+"받는사람: "+name+"\n"+"배송지 :"+address+"\n"
-						+"전화번호 :"+phone+"\n"+"이메일: "+eamil+"@"+emaildomain+"\n"+"결제방법: "+payment)
+						+"전화번호 :"+phone+"\n"+"결제방법: "+payment)
 			} else {
 				alert('모든 필드를 입력해 주세요.');
 				return;
@@ -172,45 +137,6 @@
         });
     </script>
     <style>
-header {
-	background-color: #333;
-	color: #fff;
-	padding: 10px 0;
-	text-align: center;
-}
-
-header h1 {
-	margin: 0;
-}
-
-body {
-	font-family: Arial, sans-serif;
-	background-color: #f8f8f8;
-	margin: 0;
-	padding: 0;
-}
-
-nav {
-	display: flex;
-	justify-content: space-between;
-	background-color: #444;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	width: 100%;
-}
-
-nav a {
-	color: white;
-	padding: 14px 20px;
-	text-decoration: none;
-	display: inline-block;
-}
-
-nav a:hover {
-	background-color: #575757;
-}
 
 .container {
 	max-width: 800px;
@@ -319,5 +245,3 @@ button:hover {
 	background-color: #0056b3;
 }
 </style>
-</body>
-</html>

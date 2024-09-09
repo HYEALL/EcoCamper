@@ -58,7 +58,29 @@ public class UserDAO {
 		Pageable pageable = PageRequest.of(page, size);
 		return repository.findAll(pageable);
 	}
+
 	public int getTotalA() {
 		return (int) repository.count();
+	}
+
+	// 회원 정보 수정
+	public boolean userModify(UserDTO dto) {
+		// 1. 기존 데이터 확인
+		User user = repository.findById(dto.getId()).orElse(null);
+		boolean result = false;
+
+		if (user != null) {
+			// 2. 데이터 수정
+			user.setName(dto.getName());
+			user.setPwd(passwordEncoder.encode(dto.getPwd()));
+			user.setGender(dto.getGender());
+			user.setTel(dto.getTel());
+			user.setAddr(dto.getAddr());
+			// 3. 저장
+			User user_result = repository.save(user);
+			if (user_result != null)
+				result = true;
+		}
+		return result;
 	}
 }

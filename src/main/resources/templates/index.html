@@ -1,10 +1,11 @@
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
-
-<div style="width:400px;">
-
-<h3>main</h3>
-<input type="button" value="메뉴"
-					th:onclick="location.href='/menu'">
-
+<div th:replace="~{layouts/header}"></div>
+<div class="container">
+	<div th:if="${req == null}">
+		<div th:replace="~{home}"></div>
+	</div>
+	<div th:if="${req != null}">
+		<div th:replace="~{${req}}"></div>
+	</div>
 </div>
+
+<div th:replace="~{layouts/footer}"></div>

@@ -1,105 +1,93 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>구매 페이지</title>
 <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-	<header>
-		<h1>쇼핑몰</h1>
-		<nav>
-			<a href="/shop/shopmain">홈</a> <a href="#">카테고리</a> <a
-				href="/shop/shopcart">장바구니</a> <a href="#">내 계정</a>
-		</nav>
-	</header>
+<main>
+	<section class="checkout">
+		<h2>구매 페이지</h2>
 
-	<main>
-		<section class="checkout">
-			<h2>구매 페이지</h2>
-
-			<div class="cart-summary">
-				<h3>장바구니</h3>
-				<ul>
-					<li>
-						<div class="cart-item">
-							<img th:src="@{/images/}+${dto.pimg}" alt="상품 이미지">
-							<div class="cart-item-info">
-								<h4>[[${dto.pname}]]</h4>
-								<p>₩ [[${dto.pprice}]]</p>
-								<p>수량: [[${productqty}]] 개</p>
-							</div>
+		<div class="cart-summary">
+			<h3>장바구니</h3>
+			<ul>
+				<li>
+					<div class="cart-item">
+						<img th:src="@{/images/}+${dto.pimg}" alt="상품 이미지">
+						<div class="cart-item-info">
+							<h4>[[${dto.pname}]]</h4>
+							<p>₩ [[${dto.pprice}]]</p>
+							<p>수량: [[${productqty}]] 개</p>
 						</div>
-					</li>
-				</ul>
-				<p class="total">총액: ₩ [[${productprice}]]</p>
-				<input type="button" value="제풍상제화면(뒤로)" onclick=history.back()
-					id="viewback">
-			</div>
+					</div>
+				</li>
+			</ul>
+			<p class="total">총액: ₩ [[${productprice}]]</p>
+			<input type="button" value="제풍상제화면(뒤로)" onclick=history.back()
+				id="viewback">
+		</div>
 
-			<div class="checkout-form">
-				<h3>배송 정보 입력</h3>
-				<form id="checkout-form" action="/shop/shoppay" method="post" name="form1">
-					<input type="hidden" id="productqty" name="productqty" th:value="${productqty}">
-   					<input type="hidden" id="productprice" name="productprice" th:value="${productprice}">
-   					<input type="hidden" id="productname" name="productname" th:value="${dto.pname}">
-   					<input type="hidden" id="pcode" name="pcode" th:value="${dto.pcode}">
-   					
-					<label for="receivename">받는사람</label> <input type="text" id="receivename" name="receivename" required> 
-					<label for="baddress">주소</label> <input type="text" id="baddress"	name="baddress" required> 
-					<label for="bphone">전화번호</label>	<input type="tel" id="bphone" name="bphone" required> 
-					<label for="bpayment">결제 방법:</label> <select id="bpayment"
-						name="bpayment">
-						<option value="무통장입금">무통장입금</option>
-						<option value="계좌이체">계좌이체</option>
-						<option value="카카오페이">카카오페이</option>
-					</select>
+		<div class="checkout-form">
+			<h3>배송 정보 입력</h3>
+			<form id="checkout-form" action="/shop/shoppay" method="post"
+				name="form1">
+				<input type="hidden" id="productqty" name="productqty"
+					th:value="${productqty}"> <input type="hidden"
+					id="productprice" name="productprice" th:value="${productprice}">
+				<input type="hidden" id="productname" name="productname"
+					th:value="${dto.pname}"> <input type="hidden" id="pcode"
+					name="pcode" th:value="${dto.pcode}"> <label
+					for="receivename">받는사람</label> <input type="text" id="receivename"
+					name="receivename" required> <label for="baddress">주소</label>
+				<input type="text" id="baddress" name="baddress" required> <label
+					for="bphone">전화번호</label> <input type="tel" id="bphone"
+					name="bphone" required> <label for="bpayment">결제
+					방법:</label> <select id="bpayment" name="bpayment">
+					<option value="무통장입금">무통장입금</option>
+					<option value="계좌이체">계좌이체</option>
+					<option value="카카오페이">카카오페이</option>
+				</select>
 
-					<button type="button" onclick="confirm_buy() ">결제하기</button>
-				</form>
-			</div>
-		</section>
-	</main>
+				<button type="button" onclick="confirm_buy() ">결제하기</button>
+			</form>
+		</div>
+	</section>
+</main>
 
-	<footer>
-		<!-- <p>&copy; 2024 나의 쇼핑몰. 모든 권리 보유.</p> -->
-	</footer>
-
-	<script src="scripts.js"></script>
-</body>
-</html>
+<script src="scripts.js"></script>
 
 <script type="text/javascript">
+	function confirm_orderList() {
+		if ("[[${userId}]]" != "") {
+			location.href = "/shop/shopOrderList"
+		} else {
+			alert("로그인 후 주문내역 열람이 가능합니다.")
+			if (confirm("로그인 창으로 이동하시겠습니까?"))
+				location.href = "/loginForm"
+
+		}
+	}
+
 	function confirm_buy() {
 		var frm = document.form1;
-		
-		
-			if (confirm("정말 구매하시겠습니까?")) {
-	
-				// Extract form data
-				const name = document.getElementById('receivename').value;
-				const address = document.getElementById('baddress').value;
-				const phone = document.getElementById('bphone').value;
-				const eamil = document.getElementById('email').value;
-				const emaildomain = document.getElementById('email-domain').value;
-				const payment = document.getElementById('bpayment').value;
-	
-				// Simple form validation (can be expanded)
-				if (name && address && phone && eamil && emaildomain && payment) {
-					alert(`주문이 완료되었습니다!\n상품: [[${dto.pname}]] \n금액: [[${productprice}]] 원\n받는사람: ${name}\n배송지: ${address}\n전화번호: ${phone}\n이메일: ${email}@${emaildomain}\n결제 방법: ${payment}`);
-					// Here you can add code to send the data to the server
-				} else {
-					alert('모든 필드를 입력해 주세요.');
-					return;
-				}
-				
-				frm.submit();
-				/* location.href = `shopbuy?pcode=[[${dto.pcode}]]*/
-	
-			} else
+
+		if (confirm("정말 구매하시겠습니까?")) {
+
+			// Extract form data
+			const name = document.getElementById('receivename').value;
+			const address = document.getElementById('baddress').value;
+			const phone = document.getElementById('bphone').value;
+			const payment = document.getElementById('bpayment').value;
+
+			// Simple form validation (can be expanded)
+			if (name && address && phone && payment) {
+				alert(`주문이 완료되었습니다!\n상품: [[${dto.pname}]] \n금액: [[${productprice}]] 원\n받는사람: ${name}\n배송지: ${address}\n전화번호: ${phone}\n결제 방법: ${payment}`);
+				// Here you can add code to send the data to the server
+			} else {
+				alert('모든 필드를 입력해 주세요.');
 				return;
-	
+			}
+
+			frm.submit();
+			/* location.href = `shopbuy?pcode=[[${dto.pcode}]]*/
+
+		} else
+			return;
 
 	}
 
@@ -125,33 +113,11 @@
 
 
 <style>
-body {
-	font-family: Arial, sans-serif;
-	margin: 0;
-	padding: 0;
-}
-
-header {
-	background-color: #333;
-	color: #fff;
-	padding: 10px 0;
-	text-align: center;
-}
-
-header h1 {
-	margin: 0;
-}
-
-nav a {
-	color: #fff;
-	margin: 0 15px;
-	text-decoration: none;
-}
-
 main {
 	padding: 20px;
 	max-width: 1200px;
 	margin: 0 auto;
+	margin-top: 30px;
 }
 
 #viewback {
@@ -237,15 +203,6 @@ main {
 	background-color: #0056b3;
 }
 
-footer {
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	padding: 10px 0;
-	position: fixed;
-	width: 100%;
-	bottom: 0;
-}
 
 .email-input-container {
 	display: flex;

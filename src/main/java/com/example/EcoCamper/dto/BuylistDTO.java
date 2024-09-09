@@ -21,10 +21,11 @@ public class BuylistDTO {
 	private String  baddress;
 	private String  bphone;
 	private String  bpayment;
+	private String  bcancel ;
 	@Temporal(TemporalType.DATE)
 	private Date    logtime;
 	
 	public Buylist toEntity() {
-		return new Buylist(buyseq, buyid, productcode, productqty, productprice, receivename, baddress, bphone, bpayment, logtime);
+		return new Buylist(buyseq, buyid, productcode, productqty, productprice, receivename, baddress, bphone, bpayment, bcancel, logtime);
 	}
 }

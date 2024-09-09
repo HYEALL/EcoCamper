@@ -1,3 +1,5 @@
+<script type="text/javascript" src="../js/feed.js?v=2"></script>
+
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -248,81 +250,72 @@ hr {
         }
 </style>
 <script>
-var selectedImages = [];
+        var selectedImages = [];
 
-function addPhoto() {
-    var files = event.target.files;
-    var photoList = document.getElementById('photo-list');
-    var imageCountElement = document.getElementById('image-count');
+        function addPhoto() {
+            var files = event.target.files;
+            var photoList = document.getElementById('photo-list');
+            var imageCountElement = document.getElementById('image-count');
 
-    // 기존 이미지와 새로 추가된 이미지 수를 합산하여 체크
-    if (files.length + selectedImages.length > 10) {
-        alert('최대 10개의 이미지만 선택할 수 있습니다.');
-        return;
-    }
-
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        if (file && file.type.startsWith('image/')) {
-            var reader = new FileReader();
-
-            reader.onload = function(e) {
-                var img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'uploaded-img';
-                photoList.appendChild(img);
-                selectedImages.push(e.target.result);
-                
-                // 이미지 수 업데이트
-                imageCountElement.textContent = selectedImages.length;
+            // 기존 이미지와 새로 추가된 이미지 수를 합산하여 체크
+            if (files.length + selectedImages.length > 10) {
+                alert('최대 10개의 이미지만 선택할 수 있습니다.');
+                return;
             }
 
-            reader.readAsDataURL(file);
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (file && file.type.startsWith('image/')) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        var img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'uploaded-img';
+                        photoList.appendChild(img);
+                        selectedImages.push(e.target.result);
+                        
+                        // 이미지 수 업데이트
+                        imageCountElement.textContent = selectedImages.length;
+                    }
+
+                    reader.readAsDataURL(file);
+                }
+            }
         }
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
-        emoji.addEventListener('click', function() {
-            const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
-            const textArea = document.getElementById('text-input');
-            const cursorPos = textArea.selectionStart;
-            const textBefore = textArea.value.substring(0, cursorPos);
-            const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
-            textArea.value = textBefore + emojiValue + textAfter;
-            textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
-            textArea.focus();
+        // 이모지 클릭 시 텍스트에 추가
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+                emoji.addEventListener('click', function() {
+                    const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
+                    const textArea = document.getElementById('text-input');
+                    const cursorPos = textArea.selectionStart;
+                    const textBefore = textArea.value.substring(0, cursorPos);
+                    const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
+                    textArea.value = textBefore + emojiValue + textAfter;
+                    textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+                    textArea.focus();
+                });
+            });
         });
-    });
-});
 
-function resizeTextarea(textarea) {
-    textarea.style.height = 'auto';
-    textarea.style.height = (textarea.scrollHeight) + 'px';
-}
-
-function checkWrite() {
-    // 데이터 전송 또는 폼 검증 로직
-    document.querySelector('form').submit();
-}
-</script>
+        function resizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+    </script>
 
 <style>
 /* 기존 스타일 코드 유지 */
 </style>
 </head>
 <body>
-<h2>피드 수정</h2>
 <form action="feedModifyPh" name="form1" method="post" enctype="multipart/form-data">
 <div class="form-container">
+	<input type="hidden" name="seq" th:value="${seq}">
     <div class="section content">
         <div id="photo-list">
-            <!-- 기존 이미지 로드 -->
-            <c:forEach var="image" items="${feed.images}">
-                <img src="${image.url}" alt="피드 이미지" class="uploaded-img" />
-            </c:forEach>
-            
+          
             <div class="photo-button">
                 <input type="file" accept="image/*" multiple onchange="addPhoto()" name="feed_file1[]">
                 <img src="../images/camera.jpg" alt="카메라 아이콘" />
@@ -334,8 +327,7 @@ function checkWrite() {
         <br>
         <div>
             <textarea id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
-                autocomplete="off" onkeydown="resizeTextarea(this);" onkeyup="resizeTextarea(this);" rows="13">
-                [[${feed.feed_content}]]
+                autocomplete="off" onkeydown="resizeTextarea(this);" onkeyup="resizeTextarea(this);" rows="13">[[${feed.feed_content}]]
             </textarea>
         </div>
         
@@ -360,34 +352,34 @@ function checkWrite() {
     <div class="section category" align="center">
         <div class="title">카테고리</div>
         <div class="d-flex">
-            <div class="name">아웃도어</div>
-            <div>
-                <input type="radio" id="camper" name="outdoor" th:value="캠퍼" ${feed.outdoor == '캠퍼' ? 'checked' : ''}>
-                <label for="camper">캠퍼</label>
-                
-                <input type="radio" id="backpacker" name="outdoor" th:value="백팩커" ${feed.outdoor == '백팩커' ? 'checked' : ''}>
-                <label for="backpacker">백팩커</label>
-                
-                <input type="radio" id="traveler" name="outdoor" th:value="트래블러" ${feed.outdoor == '트래블러' ? 'checked' : ''}>
-                <label for="traveler">트래블러</label>
-                
-                <input type="radio" id="hiker" name="outdoor" th:value="하이커" ${feed.outdoor == '하이커' ? 'checked' : ''}>
-                <label for="hiker">하이커</label>
-            </div>
-        </div>
-        <div class="d-flex">
-            <div class="name">글 종류</div>
-            <div>
-                <input type="radio" id="gear" name="feed_subject" th:value="기어" ${feed.feed_subject == '기어' ? 'checked' : ''}>
-                <label for="gear">기어</label>
-                
-                <input type="radio" id="place" name="feed_subject" th:value="장소" ${feed.feed_subject == '장소' ? 'checked' : ''}>
-                <label for="place">장소</label>
+    <div class="name">아웃도어</div>
+    <div>
+        <input type="radio" id="camper" name="outdoor" th:value="캠퍼" th:checked="${feed.outdoor == '캠퍼'}">
+        <label for="camper">캠퍼</label>
+        
+        <input type="radio" id="backpacker" name="outdoor" th:value="백팩커" th:checked="${feed.outdoor == '백팩커'}">
+        <label for="backpacker">백팩커</label>
+        
+        <input type="radio" id="traveler" name="outdoor" th:value="트래블러" th:checked="${feed.outdoor == '트래블러'}">
+        <label for="traveler">트래블러</label>
+        
+        <input type="radio" id="hiker" name="outdoor" th:value="하이커" th:checked="${feed.outdoor == '하이커'}">
+        <label for="hiker">하이커</label>
+    </div>
+</div>
+<div class="d-flex">
+    <div class="name">글 종류</div>
+    <div>
+        <input type="radio" id="gear" name="feed_subject" th:value="기어" th:checked="${feed.feed_subject == '기어'}">
+        <label for="gear">기어</label>
+        
+        <input type="radio" id="place" name="feed_subject" th:value="장소" th:checked="${feed.feed_subject == '장소'}">
+        <label for="place">장소</label>
 
-                <input type="radio" id="news" name="feed_subject" th:value="뉴스" ${feed.feed_subject == '뉴스' ? 'checked' : ''}>
-                <label for="news">뉴스</label>
-            </div>
-        </div>
+        <input type="radio" id="news" name="feed_subject" th:value="뉴스" th:checked="${feed.feed_subject == '뉴스'}">
+        <label for="news">뉴스</label>
+    </div>
+</div>
     </div>
 
     <hr>
@@ -417,7 +409,7 @@ function checkWrite() {
         <hr>
 
         <div align="center">
-            <input type="button" value="수정하기" onclick="checkWrite()">
+            <input type="button" value="수정하기" onclick="checkinput()">
             <input type="reset" value="다시작성">
         </div>
     </div>

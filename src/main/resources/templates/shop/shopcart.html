@@ -1,50 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>장바구니</title>
 <style>
-header {
-	background-color: #333;
-	color: #fff;
-	padding: 10px 0;
-	text-align: center;
-}
-
-header h1 {
-	margin: 0;
-}
-
-body {
-	font-family: Arial, sans-serif;
-	background-color: #f8f8f8;
-	margin: 0;
-	padding: 0;
-}
-
-nav {
-	display: flex;
-	justify-content: space-between;
-	background-color: #444;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	width: 100%;
-}
-
-nav a {
-	color: white;
-	padding: 14px 20px;
-	text-decoration: none;
-	display: inline-block;
-}
-
-nav a:hover {
-	background-color: #575757;
-}
-
 .container {
 	max-width: 1200px;
 	margin: 50px auto;
@@ -118,17 +72,6 @@ button:hover {
 	background-color: #a93226;
 }
 </style>
-</head>
-<body>
-	<header>
-		<h1>쇼핑몰</h1>
-		<nav>
-			<a href="/shop/shopmain">홈</a>
-			<a href="#">카테고리</a>
-			<a href="#" onclick="confirm_orderList()">주문내역</a>
-			<a href="#">내 계정</a>
-		</nav>
-	</header>
 	<div class="container">
 		<h1>장바구니</h1>
 
@@ -257,5 +200,3 @@ button:hover {
             });
         });
     </script>
-</body>
-</html>

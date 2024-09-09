@@ -1,6 +1,7 @@
 package com.example.EcoCamper.controller;
 
 import java.net.http.HttpRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +50,10 @@ public class ShopController {
 	public String test() {
 		return "/shop/Zest";
 	}
+	
 	@GetMapping("/shop/Zest2")
 	public String test2() {
 		return "/shop/Zest2";
-	}
-	@GetMapping("/shop/Zest3")
-	public String test3() {
-		return "/shop/Zest3";
 	}
 	
 	
@@ -70,11 +68,20 @@ public class ShopController {
 			
 		} 
 		model.addAttribute("userId",userId);
-		
-		return "/shop/shopmain";
+		model.addAttribute("req", "/shop/shopmain");
+		return "/index";
 	}
 	@GetMapping("/shop/shopbuy")
 	public String productbuy(HttpServletRequest request, Model model) {
+		String token = tokenProvider.resolveTokenFromCookie(request);
+		//System.out.println("token : " + token);
+		String userId = null;
+		if(token != null) {
+			userId = tokenProvider.validateAndGetUserId(token);
+			
+		} 
+		model.addAttribute("userId",userId);
+		
 		String pcode=request.getParameter("pcode");
 		int productqty=Integer.parseInt(request.getParameter("productqty"));
 		//System.out.println(productcode);
@@ -87,7 +94,8 @@ public class ShopController {
 		model.addAttribute("productprice",productprice);
 		model.addAttribute("productqty",productqty);
 		model.addAttribute("dto",dto);
-		return "/shop/shopbuy";
+		model.addAttribute("req", "/shop/shopbuy");
+		return "/index";
 	}
 	@GetMapping("/shop/shopcart")
 	public String productcart(HttpServletRequest request, Model model) {
@@ -99,14 +107,23 @@ public class ShopController {
 			
 		} 
 		model.addAttribute("userId",userId);
-		return "/shop/shopcart";
+		model.addAttribute("req", "/shop/shopcart");
+		return "/index";
 	}
 
 	
 	@GetMapping("/shop/shopcartbuy")
-	public String shopcartbuy() {
-
-		return "/shop/shopcartbuy";
+	public String shopcartbuy(HttpServletRequest request, Model model) {
+		String token = tokenProvider.resolveTokenFromCookie(request);
+		//System.out.println("token : " + token);
+		String userId = null;
+		if(token != null) {
+			userId = tokenProvider.validateAndGetUserId(token);
+			
+		} 
+		model.addAttribute("userId",userId);
+		model.addAttribute("req", "/shop/shopcartbuy");
+		return "/index";
 	}
 	
 	
@@ -164,14 +181,27 @@ public class ShopController {
 		model.addAttribute("pcode",pcode);
 		model.addAttribute("userId",userId);
 		model.addAttribute("order", order);
-		
-		return "/shop/shopview";
+		model.addAttribute("req", "/shop/shopview");
+		return "/index";
 	}
 	
 	@GetMapping("/shop/shopAllList")
-	public String shopAllList() {
+	public String shopAllList(Model model, HttpServletRequest request) {
+		String token = tokenProvider.resolveTokenFromCookie(request);
+		//System.out.println("token : " + token);
+		String userId = null;
+		if(token != null) {
+			userId = tokenProvider.validateAndGetUserId(token);
+			
+		} 
+		List<Shop> list=service_shop.getAllShops();
 		
-		return "/shop/shopAllList";
+		//System.out.println(list);
+		
+		model.addAttribute("userId",userId);
+		model.addAttribute("list",list);
+		model.addAttribute("req", "/shop/shopAllList");
+		return "/index";
 	}
 	
 	

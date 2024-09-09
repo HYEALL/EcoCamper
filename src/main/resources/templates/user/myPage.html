@@ -1,23 +1,36 @@
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.jade.min.css">
+<div class="container">
+	<div class="row">
+		<h2 align="center" style="font-style: italic">Account information</h2>
+		<h5 align="center" th:text="${user.name}+'님, 안녕하세요'"></h5>
+		<div class="col-md-2">
+			<table>
+				<tr>
+					<td><a href="myPage?mp=/user/editForm">회원정보수정</a></td>
+				</tr>
+				<tr>
+					<td><a href="#">내가 쓴 피드</a></td>
+				</tr>
+				<tr>
+					<td><a href="myPage?mp=/user/review">내가 쓴 리뷰</a></td>
 
-<h3 class="text-primary" th:text="${user.name}+'님'"></h3>
-<table style="width:500px">
-	<tr style="text-align: center;">
-		<td>
-			<input type="button" value="회원정보수정" onclick="location.href='/user/edit'"> <input
-			type="button" value="주문배송조회"> <input type="button"
-			value="나의 리뷰">
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<input type="button" value="로그아웃" onclick="location.href='/user/logout'">
-		</td>
-	</tr>
-</table>
+				</tr>
+				<tr>
+					<td><a href="myPage?mp=/shop/shopOrderList">주문배송조회</a></td>
+				</tr>
 
-<a href="../index">메인화면</a>
-
+				<tr>
+					<td><a href="/user/logout">로그아웃</a></td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-md-8">
+			<div th:if="${mp != null}">
+				<div th:replace="~{${mp}}"></div>
+			</div>
+		</div>
+	</div>
+</div>
 
 

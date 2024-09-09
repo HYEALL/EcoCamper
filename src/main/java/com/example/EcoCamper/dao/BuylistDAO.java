@@ -35,7 +35,11 @@ public class BuylistDAO {
 	}
 	
 	public int orderAllsum(String userId) {
-		return (int)buylistRepository.sumProductPriceByUserId(userId);
+		Integer sum= buylistRepository.sumProductPriceByUserId(userId);
+		 if (sum == null) {
+		        return 0;  // 주문 내역이 없을 때 0 반환
+		    }
+		return sum;
 	}
 	
 	public Boolean findByPcodeAndBuyId(String pcode, String buyId) {
@@ -49,13 +53,16 @@ public class BuylistDAO {
 	}
 	
 	public boolean shopOrderListDelete(String[] buyseqArray) {
-		System.out.println(buyseqArray);
 		boolean result=false;
-		if(buyseqArray != null) {
-			buylistRepository.deleteByBuyseqIn(buyseqArray);
-			 result=true;
-		}
-		
+		 for (String buyseq : buyseqArray) {
+	           int buyseqgo = Integer.parseInt(buyseq.trim());
+               int updatedCount = buylistRepository.updateBcancelToY(buyseqgo);
+               
+               if(updatedCount>0) { 
+            	   result=true;
+               }else 
+            	   result=false;
+		 }
 		return result;
 	}
 	

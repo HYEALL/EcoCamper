@@ -480,6 +480,10 @@ body {
     margin-bottom: -20px;
 }
 
+.label {
+    color: #00aaff; /* 하늘색으로 설정 */
+}
+
 </style>
 </head>
 <body th:data-user-id="${userId}">
@@ -514,8 +518,10 @@ body {
         <div class="feed-details">
             <p class="feed-content" th:text="${feed.feed_content}"></p>
             <p class="feed-date" th:text="${feed.logtime}"></p>
-            <span>장비 : </span><span class="feed-goods" th:text="${feed.goods}"></span><br><br>
-            <span>장소 : </span><span class="feed-place" th:text="${feed.place}"></span>
+           	<span class="label">장비 :</span>
+			<span th:text="${feed.goods}"></span><br><br>
+			<span class="label">장소 :</span>
+			<span th:text="${feed.place}"></span>
         </div>
         <hr>
 		
@@ -538,7 +544,7 @@ body {
             </button>
              <span class="like-count" id="like-count"></span>
              
-            <button class="comment-button">
+            <button class="comment-button" th:onclick="location.href='feedReply?seq=[[${feed.seq}]]'">
                 <img src="../images/talk.png" class="comment-icon" alt="Comment Icon">
             </button>
             <span class="comment-count" id="comment-count"></span>
@@ -549,7 +555,7 @@ body {
             <button class="delete-button" th:if="${userId == feed.id}" th:onclick="location.href = 'feedDelete?seq=[[${seq}]]'">
                 <img src="../images/trash.png" class="delete-icon" alt="Delete Icon">
             </button>
-              <button class="modify-button" th:if="${userId == feed.id} and ${feed.feed_type == 'video'}" th:onclick="location.href = 'feedModifyFormVideo?seq=[[${seq}]]'">
+              <button class="modify-button" th:if="${userId == feed.id} and ${feed.feed_type == 'video'}" th:onclick="location.href = 'feedModifyFormVoD?seq=[[${seq}]]'">
         <img src="../images/modify.png" class="modify-icon" alt="Modify Icon">
     </button>
     

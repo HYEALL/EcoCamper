@@ -11,7 +11,7 @@ import jakarta.transaction.Transactional;
 
 public interface LikesRepository extends JpaRepository<Likes, Integer>{
 	
-
+	
     // 특정 리뷰의 좋아요 수를 카운트하는 쿼리
     int countByReviewId(int reviewId);
     

@@ -1,7 +1,9 @@
 package com.example.EcoCamper.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.EcoCamper.entity.Reply;
@@ -39,12 +40,15 @@ public class ReplyController {
 	    }
 	    
 	    @DeleteMapping("/deleteReply/{replyId}")
-	    public ResponseEntity<String> deleteReply(@PathVariable("replyId") int replyId) {
+	    public ResponseEntity<Map<String, String>> deleteReply(@PathVariable("replyId") int replyId) {
 	        boolean removed = service.deleteReplyById(replyId);
+	        Map<String, String> response = new HashMap<>();
 	        if (removed) {
-	            return ResponseEntity.ok("댓글이 삭제되었습니다.");
+	            response.put("message", "댓글이 삭제되었습니다.");
+	            return ResponseEntity.ok(response);
 	        } else {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("댓글을 찾을 수 없습니다.");
+	            response.put("message", "댓글을 찾을 수 없습니다.");
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 	        }
 	    }
 }
