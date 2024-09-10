@@ -11,11 +11,9 @@ create table usertable(
     role varchar2(20) not null
 );
 select * from usertable;
-delete usertable where id='asdasf';
+delete usertable where id='member3';
 update usertable set role='ADMIN' where id='admin';
-ALTER TABLE usertable
-MODIFY age date;
-
+alter table usertable add unique(email);
 -- abcdefg9876 gil
 commit;
 drop table usertable purge;
