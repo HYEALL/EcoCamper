@@ -2,6 +2,7 @@ package com.example.EcoCamper.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,10 @@ public class UserService {
 	
 	public boolean userModify(UserDTO dto) {
 		return dao.userModify(dto);
+	}
+
+	public User kakaoLogin(Map<String, Object> userInfo) {
+		return dao.kakaoLogin(userInfo);
 	}
 	
 	

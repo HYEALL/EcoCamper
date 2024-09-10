@@ -13,4 +13,5 @@ import com.example.EcoCamper.entity.User;
 public interface UserRepository extends JpaRepository<User, String>{
 	Optional<User> findById(String id);
 	Page<User> findAll(Pageable pageable);
+	Optional<User> findByEmail(String email);
 }

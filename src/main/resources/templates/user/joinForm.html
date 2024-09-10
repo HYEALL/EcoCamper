@@ -1,6 +1,6 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
-<script type="text/javascript" src="../js/userScript.js?v=2"></script>
+<script type="text/javascript" src="/js/userScript.js?v=2"></script>
 <script type="text/javascript">
 	window.onload = function() {
 		//'출생 연도' 셀렉트 박스 option 목록 동적 생성
@@ -60,58 +60,74 @@
 	}
 </script>
 <div align="center">
-<h3>회원 가입</h3>
-<form action="join" name="inputForm" method="post" style="width: 550px;">
-	<fieldset>
-		<label align="left"> 이름 <input type="text" name="name" placeholder="이름 입력" />
-		</label> <label align="left"> 아이디 </label>
-		<fieldset role="group">
-			<input type="text" name="id" placeholder="아이디 입력" /> <input
-				type="button" value="중복체크" onclick="checkId()"> <input
-				type="hidden" name="checkIdOk" value="false">
+	<h3>회원 가입</h3>
+	<form action="/join" name="inputForm" method="post"
+		style="width: 550px;">
+		<fieldset>
 
-		</fieldset>
-		<label align="left"> 비밀번호 <input type="password" name="pwd"
-			placeholder="비밀번호 입력" />
-		</label> <label align="left"> 비밀번호 재확인 <input type="password" name="repwd"
-			placeholder="비밀번호 재확인" />
-		</label> <label align="left">생년월일</label>
-		<fieldset role="group">
-			<select class="box" id="birth-year" name="birthYear">
-				<option value="" disabled selected>출생 연도</option>
-			</select> <select class="box" id="birth-month" name="birthMonth">
-				<option value="" disabled selected>월</option>
-			</select> <select class="box" id="birth-day" name="birthDay">
-				<option value="" disabled selected>일</option>
-			</select>
-		</fieldset>
-		<label align="left">성별</label>
-		<fieldset role="group">
-			<label><input type="radio" name="gender" value="m" checked>남</label>
-			<label><input type="radio" name="gender" value="f">여</label>
-		</fieldset>
+			<label align="left"> 이름 <th:block th:if="${name} == null">
+					<input type="text" name="name" placeholder="이름 입력" />
+				</th:block> <th:block th:unless="${name} == null">
+					<input type="text" name="name" placeholder="이름 입력"
+						th:value="${name}" />
+				</th:block>
+			</label> <label align="left"> 아이디 </label>
+			<fieldset role="group">
+				<input type="text" name="id" placeholder="아이디 입력" /> <input
+					type="button" value="중복체크" onclick="checkId()"> <input
+					type="hidden" name="checkIdOk" value="false">
 
-		<label align="left"> 이메일 </label>
-		<fieldset role="group">
-			<input type="email" id="email" name="email" placeholder="이메일을 입력하세요"
-				size="20" /> <input type="button" value="인증메일발송"
-				onclick="sendNumber()">
+			</fieldset>
+			<label align="left"> 비밀번호 <input type="password" name="pwd"
+				placeholder="비밀번호 입력" />
+			</label> <label align="left"> 비밀번호 재확인 <input type="password"
+				name="repwd" placeholder="비밀번호 재확인" />
+			</label> <label align="left">생년월일</label>
+			<fieldset role="group">
+				<select class="box" id="birth-year" name="birthYear">
+					<option value="" disabled selected>출생 연도</option>
+				</select> <select class="box" id="birth-month" name="birthMonth">
+					<option value="" disabled selected>월</option>
+				</select> <select class="box" id="birth-day" name="birthDay">
+					<option value="" disabled selected>일</option>
+				</select>
+			</fieldset>
+			<label align="left">성별</label>
+			<fieldset role="group">
+				<label><input type="radio" name="gender" value="m" checked>남</label>
+				<label><input type="radio" name="gender" value="f">여</label>
+			</fieldset>
+			<label align="left"> 이메일 </label>
+			<th:block th:if="${email} == null">
+				<fieldset role="group">
+					<input type="email" id="email" name="email"
+						placeholder="이메일을 입력하세요" size="20" /> <input type="button"
+						value="인증메일발송" onclick="sendNumber()">
 
-		</fieldset>
-		<fieldset role="group" name="mail_number" id="mail_number"
-			style="display: none">
-			<input type="text" name="valid_number" id="valid_number"
-				placeholder="인증번호 입력" /> <input type="button" value="인증하기"
-				onclick="confirmNumber()"> <input type="hidden"
-				name="checkEmailOk" value="false">
-		</fieldset>
+				</fieldset>
+				<fieldset role="group" name="mail_number" id="mail_number"
+					style="display: none">
+					<input type="text" name="valid_number" id="valid_number"
+						placeholder="인증번호 입력" /> <input type="button" value="인증하기"
+						onclick="confirmNumber()"> <input type="hidden"
+						name="checkEmailOk" value="false">
+				</fieldset>
+			</th:block>
+			<th:block th:unless="${email} == null">
+				<label>카카오 계정으로 인증하셨습니다</label>
+				<fieldset role="group">
+					<input type="email" id="email" name="email" th:value="${email}"
+						size="20" readonly /> <input type="hidden" name="checkEmailOk"
+						value="true">
 
-		<label align="left"> 핸드폰<input type="tel" name="tel"
-			placeholder="010-1234-5678" size="12" />
-		</label> <label align="left"> 주소 <input type="text" name="addr" placeholder="주소 입력"
-			size="35" />
-		</label> <input type="button" value="회원가입" onclick="inputCheck()"> <input
-			type="reset" value="다시 작성">
-	</fieldset>
-</form>
+				</fieldset>
+			</th:block>
+			<label align="left"> 핸드폰<input type="tel" name="tel"
+				placeholder="010-1234-5678" size="12" />
+			</label> <label align="left"> 주소 <input type="text" name="addr"
+				placeholder="주소 입력" size="35" />
+			</label> <input type="button" value="회원가입" onclick="inputCheck()"> <input
+				type="reset" value="다시 작성">
+		</fieldset>
+	</form>
 </div>

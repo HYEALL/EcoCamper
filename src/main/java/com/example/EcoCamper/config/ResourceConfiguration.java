@@ -1,4 +1,4 @@
-package com.example.EcoCamper.controller;
+package com.example.EcoCamper.config;
 
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.context.annotation.Configuration;
