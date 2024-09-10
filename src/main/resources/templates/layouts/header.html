@@ -38,16 +38,16 @@
   ======================================================== -->
 </head>
 <script>
-function confirm_orderList(){
-	if("[[${userId}]]" != "" ){
-		location.href="/shop/shopOrderList"	;
-	}else {
-		alert("로그인 후 주문내역 열람이 가능합니다.")
-		if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
-		    
-	}
-}
+	function confirm_orderList() {
+		if ("[[${userId}]]" != "") {
+			location.href = "/shop/shopOrderList";
+		} else {
+			alert("로그인 후 주문내역 열람이 가능합니다.")
+			if (confirm("로그인 창으로 이동하시겠습니까?"))
+				location.href = "/loginForm"
 
+		}
+	}
 </script>
 <body class="index-page">
 
@@ -64,10 +64,11 @@ function confirm_orderList(){
 				<ul>
 					<li><a href="/index" class="active">Home</a></li>
 					<li><a href="/feed/feedList">Community</a></li>
-					<li class="dropdown"><a href="/shop/shopmain"><span>Shop</span> <i
-							class="bi bi-chevron-down toggle-dropdown"></i></a>
+					<li class="dropdown"><a href="/shop/shopmain"><span>Shop</span>
+							<i class="bi bi-chevron-down toggle-dropdown"></i></a>
 						<ul>
-							<li class="dropdown"><a href="#"><span>상품목록</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+							<li class="dropdown"><a href="#"><span>상품목록</span> <i
+									class="bi bi-chevron-down toggle-dropdown"></i></a>
 								<ul>
 									<li><a href="/shop/shopmain#products1">대여</a></li>
 									<li><a href="/shop/shopmain#products2">친환경캠핑장비</a></li>

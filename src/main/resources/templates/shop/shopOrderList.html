@@ -1,12 +1,11 @@
 <style>
-.container {
-	max-width: 1500px;
+.container1 {
+	max-width: 1200px;
 	margin: 50px auto;
 	padding: 20px;
 	background-color: #fff;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	border-radius: 10px;
-
 }
 
 h1 {
@@ -73,140 +72,135 @@ button:hover {
 	background-color: #a93226;
 }
 
-
-
-
-.order-items  {
-	 border: 1px;
-  	 padding: 5px;
-     transition: background-color 0.3s, border-radius 0.3s;
-     
+.order-items {
+	border: 1px;
+	padding: 5px;
+	transition: background-color 0.3s, border-radius 0.3s;
 }
-.order-items:hover {
-      background-color: #EAEAEA; /* 마우스 오버 시 배경 색상 */
-      border-radius: 8px; /* 모서리 둥글게 설정 */
-      opacity: 0.85;
+
+/* 기본 호버 효과 */
+.order-items:hover,
+.order-items.checked {
+	background-color: #EAEAEA; /* 호버 시 배경 색상 */
+	border-radius: 8px; /* 모서리 둥글게 설정 */
+	opacity: 0.85;
 }
- 
 </style>
-	<div class="container">
-		<h1>주문내역</h1>
 
-		<table>
-			<thead>
-				<tr>
-					<th>선택</th>
-					<th>주문번호</th>
-					<th>상품명</th>
-					<th>수량</th>
-					<th>총액</th>
-					<th>주문날짜</th>
-					<th>받는사람</th>
-					<th>배송지</th>
-				</tr>
-			</thead>
-			<tbody class="order-list">
-				<tr class="order-items" th:each="orderdto : ${list}">
-					<td><input type="checkbox" th:data-buyseq="${orderdto.buyseq}" 
-											 th:data-pcode="${orderdto.productcode}" 
-											 th:data-pname="${orderdto.pname}" 
-											 th:data-productqty="${orderdto.productqty}" 
-											 class="order-checkbox"></td>
-					<td th:text="${orderdto.buyseq }"></td>
-					<td th:text="${orderdto.pname }"></td>
-					<td th:text="${orderdto.productqty }"></td>
-					<td th:text="${orderdto.productprice }"></td>
-					<td th:text="${orderdto.logtime }"></td>
-					<td th:text="${orderdto.receivename }"></td>
-					<td th:text="${orderdto.baddress}"></td>
-				</tr>
-			</tbody>
-		</table>
+<div class="container1">
+	<h1>주문내역</h1>
 
-		<div class="cart-summary">
-			총액: <span id="total-amount">[[${orderAllsum}]]</span> 원
-			
-		</div>
+	<table>
+		<thead>
+			<tr>
+				<th>선택</th>
+				<th>주문번호</th>
+				<th>상품명</th>
+				<th>수량</th>
+				<th>총액</th>
+				<th>주문날짜</th>
+				<th>받는사람</th>
+				<th>배송지</th>
+			</tr>
+		</thead>
+		<tbody class="order-list">
+			<tr class="order-items" th:each="orderdto : ${list}">
+				<td><input type="checkbox" th:data-buyseq="${orderdto.buyseq}" 
+									 th:data-pcode="${orderdto.productcode}" 
+									 th:data-pname="${orderdto.pname}" 
+									 th:data-productqty="${orderdto.productqty}" 
+									 class="order-checkbox"></td>
+				<td th:text="${orderdto.buyseq }"></td>
+				<td th:text="${orderdto.pname }"></td>
+				<td th:text="${orderdto.productqty }"></td>
+				<td th:text="${orderdto.productprice }"></td>
+				<td th:text="${orderdto.logtime }"></td>
+				<td th:text="${orderdto.receivename }"></td>
+				<td th:text="${orderdto.baddress}"></td>
+			</tr>
+		</tbody>
+	</table>
 
-		<div style="text-align: center; margin-top: 30px;">
-			<button id="order_cancel" class="order_cancel" onclick="order_cancel()">주문취소</button>
-			<button id="checkout-button" onclick="go_review()">상품리뷰달기</button>
-			
-			
-			
-		</div>
+	<div class="cart-summary">
+		총액: <span id="total-amount">[[${orderAllsum}]]</span> 원
 	</div>
-	
-    <!-- 폼 추가 위치 -->
-    <form id="order-cancel-form" action="/shop/shopOrderListDelete" method="post" style="display: none;">
-        <input type="hidden" name="buyseqs" id="buyseqs">
-        <input type="hidden" name="productqtys" id="productqtys">
-        <input type="hidden" name="pcodes" id="pcodes">
-    </form>
 
-	<script>
-	function confirm_orderList(){
-		if("[[${userId}]]" != "" ){
-			location.href="/shop/shopOrderList"	
-		}else {
-			alert("로그인 후 주문내역 열람이 가능합니다.")
-			if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
-			    
-		}
+	<div style="text-align: center; margin-top: 30px;">
+		<button id="order_cancel" class="order_cancel" onclick="order_cancel()">주문취소</button>
+		<button id="checkout-button" onclick="go_review()">상품리뷰달기</button>
+	</div>
+</div>
+
+<!-- 폼 추가 위치 -->
+<form id="order-cancel-form" action="/shop/shopOrderListDelete" method="post" style="display: none;">
+    <input type="hidden" name="buyseqs" id="buyseqs">
+    <input type="hidden" name="productqtys" id="productqtys">
+    <input type="hidden" name="pcodes" id="pcodes">
+</form>
+
+<script>
+function confirm_orderList(){
+	if("[[${userId}]]" != "" ){
+		location.href="/shop/shopOrderList"	
+	}else {
+		alert("로그인 후 주문내역 열람이 가능합니다.")
+		if(confirm("로그인 창으로 이동하시겠습니까?")) location.href="/loginForm"
 	}
-		function go_review() {
-			const checkedCheckboxes = document.querySelectorAll('.order-checkbox:checked');
-			if (checkedCheckboxes.length > 1) {
-		        alert('리뷰는 한 상품에 대해서만 작성할 수 있습니다.');
-		        return;
-		    }else if (checkedCheckboxes.length == 0){
-		        alert('리뷰 작성하실 상품을 선택해주세요.');
-		        return;
-		    }else if (checkedCheckboxes.length == 1){
-		    	const  pcode = checkedCheckboxes[0].getAttribute('data-pcode');
-		    	const  pname = checkedCheckboxes[0].getAttribute('data-pname');
-		    	if(confirm(pname+" 상품 리뷰 작성을 위해 화면을 이동하시겠습니까?")){
-		    		location.href='/shop/shopview?pcode='+pcode;
-		    	}
-		    }
-			
-		}
-		function order_cancel() {
-			const checkedCheckboxes = document.querySelectorAll('.order-checkbox:checked');
-			if (checkedCheckboxes.length == 0){
-				alert('주문취소하실 상품은 선택해주세요.');
-				return;
-			}else {
-				var qty=checkedCheckboxes.length;
-				if(confirm(qty+' 건의 주문상품을 선택하셨습니다. 정말 주문취소하시겠습니까?')){
-					const buyseqArray = [];
-					const productqtyArray = [];
-					const pcodeArray = [];
-				    checkedCheckboxes.forEach(checkbox => {
-				        buyseqArray.push(checkbox.getAttribute('data-buyseq'));
-				        pcodeArray.push(checkbox.getAttribute('data-pcode'));
-		                productqtyArray.push(checkbox.getAttribute('data-productqty'));
-				    	
-				    });
+}
 
-				    // 폼의 숨겨진 입력 필드에 buyseqArray 값을 설정
-				    const buyseqsInput = document.getElementById('buyseqs');
-				    buyseqsInput.value = buyseqArray.join(',');
-				  
-				    const productqtysInput = document.getElementById('productqtys');
-				    productqtysInput.value = productqtyArray.join(',');
-				    
-				    const pcodesInput = document.getElementById('pcodes');
-				    pcodesInput.value = pcodeArray.join(',');
+function go_review() {
+	const checkedCheckboxes = document.querySelectorAll('.order-checkbox:checked');
+	if (checkedCheckboxes.length > 1) {
+	    alert('리뷰는 한 상품에 대해서만 작성할 수 있습니다.');
+	    return;
+	}else if (checkedCheckboxes.length == 0){
+	    alert('리뷰 작성하실 상품을 선택해주세요.');
+	    return;
+	}else if (checkedCheckboxes.length == 1){
+	    const pcode = checkedCheckboxes[0].getAttribute('data-pcode');
+	    const pname = checkedCheckboxes[0].getAttribute('data-pname');
+	    if(confirm(pname+" 상품 리뷰 작성을 위해 화면을 이동하시겠습니까?")){
+	        location.href='/shop/shopview?pcode='+pcode;
+	    }
+	}
+}
 
-		            // 디버깅을 위한 alert 호출
-				    //alert(buyseqArray.join(','))
-		            //alert('Product Quantities: ' + productqtyArray.join(','));
-				    document.getElementById('order-cancel-form').submit();
-				   
-				}
-				
-			} 
+function order_cancel() {
+	const checkedCheckboxes = document.querySelectorAll('.order-checkbox:checked');
+	if (checkedCheckboxes.length == 0){
+		alert('주문취소하실 상품은 선택해주세요.');
+		return;
+	}else {
+		const qty = checkedCheckboxes.length;
+		if(confirm(qty+' 건의 주문상품을 선택하셨습니다. 정말 주문취소하시겠습니까?')){
+			const buyseqArray = [];
+			const productqtyArray = [];
+			const pcodeArray = [];
+			checkedCheckboxes.forEach(checkbox => {
+				buyseqArray.push(checkbox.getAttribute('data-buyseq'));
+				pcodeArray.push(checkbox.getAttribute('data-pcode'));
+				productqtyArray.push(checkbox.getAttribute('data-productqty'));
+			});
+
+			// 폼의 숨겨진 입력 필드에 값 설정
+			document.getElementById('buyseqs').value = buyseqArray.join(',');
+			document.getElementById('productqtys').value = productqtyArray.join(',');
+			document.getElementById('pcodes').value = pcodeArray.join(',');
+
+			document.getElementById('order-cancel-form').submit();
 		}
-		
-    </script>
+	} 
+}
+
+// 체크박스 상태에 따라 스타일 변경
+document.querySelectorAll('.order-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const row = this.closest('.order-items');
+        if (this.checked) {
+            row.classList.add('checked');
+        } else {
+            row.classList.remove('checked');
+        }
+    });
+});
+</script>
