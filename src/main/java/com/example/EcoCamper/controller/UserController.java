@@ -74,7 +74,7 @@ public class UserController {
 
 			response.setHeader("Set-Cookie", cookie.toString());
 
-			System.out.println("login" + token);
+			System.out.println("kakao login: " + token);
 			return "/index";
 		// 카카오 email로 정보가 없으면 회원가입
 		} else {
@@ -112,7 +112,7 @@ public class UserController {
 
 			response.setHeader("Set-Cookie", cookie.toString());
 
-			System.out.println("login" + token);
+			System.out.println("login : " + token);
 			return "Login Success";
 
 		} else {
