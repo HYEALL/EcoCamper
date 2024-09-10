@@ -45,4 +45,11 @@ public class FeedService {
 		 return dao.feedUpdate(dto, seq);
 	 }
 	
+	 public List<Feed> getFeedsById(String id) {
+		    return dao.getFeedsById(id);
+		}
+	 
+	 public List<Feed> getFeedsByUserId(String id) {
+	        return dao.getFeedsByUserId(id);
+	    }
 }

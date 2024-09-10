@@ -19,9 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.EcoCamper.dto.FeedDTO;
 import com.example.EcoCamper.entity.Feed;
+import com.example.EcoCamper.entity.Likes;
 import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.FeedService;
-
+import com.example.EcoCamper.service.LikesService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -30,6 +31,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class FeedController {
 	@Autowired
 	FeedService service;
+	@Autowired
+	LikesService LikesService;
 
 	@Value("${project.upload.path}")
 	private String uploadpath;
@@ -37,25 +40,27 @@ public class FeedController {
 	@Autowired
 	private TokenProvider tokenProvider;
 
-	@GetMapping("feed/feedWriteFormPhoto")
+	@GetMapping("/feed/feedWriteFormPhoto")
 	public String feedWriteFormPhoto(HttpServletRequest request, FeedDTO dto, Model model) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		String userId = tokenProvider.validateAndGetUserId(token);
 		dto.setId(userId);
 		model.addAttribute("dto", dto);
-		return "feed/feedWriteFormPhoto";
+		model.addAttribute("req", "/feed/feedWriteFormPhoto");
+		return "/index";
 	}
 
-	@GetMapping("feed/feedWriteFormVideo")
+	@GetMapping("/feed/feedWriteFormVideo")
 	public String feedWriteFormVideo(HttpServletRequest request, FeedDTO dto, Model model) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		String userId = tokenProvider.validateAndGetUserId(token);
 		dto.setId(userId);
 		model.addAttribute("dto", dto);
-		return "feed/feedWriteFormVideo";
+		model.addAttribute("req", "/feed/feedWriteFormVideo");
+		return "/index";
 	}
 
-	@PostMapping("feed/feedWritePh")
+	@PostMapping("/feed/feedWritePh")
 	public String feedWritePh(FeedDTO dto, Model model, HttpServletRequest request,
 	        @RequestParam("feed_file1[]") List<MultipartFile> uploadFiles) {
 	    File uploadDir = new File(uploadpath);
@@ -101,11 +106,11 @@ public class FeedController {
 
 	    boolean result = service.feedWritePhoto(dto);
 	    model.addAttribute("result", result);
-
-	    return "feed/feedWritePh";
+	    model.addAttribute("req", "/feed/feedWritePh");
+	    return "/index";
 	}
 	
-	@PostMapping("feed/feedWriteVoD")
+	@PostMapping("/feed/feedWriteVoD")
 	public String feedWriteVoD(FeedDTO dto, Model model, HttpServletRequest request,
 	        @RequestParam("feed_file1") MultipartFile uploadFile) {
 	    // 데이터 처리
@@ -147,12 +152,12 @@ public class FeedController {
 
 	    // 데이터 공유
 	    model.addAttribute("result", result);
-
+	    model.addAttribute("req", "/feed/feedWriteVoD");
 	    // 뷰 파일 선택
-	    return "feed/feedWriteVoD";
+	    return "/index";
 	}
 	
-	@GetMapping("feed/feedList")
+	@GetMapping("/feed/feedList")
 	   public String feedList(Model model, HttpServletRequest request) {
 		
 	      String token = tokenProvider.resolveTokenFromCookie(request);
@@ -166,7 +171,7 @@ public class FeedController {
 	      return "/index";
 	   }
 	
-	@GetMapping("feed/feedReply")
+	@GetMapping("/feed/feedReply")
 	public String messageWriteForm(Model model, HttpServletRequest request) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 	    String userId = tokenProvider.validateAndGetUserId(token);
@@ -178,11 +183,12 @@ public class FeedController {
 	    model.addAttribute("userId", userId);
 	    model.addAttribute("feed", feed);
 	    model.addAttribute("seq", seq);
-		return "feed/feedReply";
+	    model.addAttribute("req", "/feed/feedReply");
+		return "/index";
 		
 	}
 	
-	@GetMapping("feed/feedView")
+	@GetMapping("/feed/feedView")
 	public String feedView(Model model, HttpServletRequest request) {
 		 String token = tokenProvider.resolveTokenFromCookie(request);
 	     String userId = tokenProvider.validateAndGetUserId(token);
@@ -193,11 +199,11 @@ public class FeedController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("feed", feed);
 	    model.addAttribute("seq", seq);
-	
-		return "feed/feedView";
+	    model.addAttribute("req", "/feed/feedView");
+		return "/index";
 	}
 	
-	@GetMapping("feed/feedDelete")
+	@GetMapping("/feed/feedDelete")
 	public String feedDelete(Model model, HttpServletRequest request) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 	    String userId = tokenProvider.validateAndGetUserId(token);
@@ -206,8 +212,8 @@ public class FeedController {
 		
 		model.addAttribute("result", result);
 		model.addAttribute("userId", userId);
-		
-		return "feed/feedDelete";
+		model.addAttribute("req", "/feed/feedDelete");
+		return "/index";
 	}
 	
 	@GetMapping("feed/feedModifyFormPh")
@@ -217,10 +223,11 @@ public class FeedController {
 		Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
 	    model.addAttribute("feed", feed);
 	    model.addAttribute("seq", seq);
-	    return "feed/feedModifyFormPh"; // JSP 파일의 경로
+	    model.addAttribute("req", "/feed/feedModifyFormPh");
+	    return "/index"; // JSP 파일의 경로
 	}
 	
-	@GetMapping("feed/feedModifyFormVoD")
+	@GetMapping("/feed/feedModifyFormVoD")
 	public String boardModifyFormVoD(Model model,  @RequestParam("seq") int seq) {
 		
 		// 한줄 데이터 불러오기
@@ -228,14 +235,14 @@ public class FeedController {
 		
 		model.addAttribute("feed", feed);
 		model.addAttribute("seq", seq);
+		model.addAttribute("req", "/feed/feedModifyFormVoD");
 
-
-		return "feed/feedModifyFormVoD";
+		return "/index";
 	}
 	
 
 	
-	@PostMapping("feed/feedModifyPh")
+	@PostMapping("/feed/feedModifyPh")
 	public String feedModifyFormPh(FeedDTO dto, Model model, HttpServletRequest request,
 	        @RequestParam("feed_file1[]") List<MultipartFile> uploadFiles) {
 		File uploadDir = new File(uploadpath);
@@ -283,12 +290,12 @@ public class FeedController {
 	    boolean result = service.feedUpdate(dto, seq);
 	    model.addAttribute("result", result);
 	    model.addAttribute("seq", seq);
-		
-		return "feed/feedModifyPh";
+	    model.addAttribute("req", "/feed/feedModifyPh");
+		return "/index";
 	}
 
 	
-	@PostMapping("feed/feedModifyVoD")
+	@PostMapping("/feed/feedModifyVoD")
 	public String feedModifyVoD(FeedDTO dto, Model model, HttpServletRequest request,
 	        @RequestParam("feed_file1") MultipartFile uploadFile) {
 	    // 데이터 처리
@@ -332,10 +339,28 @@ public class FeedController {
 	    // 데이터 공유
 	    model.addAttribute("result", result);
 	    model.addAttribute("seq", seq);
-
+	    model.addAttribute("req", "/feed/feedModifyVoD");
 	    // 뷰 파일 선택
-	    return "feed/feedModifyVoD";
+	    return "/index";
 	}
 	
 	
+	@GetMapping("/feed/myFeed")
+	public String myFeed(Model model, HttpServletRequest request) {
+	    String token = tokenProvider.resolveTokenFromCookie(request);
+	    String id = tokenProvider.validateAndGetUserId(token);
+
+	    List<Feed> myFeeds = service.getFeedsById(id);
+	    int count = myFeeds.size();
+	    List<Feed> likes =service.getFeedsByUserId(id);
+	    int count2 = likes.size();
+	    model.addAttribute("list", myFeeds);
+	    model.addAttribute("id", id);
+	    model.addAttribute("count", count);
+	    model.addAttribute("list2", likes);
+	    model.addAttribute("count2", count2);
+	    model.addAttribute("req", "/feed/myFeed");
+	    // 뷰 파일 선택
+	    return "/index";
+	}
 }

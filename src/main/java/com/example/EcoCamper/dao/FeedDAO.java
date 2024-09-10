@@ -95,4 +95,13 @@ public class FeedDAO {
 		}
 	}
 	
+	 public List<Feed> getFeedsById(String id) {
+	        // 로그인한 사용자의 피드만 가져오는 DAO 또는 Repository 호출
+	        return repository.findByIdOrderByLogtimeDesc(id);
+	    }
+	 
+	 public List<Feed> getFeedsByUserId(String id) {
+	        return repository.findFeedsByUserIdAndReviewId(id);
+	    }
+	
 }

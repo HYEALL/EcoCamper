@@ -1,0 +1,199 @@
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const tab = button.getAttribute('data-tab');
+
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            button.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+        });
+    });
+});
+    </script>
+
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    text-align: center;
+    color: #009688; /* 텍스트 색상 (청록색) */
+    margin: 10px; /* 상하 여백 추가 */
+    font-size: 28px; /* 제목 글자 크기 조정 */
+    font-weight: bold; /* 제목 글자 두께 조정 */
+    background: #ffffff; /* 배경 색상 (흰색) */
+    padding: 15px; /* 패딩 추가 */
+    max-width: 100%; /* 넓이를 컨테이너에 맞게 조정 */
+    box-sizing: border-box; /* 패딩과 테두리를 포함한 넓이 계산 */
+}
+
+.myfeed {
+    max-width: 1200px; /* 컨테이너 폭을 넓힘 */
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 한 행에 3개 아이템 */
+    gap: 20px; /* 아이템 사이의 간격을 더 넓힘 */
+}
+
+.photo-item {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border: 1px solid #ddd; /* 각 피드 구분을 위한 테두리 */
+    aspect-ratio: 1 / 1; /* 비율을 유지하여 정사각형으로 설정 */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.photo-item:hover {
+    transform: scale(1.05); /* 호버 시 확대 효과 */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.photo-item img,
+.photo-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지와 비디오가 컨테이너에 맞게 자르기 */
+    border-radius: 8px;
+    display: block;
+}
+
+.photo-item video {
+    border: none; /* 비디오 테두리 제거 */
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    margin-top: 20px; /* 상단 여백 추가 (필요에 따라 조절) */
+}
+
+.action-buttons a {
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: #007bff; /* 링크 색상 설정 (필요에 따라 조절) */
+    font-size: 18px; /* 글자 크기 설정 (필요에 따라 조절) */
+    font-weight: bold; /* 글자 두께 설정 (필요에 따라 조절) */
+}
+
+.user_id {
+    font-size: 22px; /* 글자 크기 조정 */
+    font-weight: bold; /* 글자 두께 조정 */
+    color: #ff6f00; /* 텍스트 색상 (주황색) */
+    margin: 15px 0; /* 상하 여백 추가 */
+    padding: 15px; /* 패딩 추가 */
+    background-color: #ffffff; /* 배경 색상 (흰색) */
+    border: 2px solid #ffab91; /* 테두리 색상 (연한 주황색) */
+    border-radius: 8px; /* 테두리 둥글게 처리 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    font-family: 'Arial', sans-serif; /* 가독성 좋은 폰트 */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 부드러운 그림자 효과 */
+}
+
+.tabs {
+    display: flex;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    background: #ddd;
+    border: 1px solid #ccc;
+    margin-right: 2px;
+    border-radius: 5px 5px 0 0;
+    transition: background 0.3s;
+}
+
+.tab-button.active {
+    background: #009688;
+    color: #fff;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+</style>
+
+<body th:data-user-id="${id}">
+
+    <div class="tabs">
+        <div class="tab-button active" data-tab="feed">내가 쓴 피드</div>
+        <div class="tab-button" data-tab="liked">좋아요한 피드</div>
+    </div>
+
+    <div id="feed" class="tab-content active">
+        <div class="myfeed">
+            <h2>[[${id}]]님의 피드 목록</h2>
+            <div class="user_id">게시글 : <span th:text="${count}"></span></div>
+            <div class="photo-grid">
+                <div th:each="feed : ${list}" class="photo-item">
+                    <a th:href="@{/feed/feedView?(seq=${feed.seq})}">
+                        <!-- 비디오 파일인 경우 -->
+                        <div th:if="${feed.feed_type} == 'video'">
+                            <video controls>
+                                <source th:src="@{/storage/{filename}(filename=${feed.feed_file})}" type="video/mp4">
+                            </video>
+                        </div>
+
+                        <!-- 이미지 파일인 경우 -->
+                        <div th:if="${feed.feed_type} != 'video'" class="feed_img">
+                            <!-- 첫 번째 이미지만 표시 -->
+                            <img th:src="@{/storage/{filename}(filename=${feed.getImageFileNames()[0]})}" alt="Feed Image">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="liked" class="tab-content">
+        <div class="myfeed">
+            <h2>[[${id}]]님이 좋아요한 게시글</h2>
+             <div class="user_id">게시글 : <span th:text="${count2}"></span></div>
+            <div class="photo-grid">
+                <div th:each="like : ${list2}" class="photo-item">
+                    <a th:href="@{/feed/feedView?(seq=${like.seq})}">
+                        <!-- 비디오 파일인 경우 -->
+                        <div th:if="${like.feed_type} == 'video'">
+                            <video controls>
+                                <source th:src="@{/storage/{filename}(filename=${like.feed_file})}" type="video/mp4">
+                            </video>
+                        </div>
+
+                        <!-- 이미지 파일인 경우 -->
+                        <div th:if="${like.feed_type} != 'video'" class="feed_img">
+                            <!-- 첫 번째 이미지만 표시 -->
+                            <img th:src="@{/storage/{filename}(filename=${like.getImageFileNames()[0]})}" alt="Feed Image">
+                        </div>
+                    </a>
+                </div>
+        </div>
+    </div>
+    </div>
+</body>

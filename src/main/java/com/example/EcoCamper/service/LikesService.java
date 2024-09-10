@@ -1,10 +1,13 @@
 package com.example.EcoCamper.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.EcoCamper.dao.LikesDAO;
 import com.example.EcoCamper.dto.LikesDTO;
+import com.example.EcoCamper.entity.Likes;
 
 
 @Service
@@ -33,4 +36,5 @@ public class LikesService {
     public boolean isLikedByUser(int reviewId, String userId) {
         return dao.existsByReviewIdAndUserId(reviewId, userId);
     }
+    
 }

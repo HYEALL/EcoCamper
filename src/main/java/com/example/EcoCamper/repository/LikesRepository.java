@@ -1,17 +1,20 @@
 package com.example.EcoCamper.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.example.EcoCamper.entity.Feed;
 import com.example.EcoCamper.entity.Likes;
 
 import jakarta.transaction.Transactional;
 
 public interface LikesRepository extends JpaRepository<Likes, Integer>{
 	
-	
+
     // 특정 리뷰의 좋아요 수를 카운트하는 쿼리
     int countByReviewId(int reviewId);
     
@@ -23,6 +26,8 @@ public interface LikesRepository extends JpaRepository<Likes, Integer>{
     @Transactional
     @Query("DELETE FROM Likes l WHERE l.reviewId = :reviewId AND l.userId = :userId")
     void deleteByReviewIdAndUserId(@Param("reviewId") int reviewId, @Param("userId") String userId);
+    
+   
 }
 
 

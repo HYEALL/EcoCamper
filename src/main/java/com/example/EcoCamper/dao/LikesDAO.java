@@ -1,9 +1,12 @@
 package com.example.EcoCamper.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.EcoCamper.dto.LikesDTO;
+import com.example.EcoCamper.entity.Feed;
 import com.example.EcoCamper.entity.Likes;
 import com.example.EcoCamper.repository.LikesRepository;
 
@@ -35,5 +38,5 @@ public class LikesDAO {
     public boolean existsByReviewIdAndUserId(int reviewId, String userId) {
         return repository.existsByReviewIdAndUserId(reviewId, userId);
     }
- 
+    
 }

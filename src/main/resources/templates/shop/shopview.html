@@ -1,18 +1,17 @@
 <link rel="stylesheet" href="styles.css">
 
-	<div class="cart" onclick="showCart()">
-		장바구니 (<span id="cart-count">0</span>)
-	</div>
-	<main>
-	<div class="container">
-		<section class="product-details">
+<div class="cart" onclick="showCart()">
+	장바구니 (<span id="cart-count">0</span>)
+</div>
+<main>
+	<div>
+		<div class="product-details">
 			<div class="product-image">
 				<img th:src="@{/images/}+${dto.pimg}" alt="상품 이미지">
 			</div>
 			<div class="productinfo" th:data-code="${dto.pcode}"
-									 th:data-name="${dto.pname}" 
-									 th:data-price="${dto.pprice}"
-									 th:data-img="${dto.pimg}">
+				th:data-name="${dto.pname}" th:data-price="${dto.pprice}"
+				th:data-img="${dto.pimg}">
 				<h2>[[${dto.pname}]]</h2>
 				<p class="price">₩ [[${dto.pprice}]]</p>
 				<p class="description">이곳에 상품의 상세 설명을 입력합니다. 상품의 특징, 사용 방법, 재질
@@ -39,10 +38,10 @@
 					<button id="" onclick="confirm_buy()" style="width: 127px;">회원
 						구매하기</button>
 					&ensp;
-					
+
 				</div>
 			</div>
-		</section>
+		</div>
 
 		<section class="product-reviews">
 			<div class="reviews-header">
@@ -73,12 +72,12 @@
 				</form>
 			</div>
 			<th:block th:if="${!list.isEmpty()}">
-			<div class="review_Text">
-				<table class="review_list" th:each="reviewdto : ${list}"
+				<div class="review_Text">
+					<table class="review_list" th:each="reviewdto : ${list}"
 						style="width: 100%">
 						<tr class="review_item" th:data-seq="${reviewdto.shopreviewseq}"
-												th:data-id="${reviewdto.shopreviewid}">
-												
+							th:data-id="${reviewdto.shopreviewid}">
+
 							<td class="review_author" th:text="${reviewdto.shopreviewid}"></td>
 							<td class="review_rating"><th:block
 									th:each="i : ${#numbers.sequence(1, reviewdto.rating)}">
@@ -98,40 +97,40 @@
 					</table>
 
 
-				<div align="center">
-					<p>
-						<th:block th:if="${ startPage > 3}">
+					<div align="center">
+						<p>
+							<th:block th:if="${ startPage > 3}">
 						[<a
-								th:href="@{/shop/shopview(pcode=${pcode},pg=${ startPage-1 })}"
-								class="paging">이전</a>]
+									th:href="@{/shop/shopview(pcode=${pcode},pg=${ startPage-1 })}"
+									class="paging">이전</a>]
 						</th:block>
-						<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
-							<th:block th:if="${ pg==num }">
+							<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
+								<th:block th:if="${ pg==num }">
 									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
-									class="currentPaging">[[${ num }]]</a>]
+										class="currentPaging">[[${ num }]]</a>]
 								</th:block>
-							<th:block th:if="${ pg!=num }">
+								<th:block th:if="${ pg!=num }">
 									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
-									class="paging">[[${ num }]]</a>] 
+										class="paging">[[${ num }]]</a>] 
 								</th:block>
-						</th:block>
-						<th:block th:if="${endPage < totalP}">
+							</th:block>
+							<th:block th:if="${endPage < totalP}">
 							[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ endPage+1 })}"
-								class="paging">다음</a>]
+									class="paging">다음</a>]
 						</th:block>
-						
-					</p>
+
+						</p>
+					</div>
 				</div>
-			</div>
-		</th:block>
-		<th:block th:if="${list.isEmpty()}">
-			<p>리뷰가 없습니다. 고객님의 상품 후기를 남겨주세요</p>
-		</th:block>
+			</th:block>
+			<th:block th:if="${list.isEmpty()}">
+				<p>리뷰가 없습니다. 고객님의 상품 후기를 남겨주세요</p>
+			</th:block>
 		</section>
 	</div>
-	</main>
+</main>
 
-	<script src="scripts.js"></script>
+<script src="scripts.js"></script>
 
 
 <script type="text/javascript">
@@ -314,15 +313,6 @@ main {
 	padding: 20px;
 	max-width: 1200px;
 	margin: 0 auto;
-	height: auto;
-}
-
-.container {
-	margin: 50px auto;
-	padding: 20px;
-	background-color: #fff;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	border-radius: 10px;
 }
 
 .reviews-header {
@@ -505,6 +495,7 @@ select {
 	width: 100px;
 	white-space: nowrap;
 }
+
 .star_rating {
 	width: 100%;
 	box-sizing: border-box;
@@ -552,7 +543,6 @@ select {
 	box-sizing: border-box;
 	background-size: 100%;
 }
-
 </style>
 
 
