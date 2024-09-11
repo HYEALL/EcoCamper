@@ -143,8 +143,9 @@ h2 {
 <body th:data-user-id="${id}">
 
     <div class="tabs">
-        <div class="tab-button active" data-tab="feed">내가 쓴 피드</div>
-        <div class="tab-button" data-tab="liked">좋아요한 피드</div>
+        <div class="tab-button active" data-tab="feed">작성한 피드</div>
+        <div class="tab-button" data-tab="liked">좋아요 피드</div>
+        <div class="tab-button" data-tab="saved">저장한 피드</div>
     </div>
 
     <div id="feed" class="tab-content active">
@@ -190,6 +191,31 @@ h2 {
                         <div th:if="${like.feed_type} != 'video'" class="feed_img">
                             <!-- 첫 번째 이미지만 표시 -->
                             <img th:src="@{/storage/{filename}(filename=${like.getImageFileNames()[0]})}" alt="Feed Image">
+                        </div>
+                    </a>
+                </div>
+        </div>
+    </div>
+    </div>
+    
+        <div id="saved" class="tab-content">
+        <div class="myfeed">
+            <h2>[[${id}]]님이 저장한 게시글</h2>
+             <div class="user_id">게시글 : <span th:text="${count3}"></span></div>
+            <div class="photo-grid">
+                <div th:each="save : ${list3}" class="photo-item">
+                    <a th:href="@{/feed/feedView?(seq=${save.seq})}">
+                        <!-- 비디오 파일인 경우 -->
+                        <div th:if="${save.feed_type} == 'video'">
+                            <video controls>
+                                <source th:src="@{/storage/{filename}(filename=${save.feed_file})}" type="video/mp4">
+                            </video>
+                        </div>
+
+                        <!-- 이미지 파일인 경우 -->
+                        <div th:if="${save.feed_type} != 'video'" class="feed_img">
+                            <!-- 첫 번째 이미지만 표시 -->
+                            <img th:src="@{/storage/{filename}(filename=${save.getImageFileNames()[0]})}" alt="Feed Image">
                         </div>
                     </a>
                 </div>

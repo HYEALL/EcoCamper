@@ -69,11 +69,13 @@ body {
 }
 
 h2 {
-	text-align: center;
-	color: #333;
-	padding: 20px 0;
-	background-color: #fff;
-	border-bottom: 1px solid #ddd;
+    text-align: center;
+    color: #fff; /* 텍스트 색상 변경 */
+    padding: 20px 0;
+    background-color: #2A4E3F; /* 배경색 변경 */
+    margin: 0;
+    border-radius: 15px; /* 테두리 동그랗게 설정 */
+    font-weight: bold; /* 글씨체를 굵게 설정 */
 }
 
 .form-container {
@@ -171,7 +173,7 @@ h2 {
 }
 
 #label {
-	background: #00bcd4;
+	background: #2A4E3F;
 	color: #fff;
 	padding: 10px;
 	text-align: center;
@@ -189,7 +191,7 @@ input[type="text"] {
 }
 
 input[type="button"], input[type="reset"], button {
-	background-color: #00bcd4;
+	background-color: #2A4E3F;
 	color: white;
 	border: none;
 	padding: 10px 20px;
@@ -201,7 +203,7 @@ input[type="button"], input[type="reset"], button {
 }
 
 input[type="button"]:hover, input[type="reset"]:hover, button:hover {
-	background-color: #0097a7;
+	background-color: #FFA500;
 }
 
 hr {
@@ -306,14 +308,15 @@ hr {
 </style>
 </head>
 <body>
-	<h2>피드 올리기</h2>
+	
 	<form action="feedWritePh" name="form1" method="post"
 		enctype="multipart/form-data">
 		<div class="form-container">
+		<h2>사진 올리기</h2>
 			<div class="section content">
 				<div id="photo-list">
 					<div class="photo-button">
-						<input type="file" accept="image/*" multiple onchange="addPhoto()" name="feed_file1[]"> 
+						<input type="file" accept="image/*" multiple onchange="addPhoto()" name="feed_file1"> 
 						<img src="../images/camera.jpg"
 							alt="카메라 아이콘" />
 						<div>
@@ -332,13 +335,20 @@ hr {
 				 <details>
 				  <summary role="button">😀</summary>
         		<div class="emoji-popup">
-                            <span class="emoji">😀</span>
-                            <span class="emoji">😂</span>
-                            <span class="emoji">😍</span>
-                            <span class="emoji">😠</span>
-                            <span class="emoji">👍</span>
-                            <span class="emoji">❤️</span>
-                            <span class="emoji">💔</span>
+						<span class="emoji">😀</span>
+    					<span class="emoji">😂</span>
+    					<span class="emoji">😍</span>
+    					<span class="emoji">😠</span>
+    					<span class="emoji">👍</span>
+    					<span class="emoji">❤️</span>
+    					<span class="emoji">💔</span>
+    					<span class="emoji">😭</span>
+    					<span class="emoji">🎉</span>
+    					<span class="emoji">🔥</span>
+    					<span class="emoji">🌟</span>
+    					<span class="emoji">💯</span>
+    					<span class="emoji">😜</span>
+    					<span class="emoji">💡</span> 
                             <!-- 추가 이모지를 여기 넣을 수 있습니다 -->
                         </div>
                          </details>

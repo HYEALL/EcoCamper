@@ -1,4 +1,61 @@
 <script type="text/javascript" src="../js/feed.js?v=2"></script>
+<script>
+function addVideo(event) {
+    var files = event.target.files;
+    var videoList = document.getElementById('video-list');
+    var videoCountElement = document.getElementById('video-count');
+    var videoIcon = document.querySelector('#video-list img'); // 비디오 아이콘 이미지 요소
+
+    // 비디오 아이콘 숨기기
+    if (videoIcon) {
+        videoIcon.style.display = 'none';
+    }
+    
+    var existingVideo = videoList.querySelector('video');
+
+    // 비디오가 이미 있는 경우, 기존 비디오를 제거
+    if (existingVideo) {
+        videoList.removeChild(existingVideo);
+    }
+
+    if (files.length > 0) {
+        var file = files[0];
+        if (file && file.type.startsWith('video/')) {
+            var video = document.createElement('video');
+            video.controls = true;
+            video.src = URL.createObjectURL(file);
+            video.className = 'uploaded-video';
+            videoList.appendChild(video);
+
+            videoCountElement.textContent = '1'; // 비디오 수는 항상 1로 설정
+        } else {
+            alert('비디오 파일만 선택할 수 있습니다.');
+        }
+    } else {
+        videoCountElement.textContent = '0'; // 파일이 없으면 0으로 설정
+    }
+}
+        // 이모지 클릭 시 텍스트에 추가
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+                emoji.addEventListener('click', function() {
+                    const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
+                    const textArea = document.getElementById('text-input');
+                    const cursorPos = textArea.selectionStart;
+                    const textBefore = textArea.value.substring(0, cursorPos);
+                    const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
+                    textArea.value = textBefore + emojiValue + textAfter;
+                    textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+                    textArea.focus();
+                });
+            });
+        });
+
+        function resizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+    </script>
 
 <style>
 body {
@@ -14,11 +71,13 @@ body {
 }
 
 h2 {
-	text-align: center;
-	color: #333;
-	padding: 20px 0;
-	background-color: #fff;
-	border-bottom: 1px solid #ddd;
+    text-align: center;
+    color: #fff; /* 텍스트 색상 변경 */
+    padding: 20px 0;
+    background-color: #2A4E3F; /* 배경색 변경 */
+    margin: 0;
+    border-radius: 15px; /* 테두리 동그랗게 설정 */
+    font-weight: bold; /* 글씨체를 굵게 설정 */
 }
 
 .form-container {
@@ -115,7 +174,7 @@ h2 {
 }
 
 #label {
-	background: #00bcd4;
+	background: #2A4E3F;
 	color: #fff;
 	padding: 10px;
 	text-align: center;
@@ -133,7 +192,7 @@ input[type="text"] {
 }
 
 input[type="button"], input[type="reset"], button {
-	background-color: #00bcd4;
+	background-color: #2A4E3F;
 	color: white;
 	border: none;
 	padding: 10px 20px;
@@ -145,7 +204,7 @@ input[type="button"], input[type="reset"], button {
 }
 
 input[type="button"]:hover, input[type="reset"]:hover, button:hover {
-	background-color: #0097a7;
+	background-color: #FFA500;
 }
 
 hr {
@@ -254,83 +313,27 @@ hr {
     object-fit: cover;
 }
 </style>
-<script>
-function addVideo(event) {
-    var files = event.target.files;
-    var videoList = document.getElementById('video-list');
-    var videoCountElement = document.getElementById('video-count');
-    var videoIcon = document.querySelector('#video-list img'); // 비디오 아이콘 이미지 요소
-
-    // 비디오 아이콘 숨기기
-    if (videoIcon) {
-        videoIcon.style.display = 'none';
-    }
-    
-    var existingVideo = videoList.querySelector('video');
-
-    // 비디오가 이미 있는 경우, 기존 비디오를 제거
-    if (existingVideo) {
-        videoList.removeChild(existingVideo);
-    }
-
-    if (files.length > 0) {
-        var file = files[0];
-        if (file && file.type.startsWith('video/')) {
-            var video = document.createElement('video');
-            video.controls = true;
-            video.src = URL.createObjectURL(file);
-            video.className = 'uploaded-video';
-            videoList.appendChild(video);
-
-            videoCountElement.textContent = '1'; // 비디오 수는 항상 1로 설정
-        } else {
-            alert('비디오 파일만 선택할 수 있습니다.');
-        }
-    } else {
-        videoCountElement.textContent = '0'; // 파일이 없으면 0으로 설정
-    }
-}
-        // 이모지 클릭 시 텍스트에 추가
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
-                emoji.addEventListener('click', function() {
-                    const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
-                    const textArea = document.getElementById('text-input');
-                    const cursorPos = textArea.selectionStart;
-                    const textBefore = textArea.value.substring(0, cursorPos);
-                    const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
-                    textArea.value = textBefore + emojiValue + textAfter;
-                    textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
-                    textArea.focus();
-                });
-            });
-        });
-
-        function resizeTextarea(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight) + 'px';
-        }
-    </script>
-
-<style>
-/* 기존 스타일 코드 유지 */
-</style>
-</head>
 <body>
 <form action="feedModifyVoD" name="form1" method="post" enctype="multipart/form-data">
+
 <div class="form-container">
+<h2>동영상 편집</h2>
+<div style="color: red">※ 기존 동영상도 재등록 해야합니다</div>
 	<input type="hidden" name="seq" th:value="${seq}">
     <div class="section content">
-				<div id="video-list">
-					<div class="video-button">
-						<input id="video-icon" type="file" accept="video/*" onchange="addVideo(event)" name="feed_file1"> 
-						<img src="../images/video.jpg"
-							alt="비디오 아이콘" />
-						<div>
-							<span id="video-count">0</span>/1
-						</div>
-					</div>
-				</div>
+		 <div id="video-list">
+            <div class="video-button">
+                <input id="video-icon" type="file" accept="video/*" onchange="addVideo(event)" name="feed_file1">
+                <img src="../images/video.jpg" alt="비디오 아이콘" />
+                <div>
+                    <span id="video-count">0</span>/1
+                </div>
+            </div>
+            <!-- 기존 비디오 파일 표시 -->
+<video class="uploaded-video" controls>
+    <source th:src="@{/storage/{feed_file}(feed_file=${feed.feed_file})}" type="video/mp4"> <!-- 서버에서 전달된 비디오 URL 사용 -->
+</video>
+        </div>
 				<br>
         <div>
             <textarea id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
@@ -342,13 +345,20 @@ function addVideo(event) {
             <details>
                 <summary role="button">😀</summary>
                 <div class="emoji-popup">
-                    <span class="emoji">😀</span>
-                    <span class="emoji">😂</span>
-                    <span class="emoji">😍</span>
-                    <span class="emoji">😠</span>
-                    <span class="emoji">👍</span>
-                    <span class="emoji">❤️</span>
-                    <span class="emoji">💔</span>
+						<span class="emoji">😀</span>
+    					<span class="emoji">😂</span>
+    					<span class="emoji">😍</span>
+    					<span class="emoji">😠</span>
+    					<span class="emoji">👍</span>
+    					<span class="emoji">❤️</span>
+    					<span class="emoji">💔</span>
+    					<span class="emoji">😭</span>
+    					<span class="emoji">🎉</span>
+    					<span class="emoji">🔥</span>
+    					<span class="emoji">🌟</span>
+    					<span class="emoji">💯</span>
+    					<span class="emoji">😜</span>
+    					<span class="emoji">💡</span> 
                 </div>
             </details>
         </div>

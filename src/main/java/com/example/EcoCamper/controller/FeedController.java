@@ -61,7 +61,7 @@ public class FeedController {
 
 	@PostMapping("/feed/feedWritePh")
 	public String feedWritePh(FeedDTO dto, Model model, HttpServletRequest request,
-			@RequestParam("feed_file1[]") List<MultipartFile> uploadFiles) {
+			@RequestParam("feed_file1") List<MultipartFile> uploadFiles) {
 		File uploadDir = new File(uploadpath);
 		if (!uploadDir.exists()) {
 			uploadDir.mkdirs();
@@ -251,7 +251,7 @@ public class FeedController {
 
 	@PostMapping("/feed/feedModifyPh")
 	public String feedModifyFormPh(FeedDTO dto, Model model, HttpServletRequest request,
-			@RequestParam("feed_file1[]") List<MultipartFile> uploadFiles) {
+			@RequestParam("feed_file1") List<MultipartFile> uploadFiles) {
 		File uploadDir = new File(uploadpath);
 		if (!uploadDir.exists()) {
 			uploadDir.mkdirs();
@@ -359,11 +359,15 @@ public class FeedController {
 		int count = myFeeds.size();
 		List<Feed> likes = service.getFeedsByUserId(id);
 		int count2 = likes.size();
+		List<Feed> saves = service.findFeedsBySaveSeq(id);
+		int count3 = saves.size();
 		model.addAttribute("list", myFeeds);
 		model.addAttribute("id", id);
 		model.addAttribute("count", count);
 		model.addAttribute("list2", likes);
 		model.addAttribute("count2", count2);
+		model.addAttribute("list3", saves);
+		model.addAttribute("count3", count3);
 		model.addAttribute("req", "/feed/myFeed");
 		// 뷰 파일 선택
 		return "/index";

@@ -19,9 +19,12 @@ public interface FeedRepository extends JpaRepository<Feed, Integer> {
 
 	List<Feed> findAllByOrderByLogtimeDesc();
 	
-	 List<Feed> findByIdOrderByLogtimeDesc(String id);
+	List<Feed> findByIdOrderByLogtimeDesc(String id);
 	
 	 
-	  @Query("SELECT f FROM Feed f JOIN Likes l ON f.seq = l.reviewId WHERE l.userId = :userId AND f.id = l.userId")
-	    List<Feed> findFeedsByUserIdAndReviewId(@Param("userId") String id);
+	@Query("SELECT f FROM Feed f JOIN Likes l ON f.seq = l.reviewId WHERE l.userId = :userId AND f.id = l.userId")
+	List<Feed> findFeedsByUserIdAndReviewId(@Param("userId") String id);
+	
+	@Query("SELECT f FROM Feed f JOIN Save l ON f.seq = l.save_seq WHERE l.save_id = :save_id AND f.id = l.save_id")
+	List<Feed> findFeedsBySeqIdAndSaveSeq(@Param("save_id") String id);
 }

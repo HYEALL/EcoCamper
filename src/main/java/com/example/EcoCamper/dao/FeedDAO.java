@@ -103,5 +103,9 @@ public class FeedDAO {
 	 public List<Feed> getFeedsByUserId(String id) {
 	        return repository.findFeedsByUserIdAndReviewId(id);
 	    }
-	
+	 
+	 public List<Feed> findFeedsBySaveSeq(String id){
+		 	return repository.findFeedsBySeqIdAndSaveSeq(id);
+	 }
+ 	
 }

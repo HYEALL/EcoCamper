@@ -2,11 +2,12 @@
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
    document.addEventListener('DOMContentLoaded', function() {
-	    var userId = document.body.dataset.userId;
+	   var saveButtons = document.querySelectorAll('.save-button');
 	    var likeButtons = document.querySelectorAll('.like-button');
 
 	    // 서버에서 좋아요 상태를 가져와서 버튼 상태를 업데이트
 	    likeButtons.forEach(function(button) {
+	    	var userId = document.body.dataset.userId;
     var reviewId = button.getAttribute('data-review-id');
     
     fetch(`/isLiked/${reviewId}?userId=${userId}`)
@@ -33,6 +34,33 @@
             button.dataset.liked = "false";
         });
 });
+	    saveButtons.forEach(function(button) {
+	        var save_seq = button.getAttribute('data-save-seq');
+			var save_id = document.body.dataset.userId;
+	        // 페이지 로드 시 저장 상태 가져오기
+	        fetch(`/isSave/${save_seq}?save_id=${save_id}`)
+	            .then(response => response.json())
+	            .then(isSaved => {
+	                var saveIcon = button.querySelector('.save-icon');
+	                if (isSaved === null || isSaved === undefined) {
+	                    isSaved = false;
+	                }
+	                if (isSaved) {
+	                    saveIcon.src = '../images/tent.png';
+	                    button.dataset.saved = "true";
+	                } else {
+	                    saveIcon.src = '../images/non-tent.png';
+	                    button.dataset.saved = "false";
+	                }
+	            })
+	            .catch(error => {
+	                console.error('Error:', error);
+	                var saveIcon = button.querySelector('.save-icon');
+	                saveIcon.src = '../images/non-tent.png';
+	                button.dataset.saved = "false";
+	            });
+	    });
+
 
 	    // 스와이퍼 초기화
 	    var swiperContainers = document.querySelectorAll('.swiper-container');
@@ -125,6 +153,41 @@
 	            .catch(error => console.error('Error:', error));
 	        });
 	    });
+	    document.querySelectorAll('.save-button').forEach(function(button) {
+	        button.addEventListener('click', function() {
+	            var SaveIcon = button.querySelector('.save-icon');
+	            var isSave = button.dataset.saved === "true";
+	            var save_seq = button.getAttribute('data-save-seq');
+	            var save_id = document.body.dataset.userId;
+
+	            if (!save_id) {
+	                console.error('사용자 ID가 설정되지 않았습니다.');
+	                return;
+	            }
+
+	            var url = isSave ? `/mius?save_seq=${save_seq}&save_id=${save_id}` : '/pulse';
+	            var method = isSave ? 'DELETE' : 'POST';
+
+	            fetch(url, {
+	                method: method,
+	                headers: {
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify({ save_seq: parseInt(save_seq), save_id: save_id })
+	            })
+	            .then(response => response.text())
+	            .then(() => {
+	                if (isSave) {
+	                    SaveIcon.src = '../images/non-tent.png';
+	                    button.dataset.saved = "false";
+	                } else {
+	                	SaveIcon.src = '../images/tent.png';
+	                    button.dataset.saved = "true";
+	                }
+	            })
+	            .catch(error => console.error('Error:', error));
+	        });
+	    });
 
 	    // 필터 초기화
 	    applyFilters();
@@ -132,6 +195,15 @@
    
     </script>
 <style>
+h2 {
+    text-align: center;
+    color: #fff; /* 텍스트 색상 변경 */
+    padding: 20px 0;
+    background-color: #2A4E3F; /* 배경색 변경 */
+    margin: 0;
+    border-radius: 15px; /* 테두리 동그랗게 설정 */
+    font-weight: bold; /* 글씨체를 굵게 설정 */
+}
 body {
 	font-family: Arial, sans-serif;
 	margin: 0;
@@ -330,18 +402,18 @@ body {
 }
 
 .like-icon, .comment-icon {
-	width: 90%; /* 아이콘 크기 조정 */
-	height: 90%; /* 아이콘 크기 조정 */
+	width: 120%; /* 아이콘 크기 조정 */
+	height: 120%; /* 아이콘 크기 조정 */
 	object-fit: contain; /* 아이콘 비율 유지 */
 }
 
 .like-button-container {
-	display: flex; /* 버튼을 가로로 정렬 */
-	align-items: center; /* 버튼 수직 중앙 정렬 */
-	margin-left: 10px; /* 왼쪽 여백 */
-	padding: 5px; /* 내부 여백 */
-	border-top: 1px solid #dbdbdb; /* 상단 구분선 */
-	box-sizing: border-box; /* 패딩과 테두리를 포함하여 전체 폭 조정 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 버튼들 사이 공간 배분 */
+    padding: 5px;
+    border-top: 1px solid #dbdbdb;
+    box-sizing: border-box;
 }
 
 .like-button, .comment-button {
@@ -385,11 +457,67 @@ a {
 	font-size: 18px; /* 글자 크기 설정 (필요에 따라 조절) */
 	font-weight: bold; /* 글자 두께 설정 (필요에 따라 조절) */
 }
-</style>
-</head>
-<body th:data-user-id="${userId}">
+.action-buttons button {
+    background-color: #2A4E3F; /* 버튼 배경 색상 */
+    color: #fff; /* 버튼 텍스트 색상 */
+    border: none; /* 테두리 제거 */
+    padding: 10px 20px; /* 패딩 설정 */
+    font-size: 16px; /* 글씨 크기 설정 */
+    border-radius: 5px; /* 모서리 둥글게 설정 */
+    cursor: pointer; /* 클릭 커서 표시 */
+    margin: 0 10px; /* 버튼 사이 간격 */
+    transition: background-color 0.3s ease; /* 호버 시 배경색 변화 애니메이션 */
+}
 
+.action-buttons button:hover {
+    background-color: #FFA500; /* 호버 시 버튼 색상 */
+    
+    
+}
+.save-button-container {
+    margin-left: auto; /* 저장 버튼을 오른쪽으로 이동 */
+}
+
+
+.save-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.1s, transform 0.1s;
+    width: 50px; /* 버튼 너비 설정 */
+    height: 50px; /* 버튼 높이 설정 */
+    margin-left: 0; /* 저장 버튼 왼쪽 여백 제거 */
+}
+
+.save-button:hover {
+    background-color: rgba(255, 0, 0, 0.1); /* 호버 시 배경색 */
+}
+
+.save-button:active {
+    transform: scale(0.9); /* 클릭 시 버튼 크기 축소 */
+}
+
+.save-icon {
+    width: 120%;
+    height: 120%;
+    object-fit: contain;
+} 
+
+
+</style>
+<body th:data-user-id="${userId}">
+	
     <div class="form-container">
+    <h2>피드</h2>
+    <div class="action-buttons">
+    	<button th:if="${userId != null}" onclick="location.href='feedWriteFormPhoto'">사진 올리기</button>
+    	<button th:if="${userId != null}" onclick="location.href='feedWriteFormVideo'">동영상 올리기</button>
+	</div>
         <div class="filter-div" align="center">
             <!-- 필터링 폼 -->
             <form id="filterForm">
@@ -477,7 +605,13 @@ a {
     				</button>
    
     				<span class="comment-count" id="comment-count"></span>
+        			 <div class="save-button-container">
+            			<button class="save-button" data-saved="false" th:data-save-seq="${feed.seq}">
+                			<img src="../images/non-tent.png" class="save-icon" alt="Save Icon">
+            			</button>
+        			</div>
         		</div>
+        		
 
                 <div class="feed-details">
                 	<a th:href="@{feedView(seq=${feed.seq})}" class="feed-card-link">
@@ -488,9 +622,5 @@ a {
             </div>     
         </section>
     </div>
-    <div class="action-buttons">
-        <a th:if="${userId != null}" href="feedWriteFormPhoto">사진 올리기</a>
-        <a th:if="${userId != null}" href="feedWriteFormVideo">동영상 올리기</a>
-		<a href="../menu">메뉴 돌아가기</a>
-    </div>
+   
 </body>

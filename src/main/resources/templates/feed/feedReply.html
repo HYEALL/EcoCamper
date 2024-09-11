@@ -77,6 +77,11 @@
             .catch(error => console.error('Error:', error));
         }
 
+        function resizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+
         function updateReplyCount() {
             var replyCount = document.querySelectorAll('.reply').length;
             document.getElementById('reply-count').textContent = replyCount;
@@ -103,6 +108,20 @@
         }
 
         loadReplies();
+
+        // 이모지 클릭 시 텍스트에 추가
+        document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+            emoji.addEventListener('click', function() {
+                const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
+                const textArea = document.getElementById('reply-content');
+                const cursorPos = textArea.selectionStart;
+                const textBefore = textArea.value.substring(0, cursorPos);
+                const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
+                textArea.value = textBefore + emojiValue + textAfter;
+                textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+                textArea.focus();
+            });
+        });
     });
     </script>
 
@@ -224,6 +243,56 @@
     #submit-reply:hover {
         background-color: #0056b3;
     }
+    #emoji-container {
+            margin-bottom: 10px;
+        }
+
+
+        #emoji-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        #emoji-container summary {
+            cursor: pointer;
+            font-size: 25px;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            background-color: #fafafa;
+            margin-bottom: 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        #emoji-container summary:hover {
+            background-color: #f0f0f0;
+        }
+
+        #emoji-container details[open] .emoji-popup {
+            display: flex;
+        }
+
+        .emoji-popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .emoji {
+            font-size: 24px;
+            cursor: pointer;
+            margin: 5px;
+        }
 </style>
 </head>
 <body th:data-user-id="${userId}">
@@ -234,5 +303,25 @@
 
     <div class="reply-section">
         <textarea id="reply-content" placeholder="댓글을 작성하세요"></textarea>
-        <button id="submit-reply" th:data-feed-id="${seq}">댓글 작성</button>
-    </div>
+       <button id="submit-reply" th:data-feed-id="${feed.seq}">댓글 작성</button>
+            <div id="emoji-container">
+            <details>
+                <summary role="button">😀</summary>
+                <div class="emoji-popup">
+                        <span class="emoji">😀</span>
+    					<span class="emoji">😂</span>
+    					<span class="emoji">😍</span>
+    					<span class="emoji">😠</span>
+    					<span class="emoji">👍</span>
+    					<span class="emoji">❤️</span>
+    					<span class="emoji">💔</span>
+    					<span class="emoji">😭</span>
+    					<span class="emoji">🎉</span>
+    					<span class="emoji">🔥</span>
+    					<span class="emoji">🌟</span>
+    					<span class="emoji">💯</span>
+    					<span class="emoji">😜</span>
+    					<span class="emoji">💡</span>   						
+                </div>
+            </details>
+        </div>

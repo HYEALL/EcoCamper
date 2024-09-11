@@ -2,10 +2,11 @@
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
    <script>
    document.addEventListener('DOMContentLoaded', function() {
-	    var userId = document.body.dataset.userId;
 	    var likeButtons = document.querySelectorAll('.like-button');
-
+	    var saveButtons = document.querySelectorAll('.save-button');
+	    
 	    likeButtons.forEach(function(button) {
+	    	var userId = document.body.dataset.userId;
 	        var reviewId = button.getAttribute('data-review-id');
 
 	        // 페이지 로드 시 좋아요 상태와 개수를 가져옴
@@ -34,6 +35,35 @@
 	        // 좋아요 개수 가져오기
 	        updateLikeCount(reviewId);
 	    });
+	    
+	    saveButtons.forEach(function(button) {
+	        var save_seq = button.getAttribute('data-save-seq');
+			var save_id = document.body.dataset.userId;
+	        // 페이지 로드 시 저장 상태 가져오기
+	        fetch(`/isSave/${save_seq}?save_id=${save_id}`)
+	            .then(response => response.json())
+	            .then(isSaved => {
+	                var saveIcon = button.querySelector('.save-icon');
+	                if (isSaved === null || isSaved === undefined) {
+	                    isSaved = false;
+	                }
+	                if (isSaved) {
+	                    saveIcon.src = '../images/tent.png';
+	                    button.dataset.saved = "true";
+	                } else {
+	                    saveIcon.src = '../images/non-tent.png';
+	                    button.dataset.saved = "false";
+	                }
+	            })
+	            .catch(error => {
+	                console.error('Error:', error);
+	                var saveIcon = button.querySelector('.save-icon');
+	                saveIcon.src = '../images/non-tent.png';
+	                button.dataset.saved = "false";
+	            });
+	    });
+
+	    
 	    
 	    // 스와이퍼 초기화
 	    var swiperContainers = document.querySelectorAll('.swiper-container');
@@ -104,7 +134,41 @@
 	        });
 	    });
 
+	    document.querySelectorAll('.save-button').forEach(function(button) {
+	        button.addEventListener('click', function() {
+	            var SaveIcon = button.querySelector('.save-icon');
+	            var isSave = button.dataset.saved === "true";
+	            var save_seq = button.getAttribute('data-save-seq');
+	            var save_id = document.body.dataset.userId;
 
+	            if (!save_id) {
+	                console.error('사용자 ID가 설정되지 않았습니다.');
+	                return;
+	            }
+
+	            var url = isSave ? `/mius?save_seq=${save_seq}&save_id=${save_id}` : '/pulse';
+	            var method = isSave ? 'DELETE' : 'POST';
+
+	            fetch(url, {
+	                method: method,
+	                headers: {
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify({ save_seq: parseInt(save_seq), save_id: save_id })
+	            })
+	            .then(response => response.text())
+	            .then(() => {
+	                if (isSave) {
+	                    SaveIcon.src = '../images/non-tent.png';
+	                    button.dataset.saved = "false";
+	                } else {
+	                	SaveIcon.src = '../images/tent.png';
+	                    button.dataset.saved = "true";
+	                }
+	            })
+	            .catch(error => console.error('Error:', error));
+	        });
+	    });
 	    document.getElementById('submit-reply').addEventListener('click', function() {
 	        var content = document.getElementById('reply-content').value;
 	        var seq = this.getAttribute('data-feed-id');
@@ -334,8 +398,8 @@ body {
 }
 
 .like-icon, .comment-icon, .delete-icon, .modify-icon {
-    width: 90%;
-    height: 90%;
+    width: 120%;
+    height: 120%;
     object-fit: contain;
 }
 
@@ -484,8 +548,88 @@ body {
     color: #00aaff; /* 하늘색으로 설정 */
 }
 
+
+ #emoji-container {
+            margin-bottom: 10px;
+        }
+
+
+        #emoji-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        #emoji-container summary {
+            cursor: pointer;
+            font-size: 25px;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            background-color: #fafafa;
+            margin-bottom: 5px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        #emoji-container summary:hover {
+            background-color: #f0f0f0;
+        }
+
+        #emoji-container details[open] .emoji-popup {
+            display: flex;
+        }
+
+        .emoji-popup {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .emoji {
+            font-size: 24px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+       .save-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.1s, transform 0.1s;
+    width: 50px; /* 버튼 너비 설정 */
+    height: 50px; /* 버튼 높이 설정 */
+}
+
+.save-button:hover {
+    background-color: rgba(255, 0, 0, 0.1); /* 호버 시 배경색 */
+}
+
+.save-button:active {
+    transform: scale(0.9); /* 클릭 시 버튼 크기 축소 */
+}
+
+.save-icon {
+    width: 120%;
+    height: 120%;
+    object-fit: contain;
+} 
+
+
 </style>
-</head>
 <body th:data-user-id="${userId}">
     <div class="feed-container">
         <div class="user_id">
@@ -535,6 +679,26 @@ body {
         <div class="reply-section">
             <textarea id="reply-content" placeholder="댓글을 작성하세요"></textarea>
             <button id="submit-reply" th:data-feed-id="${feed.seq}">댓글 작성</button>
+            <div id="emoji-container">
+            <details>
+                <summary role="button">😀</summary>
+                <div class="emoji-popup">
+                        <span class="emoji">😀</span>
+    					<span class="emoji">😂</span>
+    					<span class="emoji">😍</span>
+    					<span class="emoji">😠</span>
+    					<span class="emoji">👍</span>
+    					<span class="emoji">❤️</span>
+    					<span class="emoji">💔</span>
+    					<span class="emoji">😭</span>
+    					<span class="emoji">🎉</span>
+    					<span class="emoji">🔥</span>
+    					<span class="emoji">🌟</span>
+    					<span class="emoji">💯</span>
+    					<span class="emoji">😜</span>
+    					<span class="emoji">💡</span>   						
+                </div>
+            </details>
         </div>
 		
         <div class="action-buttons-container">
@@ -548,8 +712,13 @@ body {
                 <img src="../images/talk.png" class="comment-icon" alt="Comment Icon">
             </button>
             <span class="comment-count" id="comment-count"></span>
-            
+         </div>
+            <div class="save-button-container">
+            <button class="save-button" data-saved="false" th:data-save-seq="${feed.seq}">
+                <img src="../images/non-tent.png" class="save-icon" alt="Save Icon">
+            </button>
         </div>
+        
         
         <div class="choose-button-container">
             <button class="delete-button" th:if="${userId == feed.id}" th:onclick="location.href = 'feedDelete?seq=[[${seq}]]'">

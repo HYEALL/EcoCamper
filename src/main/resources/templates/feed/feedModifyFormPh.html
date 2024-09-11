@@ -1,4 +1,78 @@
 <script type="text/javascript" src="../js/feed.js?v=2"></script>
+<script>
+var selectedImages = [];
+
+//페이지 로드 시 기존 이미지를 미리 보기로 추가
+function loadExistingImages() {
+ var existingImages = document.querySelectorAll('#photo-list img.uploaded-img');
+ selectedImages = Array.from(existingImages).map(img => img.src);
+ document.getElementById('image-count').textContent = selectedImages.length;
+}
+
+//새 이미지를 추가하고 기존 이미지와 수를 초기화
+function addPhoto() {
+ var files = event.target.files;
+ var photoList = document.getElementById('existing-images');
+ var imageCountElement = document.getElementById('image-count');
+
+ // 기존 이미지 삭제
+ photoList.innerHTML = '';
+
+ // 이미지 수 초기화
+ selectedImages = [];
+ imageCountElement.textContent = '0';
+
+ // 새 이미지 추가
+ if (files.length > 10) {
+     alert('최대 10개의 이미지만 선택할 수 있습니다.');
+     return;
+ }
+
+ for (var i = 0; i < files.length; i++) {
+     var file = files[i];
+     if (file && file.type.startsWith('image/')) {
+         var reader = new FileReader();
+
+         reader.onload = function(e) {
+             var img = document.createElement('img');
+             img.src = e.target.result;
+             img.className = 'uploaded-img';
+             photoList.appendChild(img);
+             selectedImages.push(e.target.result);
+
+             // 이미지 수 업데이트
+             document.getElementById('image-count').textContent = selectedImages.length;
+         }
+
+         reader.readAsDataURL(file);
+     }
+ }
+ 
+}
+
+//이모지 클릭 시 텍스트에 추가
+document.addEventListener('DOMContentLoaded', () => {
+ loadExistingImages(); // 페이지 로드 시 기존 이미지 불러오기
+
+ document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+     emoji.addEventListener('click', function() {
+         const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
+         const textArea = document.getElementById('text-input');
+         const cursorPos = textArea.selectionStart;
+         const textBefore = textArea.value.substring(0, cursorPos);
+         const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
+         textArea.value = textBefore + emojiValue + textAfter;
+         textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+         textArea.focus();
+     });
+ });
+});
+
+function resizeTextarea(textarea) {
+ textarea.style.height = 'auto';
+ textarea.style.height = (textarea.scrollHeight) + 'px';
+}
+    </script>
 
 <style>
 body {
@@ -14,13 +88,14 @@ body {
 }
 
 h2 {
-	text-align: center;
-	color: #333;
-	padding: 20px 0;
-	background-color: #fff;
-	border-bottom: 1px solid #ddd;
+    text-align: center;
+    color: #fff; /* 텍스트 색상 변경 */
+    padding: 20px 0;
+    background-color: #2A4E3F; /* 배경색 변경 */
+    margin: 0;
+    border-radius: 15px; /* 테두리 동그랗게 설정 */
+    font-weight: bold; /* 글씨체를 굵게 설정 */
 }
-
 .form-container {
 	max-width: 800px;
 	margin: 0 auto;
@@ -116,7 +191,7 @@ h2 {
 }
 
 #label {
-	background: #00bcd4;
+	background: #2A4E3F;
 	color: #fff;
 	padding: 10px;
 	text-align: center;
@@ -134,7 +209,7 @@ input[type="text"] {
 }
 
 input[type="button"], input[type="reset"], button {
-	background-color: #00bcd4;
+	background-color: #2A4E3F;
 	color: white;
 	border: none;
 	padding: 10px 20px;
@@ -146,7 +221,7 @@ input[type="button"], input[type="reset"], button {
 }
 
 input[type="button"]:hover, input[type="reset"]:hover, button:hover {
-	background-color: #0097a7;
+	background-color: #FFA500;
 }
 
 hr {
@@ -249,81 +324,29 @@ hr {
             margin: 5px;
         }
 </style>
-<script>
-        var selectedImages = [];
-
-        function addPhoto() {
-            var files = event.target.files;
-            var photoList = document.getElementById('photo-list');
-            var imageCountElement = document.getElementById('image-count');
-
-            // 기존 이미지와 새로 추가된 이미지 수를 합산하여 체크
-            if (files.length + selectedImages.length > 10) {
-                alert('최대 10개의 이미지만 선택할 수 있습니다.');
-                return;
-            }
-
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                if (file && file.type.startsWith('image/')) {
-                    var reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        var img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'uploaded-img';
-                        photoList.appendChild(img);
-                        selectedImages.push(e.target.result);
-                        
-                        // 이미지 수 업데이트
-                        imageCountElement.textContent = selectedImages.length;
-                    }
-
-                    reader.readAsDataURL(file);
-                }
-            }
-        }
-        // 이모지 클릭 시 텍스트에 추가
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
-                emoji.addEventListener('click', function() {
-                    const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
-                    const textArea = document.getElementById('text-input');
-                    const cursorPos = textArea.selectionStart;
-                    const textBefore = textArea.value.substring(0, cursorPos);
-                    const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
-                    textArea.value = textBefore + emojiValue + textAfter;
-                    textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
-                    textArea.focus();
-                });
-            });
-        });
-
-        function resizeTextarea(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight) + 'px';
-        }
-    </script>
-
-<style>
-/* 기존 스타일 코드 유지 */
-</style>
-</head>
 <body>
 <form action="feedModifyPh" name="form1" method="post" enctype="multipart/form-data">
 <div class="form-container">
+<h2>사진 편집</h2>
+<div style="color: red">※ 기존 이미지도 재등록 해야합니다</div>
 	<input type="hidden" name="seq" th:value="${seq}">
     <div class="section content">
-        <div id="photo-list">
-          
-            <div class="photo-button">
-                <input type="file" accept="image/*" multiple onchange="addPhoto()" name="feed_file1[]">
-                <img src="../images/camera.jpg" alt="카메라 아이콘" />
-                <div>
-                    <span id="image-count">0</span>/10
-                </div>
-            </div>
+<div id="photo-list">
+	<div class="photo-button">
+        <input type="file" accept="image/*" multiple onchange="addPhoto()" name="feed_file1">
+        <img src="../images/camera.jpg" alt="카메라 아이콘" />
+    <div>
+            <span id="image-count">0</span>/10
         </div>
+    </div>
+
+    <!-- 기존 이미지 미리보기 -->
+    <div id="existing-images">
+        <th:block th:each="image : ${feed.imageFileNames}">
+            <img th:src="@{'/storage/' + ${image}}" alt="이미지 미리보기" class="uploaded-img">
+        </th:block>
+    </div>
+</div>
         <br>
         <div>
             <textarea id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
@@ -335,13 +358,20 @@ hr {
             <details>
                 <summary role="button">😀</summary>
                 <div class="emoji-popup">
-                    <span class="emoji">😀</span>
-                    <span class="emoji">😂</span>
-                    <span class="emoji">😍</span>
-                    <span class="emoji">😠</span>
-                    <span class="emoji">👍</span>
-                    <span class="emoji">❤️</span>
-                    <span class="emoji">💔</span>
+                        <span class="emoji">😀</span>
+    					<span class="emoji">😂</span>
+    					<span class="emoji">😍</span>
+    					<span class="emoji">😠</span>
+    					<span class="emoji">👍</span>
+    					<span class="emoji">❤️</span>
+    					<span class="emoji">💔</span>
+    					<span class="emoji">😭</span>
+    					<span class="emoji">🎉</span>
+    					<span class="emoji">🔥</span>
+    					<span class="emoji">🌟</span>
+    					<span class="emoji">💯</span>
+    					<span class="emoji">😜</span>
+    					<span class="emoji">💡</span>   						
                 </div>
             </details>
         </div>

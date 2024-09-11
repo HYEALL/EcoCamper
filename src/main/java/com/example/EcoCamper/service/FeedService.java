@@ -52,4 +52,9 @@ public class FeedService {
 	 public List<Feed> getFeedsByUserId(String id) {
 	        return dao.getFeedsByUserId(id);
 	    }
+	 public List<Feed> findFeedsBySaveSeq(String id) {
+	        return dao.findFeedsBySaveSeq(id);
+	    }
+	 
+	 
 }
