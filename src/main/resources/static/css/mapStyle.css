@@ -1,0 +1,225 @@
+/* 커스텀 오버레이 박스 스타일 */
+.wrap {
+	position: absolute;
+	left: 50%; /* 오버레이를 가로 중앙에 맞추기 */
+	bottom: 60px; /* 마커 위에 배치하기 위해 필요한 간격 */
+	transform: translateX(-50%); /* 가로 중앙을 맞추기 위해 가로 이동 */
+	width: 288px;
+	height: 132px;
+	text-align: left;
+	overflow: hidden;
+	font-size: 12px;
+	font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+	line-height: 1.5;
+}
+
+.wrap * {
+	padding: 0;
+	margin: 0;
+}
+
+.wrap .info {
+	width: 286px;
+	height: 120px;
+	border-radius: 5px;
+	border-bottom: 2px solid #ccc;
+	border-right: 1px solid #ccc;
+	overflow: hidden;
+	background: #fff;
+}
+
+/* 첫 번째 정보 박스에 그림자 추가 */
+.wrap .info:nth-child(1) {
+	border: 0;
+	box-shadow: 0px 1px 2px #888;
+}
+
+/* 제목 스타일 */
+.info .title {
+	padding: 5px 0 0 10px;
+	height: 30px;
+	background: #eee;
+	border-bottom: 1px solid #ddd;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+/* 닫기 버튼 스타일 */
+.info .close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	color: #888;
+	width: 17px;
+	height: 17px;
+	background:
+		url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
+}
+
+.info .close:hover {
+	cursor: pointer;
+}
+
+/* 정보 박스 본문 스타일 */
+.info .body {
+	position: relative;
+	overflow: hidden;
+}
+
+/* 설명 텍스트 위치 및 스타일 */
+.info .desc {
+	position: relative;
+	margin: 13px 0 0 90px;
+	height: 75px;
+}
+
+/* 생략(...) 처리 스타일 */
+.desc .ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* 지번 주소 스타일 */
+.desc .jibun {
+	font-size: 11px;
+	color: #888;
+	margin-top: -2px;
+}
+
+/* 이미지 영역 스타일 */
+.info .img {
+	position: absolute;
+	top: 6px;
+	left: 5px;
+	width: 73px;
+	height: 71px;
+	border: 1px solid #ddd;
+	color: #888;
+	overflow: hidden;
+}
+
+/* 커스텀 오버레이 아래 삼각형 모양 추가 */
+.info:after {
+	content: '';
+	position: absolute;
+	margin-left: -12px;
+	left: 50%;
+	bottom: 0;
+	width: 22px;
+	height: 12px;
+	background:
+		url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');
+}
+
+/* 링크 스타일 */
+.info .link {
+	color: #5085BB;
+}
+
+/* 전체 레이아웃 설정 */
+body {
+	display: flex;
+	height: 100vh;
+}
+
+/* 검색창 스크롤바 숨김 설정 */
+#search-container::-webkit-scrollbar {
+	display: none; /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+}
+
+/* 검색창 스타일 */
+#search-container {
+	width: 450px;
+	padding: 20px;
+	overflow-y: auto;
+	height: 100vh;
+}
+
+/* 검색창 폼 고정 */
+form {
+	position: sticky;
+	top: 0;
+	background-color: white; /* 스크롤 시 배경 고정 */
+	z-index: 10;
+	padding-bottom: 10px; /* 폼 하단 여백 */
+}
+
+/* 필터 섹션 스타일 */
+#filter-section {
+	margin-top: 20px;
+}
+
+/* 지도 영역 스타일 */
+#map {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+}
+
+/* 장소 정보 오버레이 스타일 */
+.placeinfo_wrap {
+	position: absolute;
+	bottom: 28px;
+	left: -150px;
+	width: 300px;
+}
+
+.placeinfo {
+	position: relative;
+	width: 100%;
+	border-radius: 6px;
+	border: 1px solid;
+	border-bottom: 2px solid;
+	padding-bottom: 10px;
+	background: #fff;
+}
+
+/* 다수의 장소 정보 스타일 */
+.placeinfo:nth-of-type(n) {
+	border: 0;
+	box-shadow: 0px 1px 2px;
+}
+
+/* 오버레이 아래 삼각형 모양 추가 */
+.placeinfo_wrap .after {
+	content: '';
+	position: relative;
+	margin-left: -12px;
+	left: 50%;
+	width: 22px;
+	height: 12px;
+	background:
+		url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png');
+}
+
+/* 링크 스타일 */
+.placeinfo a, .placeinfo a:hover, .placeinfo a:active {
+	text-decoration: none;
+}
+
+.placeinfo a, .placeinfo span {
+	display: block;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.placeinfo span {
+	margin: 5px 5px 0 5px;
+	cursor: default;
+	font-size: 13px;
+}
+
+/* 장소 정보 제목 스타일 */
+.placeinfo .title {
+	font-weight: bold;
+	font-size: 14px;
+	border-radius: 6px 6px 0 0;
+	margin: -1px -1px 0 -1px;
+	padding: 10px;
+	background:
+		url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png)
+		no-repeat right 14px center;
+}

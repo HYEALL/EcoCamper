@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>카카오맵 연동 지도</title>
+
+
+<!-- 자체 CSS 로드 -->
+<link rel="stylesheet" href="../css/mapStyle.css">
+
+<!-- 외부 CSS 로드 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+</head>
+<body>
+
+	<form id="form1" method="post">
+		<input type="hidden" id="list" name="list" th:value="${list}">
+	</form>
+
+<!-- 검색 기능 섹션 -->
+<div id="search-container">
+    <!-- 하나의 form 태그로 검색과 필터링 포함 -->
+    <form onsubmit="searchPlaces(); return false;">
+        <!-- 검색어 입력 섹션 -->
+        <input name="search" type="search" id="keyword" placeholder="Search">
+        <input type="submit" value="Search">
+        <hr />
+
+        <!-- 필터 섹션 -->
+        <details>
+            <summary>필터 적용하기</summary>
+            <div id="filter-section">
+                <input name="filter_apply" type="submit" value="필터 적용하기">
+                <input name="filter_reset" type="reset" value="필터 초기화">
+                <hr />
+
+                <!-- 지역 필터 -->
+                <div class="filter-label">지역</div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="region" value="수도권 전체">수도권 전체</label>
+
+                    <details>
+                        <summary>
+                            <input type="checkbox" name="region" value="서울">서울특별시
+                        </summary>
+                        <label><input type="checkbox" name="region" value="종로구">종로구</label>
+                        <label><input type="checkbox" name="region" value="강남구">강남구</label>
+                        <label><input type="checkbox" name="region" value="송파구">송파구</label>
+                        <label><input type="checkbox" name="region" value="마포구">마포구</label>
+                    </details>
+
+                    <details>
+                        <summary>
+                            <input type="checkbox" name="region" value="경기">경기도
+                        </summary>
+                        <label><input type="checkbox" name="region" value="수원시">수원시</label>
+                        <label><input type="checkbox" name="region" value="용인시">용인시</label>
+                        <label><input type="checkbox" name="region" value="성남시">성남시</label>
+						<label><input type="checkbox" name="region" value="고양시">고양시</label>
+						<label><input type="checkbox" name="region" value="부천시">부천시</label>
+						<label><input type="checkbox" name="region" value="안양시">안양시</label>
+						<label><input type="checkbox" name="region" value="안산시">안산시</label>
+						<label><input type="checkbox" name="region" value="남양주시">남양주시</label>
+						<label><input type="checkbox" name="region" value="화성시">화성시</label>
+						<label><input type="checkbox" name="region" value="평택시">평택시</label>
+						<label><input type="checkbox" name="region" value="의정부시">의정부시</label>
+						<label><input type="checkbox" name="region" value="광명시">광명시</label>
+						<label><input type="checkbox" name="region" value="동두천시">동두천시</label>
+						<label><input type="checkbox" name="region" value="과천시">과천시</label>
+						<label><input type="checkbox" name="region" value="구리시">구리시</label>
+						<label><input type="checkbox" name="region" value="오산시">오산시</label>
+						<label><input type="checkbox" name="region" value="시흥시">시흥시</label>
+						<label><input type="checkbox" name="region" value="군포시">군포시</label>
+						<label><input type="checkbox" name="region" value="의왕시">의왕시</label>
+						<label><input type="checkbox" name="region" value="하남시">하남시</label>
+						<label><input type="checkbox" name="region" value="이천시">이천시</label>
+						<label><input type="checkbox" name="region" value="안성시">안성시</label>
+						<label><input type="checkbox" name="region" value="김포시">김포시</label>
+						<label><input type="checkbox" name="region" value="광주시">광주시</label>
+						<label><input type="checkbox" name="region" value="양주시">양주시</label>
+						<label><input type="checkbox" name="region" value="포천시">포천시</label>
+						<label><input type="checkbox" name="region" value="여주시">여주시</label>
+                    </details>
+
+                    <details>
+                        <summary>
+                            <input type="checkbox" name="region" value="인천">인천광역시
+                        </summary>
+                        <label><input type="checkbox" name="region" value="중구">중구</label>
+                        <label><input type="checkbox" name="region" value="부평구">부평구</label>
+                        <label><input type="checkbox" name="region" value="계양구">계양구</label>
+                    </details>
+                </div>
+                <hr />
+
+                <!-- 공간 유형 필터 -->
+                <div class="filter-label">공간유형</div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="category" value="place_c01">캠핑장</label>
+                    <label><input type="checkbox" name="category" value="place_c02">차박, 노지</label>
+                    <label><input type="checkbox" name="category" value="place_c03">글램핑, 카라반</label>
+                    <label><input type="checkbox" name="category" value="place_c04">백패킹, 하이킹</label>
+                    <label><input type="checkbox" name="category" value="place_c05">낚시스팟</label>
+                    <label><input type="checkbox" name="category" value="place_c06">여행</label>
+                    <label><input type="checkbox" name="category" value="place_c07">액티비티</label>
+                    <label><input type="checkbox" name="category" value="place_c08">워터스포츠</label>
+                    <label><input type="checkbox" name="category" value="place_c09">스토어</label>
+                </div>
+                <hr />
+
+                <!-- 편의시설 필터 -->
+                <div class="filter-label">편의시설</div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="facilities" value="place_f01">화장실</label>
+                    <label><input type="checkbox" name="facilities" value="place_f02">샤워실</label>
+                    <label><input type="checkbox" name="facilities" value="place_f03">매점</label>
+                    <label><input type="checkbox" name="facilities" value="place_f04">낚시</label> 
+					<label><input type="checkbox" name="facilities" value="place_f05">개수대</label> 
+					<label><input type="checkbox" name="facilities" value="place_f06">전기사용</label> 
+					<label><input type="checkbox" name="facilities" value="place_f07">장비대여</label> 
+					<label><input type="checkbox" name="facilities" value="place_f08">수영장</label> 
+					<label><input type="checkbox" name="facilities" value="place_f09">뷰맛집</label> 
+					<label><input type="checkbox" name="facilities" value="place_f10">체험 프로그램</label> 
+					<label><input type="checkbox" name="facilities" value="place_f11">놀이시설</label> 
+					<label><input type="checkbox" name="facilities" value="place_f12">액티비티</label> 
+					<label><input type="checkbox" name="facilities" value="place_f13">노키즈</label> 
+					<label><input type="checkbox" name="facilities" value="place_f14">반려견 동반</label>
+					<label><input type="checkbox" name="facilities" value="place_f15">방송출연</label> 
+					<label><input type="checkbox" name="facilities" value="place_f16">에어컨</label> 
+					<label><input type="checkbox" name="facilities" value="place_f17">주차</label>
+                </div>
+                <hr />
+
+                <!-- 주변환경 필터 -->
+                <div class="filter-label">주변환경</div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="environment" value="place_e01">바다</label>
+                    <label><input type="checkbox" name="environment" value="place_e02">호수, 강</label>
+                    <label><input type="checkbox" name="environment" value="place_e03">계곡</label> 
+					<label><input type="checkbox" name="environment" value="place_e04">산, 숲</label> 
+					<label><input type="checkbox" name="environment" value="place_e05">섬</label> 
+					<label><input type="checkbox" name="environment" value="place_e06">공원, 유원지</label> 
+					<label><input type="checkbox" name="environment" value="place_e07">도심</label> 
+					<label><input type="checkbox" name="environment" value="place_e08">농촌</label>
+
+                </div>
+                <hr />
+
+                <!-- 계절 필터 -->
+                <div class="filter-label">계절</div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="season" value="place_s01">봄</label>
+                    <label><input type="checkbox" name="season" value="place_s02">여름</label>
+                    <label><input type="checkbox" name="season" value="place_s03">가을</label>
+                    <label><input type="checkbox" name="season" value="place_s04">겨울</label>
+                </div>
+            </div>
+            <hr />
+
+            <input name="filter_apply" type="submit" value="필터 적용하기">
+            <input name="filter_reset" type="reset" value="필터 초기화">
+        </details>
+        <hr />
+    </form>
+
+    <!-- 검색 결과 목록 표시 영역 -->
+    <ul id="placesList"></ul>
+    <div id="pagination"></div>
+</div>
+
+	<!-- 지도 표시 영역 -->
+	<div id="map"></div>
+
+	<!-- 카카오 지도 및 플러그인 로드 -->
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=72e9905822817ffd02d844d2e0802d86&libraries=services,clusterer"></script>
+	<script type="text/javascript" src="../js/mapScript.js"></script>
+
+	
+
+
+</body>
+</html>
