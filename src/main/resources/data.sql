@@ -15,10 +15,9 @@ delete usertable where id='hyeall';
 update usertable set role='ADMIN' where id='admin';
 alter table usertable add unique(email);
 -- 주소 바꾸기
-alter table member add zipcode varchar2(7); -- 우편번호
-alter table member rename column addr to addr1; --- 도로명 주소 
-alter table member add addr2 varchar2(200); -- 상세 주소
-ALTER TABLE usertable DROP COLUMN addr;
+alter table usertable add zipcode varchar2(7); -- 우편번호
+alter table usertable rename column addr to addr1; --- 도로명 주소 
+alter table usertable add addr2 varchar2(200); -- 상세 주소
 -- abcdefg9876 gil
 commit;
 desc usertable;
@@ -70,6 +69,12 @@ create table Buylist(
     foreign key (buyid) references  usertable(id),
     foreign key (productcode) references  Shop(pcode)
 );
+-- 주소 바꾸기
+alter table buylist add bzipcode varchar2(7); -- 우편번호
+alter table buylist rename column baddress to baddr1; --- 도로명 주소 
+alter table buylist add baddr2 varchar2(200); -- 상세 주소
+
+
 drop table Buylist purge;
 
 insert into Buylist values(seq_Buylist.nextval,'euneun','0002',1,5000,'곽은성', 
@@ -77,7 +82,7 @@ insert into Buylist values(seq_Buylist.nextval,'euneun','0002',1,5000,'곽은성
 insert into Buylist values(seq_Buylist.nextval,'euneun','0001',1,10000,'곽은성', '서울','010','신용',sysdate);
 select*from Buylist;
 
-delete Buylist where buyername='홍';
+delete Buylist where buyseq='12';
 
 create SEQUENCE seq_Buylist NOCACHE NOCYCLE;
 drop SEQUENCE seq_Buylist;
@@ -526,4 +531,5 @@ drop table save purge;
 
 select * from save; 
 commit;
+
 
