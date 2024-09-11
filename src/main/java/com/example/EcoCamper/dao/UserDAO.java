@@ -76,7 +76,9 @@ public class UserDAO {
 			user.setPwd(passwordEncoder.encode(dto.getPwd()));
 			user.setGender(dto.getGender());
 			user.setTel(dto.getTel());
-			user.setAddr(dto.getAddr());
+			user.setZipcode(dto.getZipcode());
+			user.setAddr1(dto.getAddr1());
+			user.setAddr2(dto.getAddr2());
 			// 3. 저장
 			User user_result = repository.save(user);
 			if (user_result != null)

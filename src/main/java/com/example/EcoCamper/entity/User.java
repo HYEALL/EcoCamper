@@ -36,10 +36,13 @@ public class User implements UserDetails {
 	private String gender;
 	private String email;
 	private String tel;
-	private String addr;
+	private String zipcode;
+	private String addr1;
+	private String addr2;
 	@Temporal(TemporalType.DATE)
 	private Date logtime;
 	private String role;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<>();

@@ -59,6 +59,7 @@
 		});
 	}
 </script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <div align="center">
 	<h3>회원 가입</h3>
 	<form action="/join" name="inputForm" method="post"
@@ -124,8 +125,13 @@
 			</th:block>
 			<label align="left"> 핸드폰<input type="tel" name="tel"
 				placeholder="010-1234-5678" size="12" />
-			</label> <label align="left"> 주소 <input type="text" name="addr"
-				placeholder="주소 입력" size="35" />
+			</label> <label align="left"> 주소
+				<fieldset role="group">
+					<input type="text" name="zipcode" id="zipcode" placeholder="우편번호" readonly>
+					<input type="button" onclick="DaumZipcode()"
+						value="우편번호 찾기">
+				</fieldset> <input type="text" id="addr1" name="addr1" placeholder="주소"><br>
+				<input type="text" id="addr2" name="addr2" placeholder="상세주소">
 			</label> <input type="button" value="회원가입" onclick="inputCheck()"> <input
 				type="reset" value="다시 작성">
 		</fieldset>
