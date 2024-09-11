@@ -21,6 +21,7 @@ import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.BuylistSevice;
 import com.example.EcoCamper.service.ShopReviewService;
 import com.example.EcoCamper.service.ShopService;
+import com.example.EcoCamper.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -37,6 +38,9 @@ public class ShopController {
 	
 	@Autowired
 	BuylistSevice service_buy;
+	
+	@Autowired
+	UserService service_user;
 	
 	@Value("${project.upload.path}")
 	private String uploadpath;
@@ -78,9 +82,13 @@ public class ShopController {
 		String userId = null;
 		if(token != null) {
 			userId = tokenProvider.validateAndGetUserId(token);
-			
+			if (userId != null) {
+				User user = service_user.getUser(userId);
+				model.addAttribute("userId",userId);
+				model.addAttribute("user",user);
+			}
 		} 
-		model.addAttribute("userId",userId);
+		
 		
 		String pcode=request.getParameter("pcode");
 		int productqty=Integer.parseInt(request.getParameter("productqty"));

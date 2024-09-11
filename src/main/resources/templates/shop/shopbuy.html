@@ -56,7 +56,7 @@
 		<h2 align="center">구매 페이지</h2>
 
 		<div class="cart-summary">
-			<h3>장바구니</h3>
+			<h3>장바구니 내역</h3>
 			<ul>
 				<li>
 					<div class="cart-item">
@@ -70,12 +70,28 @@
 				</li>
 			</ul>
 			<p class="total">총액: ₩ [[${productprice}]]</p>
-			<input type="button" value="제풍상제화면(뒤로)" onclick=history.back()
+			<input type="button" value="제품상제화면(뒤로)" onclick=history.back()
 				id="viewback">
 		</div>
 
 		<div class="checkout-form">
-			<h3>배송 정보 입력</h3>
+			<h3 align="center">배송 정보 입력</h3>
+			<h4>주문자 정보</h4>
+			<div>
+				<label>이름 :</label> <span id="name" th:text="${user.name}"></span>
+			</div>
+			<div>
+				<label>연락처 :</label> <span id="tel" th:text="${user.tel}"></span>
+			</div>
+			<div>
+				<label>주소 :</label> <span id="zipcode" th:text="${user.zipcode}">우편번호</span>
+				<span id="addr1" th:text="${user.addr1}"></span> <span id="addr2"
+					th:text="${user.addr2}"></span>
+			</div>
+
+
+			<input type="checkbox" name="same" id="same" onclick=""> <label
+				for="same">주문자 정보와 동일할 경우 체크해 주세요</label>
 			<form id="checkout-form" action="/shop/shoppay" method="post"
 				name="form1">
 				<input type="hidden" id="productqty" name="productqty"
@@ -85,15 +101,19 @@
 					th:value="${dto.pname}"> <input type="hidden" id="pcode"
 					name="pcode" th:value="${dto.pcode}"> <label
 					for="receivename">받는사람</label> <input type="text" id="receivename"
-					name="receivename" placeholder="받는사람 성함" required> <label align="left">
-					주소</label> <fieldset role="group"><input type="text" name="bzipcode" id="bzipcode"
-					placeholder="우편번호" readonly required> <input type="button"
-					onclick="DaumZipcode()" value="우편번호 찾기"></fieldset> <input type="text"
-					id="baddr1" name="baddr1" placeholder="주소" required> <input
-					type="text" id="baddr2" name="baddr2" placeholder="상세주소" required>
-				<label for="bphone">전화번호</label> <input type="tel" id="bphone"
-					name="bphone" placeholder="받는사람 전화번호" required> <label for="bpayment">결제
-					방법:</label> <select id="bpayment" name="bpayment">
+					name="receivename" placeholder="받는사람 성함" required> <label
+					align="left"> 주소</label>
+				<fieldset role="group">
+					<input type="text" name="bzipcode" id="bzipcode" placeholder="우편번호"
+						readonly required> <input type="button"
+						onclick="DaumZipcode()" value="우편번호 찾기">
+				</fieldset>
+				<input type="text" id="baddr1" name="baddr1" placeholder="주소"
+					required> <input type="text" id="baddr2" name="baddr2"
+					placeholder="상세주소" required> <label for="bphone">전화번호</label>
+				<input type="tel" id="bphone" name="bphone" placeholder="받는사람 전화번호"
+					required> <label for="bpayment">결제 방법:</label> <select
+					id="bpayment" name="bpayment">
 					<option value="무통장입금">무통장입금</option>
 					<option value="계좌이체">계좌이체</option>
 					<option value="카카오페이">카카오페이</option>
@@ -165,6 +185,29 @@
 				customDomainInput.style.display = 'none';
 			}
 		});
+	});
+	// 체크확인
+	let check = document.querySelector("#same");
+
+	check.addEventListener("click", function() {
+		if (check.checked == true) {
+			document.querySelector("#receivename").value = document
+					.querySelector("#name").innerText;
+			document.querySelector("#bphone").value = document
+					.querySelector("#tel").innerText;
+			document.querySelector("#bzipcode").value = document
+					.querySelector("#zipcode").innerText;
+			document.querySelector("#baddr1").value = document
+					.querySelector("#addr1").innerText;
+			document.querySelector("#baddr2").value = document
+					.querySelector("#addr2").innerText;
+		} else {
+			document.querySelector("#receivename").value = "";
+			document.querySelector("#bphone").value = "";
+			document.querySelector("#bzipcode").value = "";
+			document.querySelector("#baddr1").value = "";
+			document.querySelector("#baddr2").value = "";
+		}
 	});
 </script>
 
