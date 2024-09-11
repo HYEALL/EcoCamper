@@ -76,6 +76,7 @@
 
 		<div class="checkout-form">
 			<h3 align="center">배송 정보 입력</h3>
+			
 			<h4>주문자 정보</h4>
 			<div>
 				<label>이름 :</label> <span id="name" th:text="${user.name}"></span>
@@ -92,8 +93,11 @@
 
 			<input type="checkbox" name="same" id="same" onclick=""> <label
 				for="same">주문자 정보와 동일할 경우 체크해 주세요</label>
+			<!--/payment/ready-->
 			<form id="checkout-form" action="/shop/shoppay" method="post"
 				name="form1">
+				<input type="hidden" name="userId"
+					th:value="${user.id}">
 				<input type="hidden" id="productqty" name="productqty"
 					th:value="${productqty}"> <input type="hidden"
 					id="productprice" name="productprice" th:value="${productprice}">
@@ -152,13 +156,17 @@
 			const phone = document.getElementById('bphone').value;
 			const payment = document.getElementById('bpayment').value;
 
-			// Simple form validation (can be expanded)
-			if (name && addr1 && phone && payment) {
-				alert(`주문이 완료되었습니다!\n상품: [[${dto.pname}]] \n금액: [[${productprice}]] 원\n받는사람: ${name}\n배송지: ${addr1}\n전화번호: ${phone}\n결제 방법: ${payment}`);
-				// Here you can add code to send the data to the server
+			if (payment == "카카오페이") {
+				frm.action = "/payment/ready";
 			} else {
-				alert('모든 필드를 입력해 주세요.');
-				return;
+				// Simple form validation (can be expanded)
+				if (name && addr1 && phone && payment) {
+					alert(`주문이 완료되었습니다!\n상품: [[${dto.pname}]] \n금액: [[${productprice}]] 원\n받는사람: ${name}\n배송지: ${addr1}\n전화번호: ${phone}\n결제 방법: ${payment}`);
+					// Here you can add code to send the data to the server
+				} else {
+					alert('모든 필드를 입력해 주세요.');
+					return;
+				}
 			}
 
 			frm.submit();
@@ -209,6 +217,13 @@
 			document.querySelector("#baddr2").value = "";
 		}
 	});
+
+	function kakaoPay() {
+		var frm = document.form1;
+
+		frm.submit();
+
+	}
 </script>
 
 
