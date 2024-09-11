@@ -30,7 +30,9 @@ public class Buylist {
 	private int		productqty;
 	private int		productprice ;
 	private String  receivename;
-	private String  baddress;
+	private String  bzipcode;
+	private String  baddr1;
+	private String  baddr2;
 	private String  bphone;
 	private String  bpayment;
 	private String  bcancel ;

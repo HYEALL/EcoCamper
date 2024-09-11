@@ -18,7 +18,9 @@ public class BuylistDTO {
 	private int		productqty;
 	private int		productprice ;
 	private String  receivename;
-	private String  baddress;
+	private String bzipcode;
+	private String  baddr1;
+	private String  baddr2;
 	private String  bphone;
 	private String  bpayment;
 	private String  bcancel ;
@@ -26,6 +28,6 @@ public class BuylistDTO {
 	private Date    logtime;
 	
 	public Buylist toEntity() {
-		return new Buylist(buyseq, buyid, productcode, productqty, productprice, receivename, baddress, bphone, bpayment, bcancel, logtime);
+		return new Buylist(buyseq, buyid, productcode, productqty, productprice, receivename, bzipcode, baddr1, baddr2, bphone, bpayment, bcancel, logtime);
 	}
 }

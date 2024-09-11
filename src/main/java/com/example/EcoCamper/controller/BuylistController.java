@@ -70,10 +70,11 @@ public class BuylistController {
 		
 
 		String receivename = request.getParameter("receivename");
-		String baddress = request.getParameter("baddress");
+		String baddr1 = request.getParameter("baddr1");
+		String baddr2 = request.getParameter("baddr2");
+		String bzipcode = request.getParameter("bzipcode");
 		String bphone = request.getParameter("bphone");
 		String bpayment = request.getParameter("bpayment");
-
 		/* 주문결제 동시에 재고 테이블 수량 감소 */
 		Shop shopdto = service_shop.view(pcode);
 		int bal = shopdto.getPqty() - productqty;
@@ -93,12 +94,14 @@ public class BuylistController {
 		
 
 		dto.setReceivename(receivename);
-		dto.setBaddress(baddress);
+		dto.setBzipcode(bzipcode);
+		dto.setBaddr1(baddr1);
+		dto.setBaddr2(baddr2);
 		dto.setBphone(bphone);
 		dto.setBpayment(bpayment);
 		dto.setBcancel("N");
 		dto.setLogtime(new Date());
-
+		System.out.println(dto);
 		Buylist result = service_buy.pay(dto);
 
 		model.addAttribute("result", result);
@@ -123,7 +126,9 @@ public class BuylistController {
 		//System.out.println(cartItems);
 
 		String receivename = request.getParameter("receivename");
-		String baddress = request.getParameter("baddress");
+		String baddr1 = request.getParameter("baddr1");
+		String baddr2 = request.getParameter("baddr2");
+		String bzipcode = request.getParameter("bzipcode");
 		String bphone = request.getParameter("bphone");
 		String bpayment = request.getParameter("bpayment");
 
@@ -150,7 +155,9 @@ public class BuylistController {
 					dto.setBuyid(userId);
 					
 					dto.setReceivename(receivename);
-					dto.setBaddress(baddress);
+					dto.setBzipcode(bzipcode);
+					dto.setBaddr1(baddr1);
+					dto.setBaddr1(baddr2);
 					dto.setBphone(bphone);
 					dto.setBcancel("N");
 					dto.setBpayment(bpayment);

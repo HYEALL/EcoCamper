@@ -14,7 +14,7 @@ import com.example.EcoCamper.dto.OrderlistDTO;
 import com.example.EcoCamper.entity.Buylist;
 
 public interface BuylistRepository extends JpaRepository<Buylist, Integer>{
-	@Query("SELECT new com.example.EcoCamper.dto.OrderlistDTO(b.buyseq, b.buyid, b.productcode, b.productqty, b.productprice, b.receivename, b.baddress, b.bphone, b.bpayment, bcancel, b.logtime, s.pname) "
+	@Query("SELECT new com.example.EcoCamper.dto.OrderlistDTO(b.buyseq, b.buyid, b.productcode, b.productqty, b.productprice, b.receivename, b.bzipcode, b.baddr1, b.baddr2, b.bphone, b.bpayment, bcancel, b.logtime, s.pname) "
 	           + "FROM Buylist b "
 	           + "JOIN Shop s ON b.productcode = s.pcode "
 	           + "WHERE b.buyid = :userId AND b.bcancel = 'N' "
