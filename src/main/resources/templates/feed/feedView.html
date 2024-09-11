@@ -201,6 +201,7 @@
 	    });
 
 	    function addReplyToDOM(reply) {
+	    	var userId = document.body.dataset.userId;
 	        var repliesContainer = document.querySelector('.replies');
 	        var replyElement = document.createElement('div');
 	        replyElement.className = 'reply';
