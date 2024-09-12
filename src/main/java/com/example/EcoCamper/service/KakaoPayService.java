@@ -48,7 +48,7 @@ public class KakaoPayService {
 		parameters.put("total_amount", Integer.toString(buylist.getProductprice())); // 총금액
 		parameters.put("vat_amount", "0"); // 부가세
 		parameters.put("tax_free_amount", "0"); // 비과세 금액
-		parameters.put("approval_url", "http://localhost:8080/payment/success?partner_order_id=" + buylist.getBuyseq()); // 성공 시 redirect url 
+		parameters.put("approval_url", "http://localhost:8080/payment/success?partner_order_id=" + buylist.getBuyseq()+"&qty=" + buylist.getProductqty()); // 성공 시 redirect url 
 		parameters.put("cancel_url", "http://localhost:8080/payment/cancel"); // 취소 시 redirect url
 		parameters.put("fail_url", "http://localhost:8080/payment/fail"); // 실패 시 redirect url
 
@@ -67,14 +67,15 @@ public class KakaoPayService {
 	/**
 	 * 결제 완료 승인
 	 */
-	public KakaoApproveResponse approveResponse(String pgToken, String partnerOrderId) {
-		Buylist buylist = buylistRepository.findById(Integer.parseInt(partnerOrderId)).orElse(null);
+	public KakaoApproveResponse approveResponse(String pgToken, String partnerOrderId, String qty) {
+		Buylist currentbuylist = buylistRepository.findById(Integer.parseInt(partnerOrderId)).orElse(null);
+		int pQty = Integer.parseInt(qty);
 		// 카카오 요청
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("cid", cid);
 		parameters.put("tid", kakaoReady.getTid());
 		parameters.put("partner_order_id", partnerOrderId);
-		parameters.put("partner_user_id", buylist.getBuyid());
+		parameters.put("partner_user_id", currentbuylist.getBuyid());
 		parameters.put("pg_token", pgToken);
 
 		// 파라미터, 헤더
@@ -85,8 +86,15 @@ public class KakaoPayService {
 
 		KakaoApproveResponse approveResponse = restTemplate.postForObject(
 				"https://open-api.kakaopay.com/online/v1/payment/approve", requestEntity, KakaoApproveResponse.class);
-		buylist.setBcancel("N");
-		buylistRepository.save(buylist);
+		
+		for (int i = 0; i < pQty+1; i++) {
+		    Buylist buylist = buylistRepository.findById((Integer.parseInt(partnerOrderId))-i).orElse(null);
+		    if (buylist != null) {
+		    	buylist.setBcancel("N");
+				buylistRepository.save(buylist);
+		    }
+		}
+		
 		return approveResponse;
 	}
 

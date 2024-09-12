@@ -112,7 +112,6 @@ public class ShopController {
 		String userId = null;
 		if(token != null) {
 			userId = tokenProvider.validateAndGetUserId(token);
-			
 		} 
 		model.addAttribute("userId",userId);
 		model.addAttribute("req", "/shop/shopcart");
@@ -127,7 +126,8 @@ public class ShopController {
 		String userId = null;
 		if(token != null) {
 			userId = tokenProvider.validateAndGetUserId(token);
-			
+			User user = service_user.getUser(userId);
+			model.addAttribute("user",user);
 		} 
 		model.addAttribute("userId",userId);
 		model.addAttribute("req", "/shop/shopcartbuy");

@@ -187,7 +187,16 @@ public class UserController {
 	}
 
 	@GetMapping("/index")
-	public String index() {
+	public String index(HttpServletRequest request, Model model) {
+		String token = tokenProvider.resolveTokenFromCookie(request); // 쿠키에서 token 가져오기
+		String userId = null;
+		if (token != null) {
+			userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
+			if (userId != null) {
+				User user = service.getUser(userId);
+				model.addAttribute("userId", userId);
+			} 
+		} 
 		return "/index";
 	}
 

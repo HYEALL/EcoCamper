@@ -1,53 +1,135 @@
 
-	<div class="container">
-		<h1>장바구니</h1>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+	function DaumZipcode() {
+		new daum.Postcode({
+			oncomplete : function(data) {
+				// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-		<table>
-			<thead>
-				<tr>
-					<th>상품코드</th>
-					<th>상품명</th>
-					<th>수량</th>
-					<th>금액</th>
-					<th>총액</th>
-					<th>삭제</th>
-				</tr>
-			</thead>
-			<tbody id="cart-items">
-				<!-- JavaScript로 동적 데이터가 삽입될 예정 -->
-			</tbody>
-		</table>
+				// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+				// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+				var addr = ''; // 주소 변수
+				var extraAddr = ''; // 참고항목 변수
 
-		<div class="cart-summary">
-			총액: <span id="total-amount">0</span> 원
+				//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+				if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+					addr = data.roadAddress;
+				} else { // 사용자가 지번 주소를 선택했을 경우(J)
+					addr = data.jibunAddress;
+				}
+
+				// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+				if (data.userSelectedType === 'R') {
+					// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+					// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+					if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+						extraAddr += data.bname;
+					}
+					// 건물명이 있고, 공동주택일 경우 추가한다.
+					if (data.buildingName !== '' && data.apartment === 'Y') {
+						extraAddr += (extraAddr !== '' ? ', '
+								+ data.buildingName : data.buildingName);
+					}
+					// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+					if (extraAddr !== '') {
+						extraAddr = ' (' + extraAddr + ')';
+					}
+					// 조합된 참고항목을 해당 필드에 넣는다.
+					document.getElementById("baddr1").value = extraAddr;
+
+				} else {
+					document.getElementById("baddr2").value = '';
+				}
+
+				// 우편번호와 주소 정보를 해당 필드에 넣는다.
+				document.getElementById('bzipcode').value = data.zonecode;
+				document.getElementById("baddr1").value = addr;
+				// 커서를 상세주소 필드로 이동한다.
+				document.getElementById("baddr2").focus();
+			}
+		}).open();
+	}
+</script>
+<div class="container">
+	<h1>장바구니</h1>
+
+	<table>
+		<thead>
+			<tr>
+				<th>상품코드</th>
+				<th>상품명</th>
+				<th>수량</th>
+				<th>금액</th>
+				<th>총액</th>
+				<th>삭제</th>
+			</tr>
+		</thead>
+		<tbody id="cart-items">
+			<!-- JavaScript로 동적 데이터가 삽입될 예정 -->
+		</tbody>
+	</table>
+
+	<div class="cart-summary">
+		총액: <span id="total-amount">0</span> 원
+	</div>
+	<br>
+	<div class="checkout-form">
+		<h3 align="center">배송 정보 입력</h3>
+
+		<h4>주문자 정보</h4>
+		<div>
+			<label>이름 :</label> <span id="name" th:text="${user.name}"></span>
 		</div>
-		<br>
-		<div class="checkout-form">
-			<h3>배송 정보 입력</h3>
-			<form id="checkout-form" action="/shop/shopcartpay" method="post"
-				name="form1">
-				<input type="hidden" id="cart-data" name="cart-data"> 
-				<label for="receivename">받는사람</label> 	<input type="text" id="receivename"	name="receivename" required> 
-				<label for="baddress">주소</label> <input type="text" id="baddress" name="baddress" required> 
-				<label for="bphone">전화번호</label> <input type="tel" id="bphone" 	name="bphone" required> 
-			
-				<label for="bpayment">결제 방법:</label> <select id="bpayment"
-					name="bpayment">
-					<option value="무통장입금">무통장입금</option>
-					<option value="계좌이체">계좌이체</option>
-					<option value="카카오페이">카카오페이</option>
-				</select>
-			</form>
+		<div>
+			<label>연락처 :</label> <span id="tel" th:text="${user.tel}"></span>
+		</div>
+		<div>
+			<label>주소 :</label> <span id="zipcode" th:text="${user.zipcode}">우편번호</span>
+			<span id="addr1" th:text="${user.addr1}"></span> <span id="addr2"
+				th:text="${user.addr2}"></span>
 		</div>
 
 
-		<div style="text-align: center; margin-top: 30px;">
-
-			<button type="button" onclick="confirm_cartbuy()">결제하기</button>
-		</div>
+		<input type="checkbox" name="same" id="same" onclick=""> <label
+			for="same">주문자 정보와 동일할 경우 체크해 주세요</label>
+		
+		<form id="checkout-form" action="/shop/shopcartpay" method="post"
+			name="form1">
+			<input type="hidden" id="cart-data" name="cart-data"> 
+			<input type="hidden" name="userId" th:value="${user.id}"> <input
+				type="hidden" id="productqty" name="productqty"
+				th:value="${productqty}"> <input type="hidden"
+				id="productprice" name="productprice" th:value="${productprice}">
+			<label for="receivename">받는사람</label> <input type="text"
+				id="receivename" name="receivename" placeholder="받는사람 성함" required>
+			<label align="left"> 주소</label>
+			<fieldset role="group">
+				<input type="text" name="bzipcode" id="bzipcode" placeholder="우편번호"
+					readonly required> <input type="button"
+					onclick="DaumZipcode()" value="우편번호 찾기">
+			</fieldset>
+			<input type="text" id="baddr1" name="baddr1" placeholder="주소"
+				required> <input type="text" id="baddr2" name="baddr2"
+				placeholder="상세주소" required> <label for="bphone">전화번호</label>
+			<input type="tel" id="bphone" name="bphone" placeholder="받는사람 전화번호"
+				required> <label for="bpayment">결제 방법:</label> <select
+				id="bpayment" name="bpayment">
+				<option value="무통장입금">무통장입금</option>
+				<option value="계좌이체">계좌이체</option>
+				<option value="카카오페이">카카오페이</option>
+			</select>
+		</form>
 	</div>
 
-	<script>
+
+	<div style="text-align: center; margin-top: 30px;">
+
+		<button type="button" onclick="confirm_cartbuy()">결제하기</button>
+	</div>
+</div>
+
+<script>
     function confirm_cartbuy(){
     	var frm = document.form1;
 		if (confirm("정말 구매하시겠습니까?")) {
@@ -58,18 +140,24 @@
 
 	       
 	        const name = document.getElementById('receivename').value;
-			const address = document.getElementById('baddress').value;
+	        const addr1 = document.getElementById('baddr1').value;
+			const addr2 = document.getElementById('baddr2').value;
+			const zipcode = document.getElementById('bzipcode').value;
 			const phone = document.getElementById('bphone').value;
 			const payment = document.getElementById('bpayment').value;
-	        
-			if (name && address && phone  && payment) {
-				
-				alert("총 "+totalQuantity+" 개의 총 상품 금액은 "+totalAmount + "원 입니다.\n"+"받는사람: "+name+"\n"+"배송지 :"+address+"\n"
-						+"전화번호 :"+phone+"\n"+"결제방법: "+payment)
+			if (payment == "카카오페이") {
+				frm.action = "/payment/cartReady";
 			} else {
-				alert('모든 필드를 입력해 주세요.');
-				return;
+				if (name && addr1 && phone  && payment) {
+					
+					alert("총 "+totalQuantity+" 개의 총 상품 금액은 "+totalAmount + "원 입니다.\n"+"받는사람: "+name+"\n"+"배송지 :"+addr1+"\n"
+							+"전화번호 :"+phone+"\n"+"결제방법: "+payment)
+				} else {
+					alert('모든 필드를 입력해 주세요.');
+					return;
+				}
 			}
+			
 			
 			frm.submit();
 
@@ -135,9 +223,38 @@
                 localStorage.clear(); // localStorage의 모든 데이터를 삭제합니다.
             });
         });
-    </script>
-    <style>
+     // 체크확인
+    	let check = document.querySelector("#same");
 
+    	check.addEventListener("click", function() {
+    		if (check.checked == true) {
+    			document.querySelector("#receivename").value = document
+    					.querySelector("#name").innerText;
+    			document.querySelector("#bphone").value = document
+    					.querySelector("#tel").innerText;
+    			document.querySelector("#bzipcode").value = document
+    					.querySelector("#zipcode").innerText;
+    			document.querySelector("#baddr1").value = document
+    					.querySelector("#addr1").innerText;
+    			document.querySelector("#baddr2").value = document
+    					.querySelector("#addr2").innerText;
+    		} else {
+    			document.querySelector("#receivename").value = "";
+    			document.querySelector("#bphone").value = "";
+    			document.querySelector("#bzipcode").value = "";
+    			document.querySelector("#baddr1").value = "";
+    			document.querySelector("#baddr2").value = "";
+    		}
+    	});
+
+    	function kakaoPay() {
+    		var frm = document.form1;
+
+    		frm.submit();
+
+    	}
+    </script>
+<style>
 .container {
 	max-width: 800px;
 	margin: 50px auto;
