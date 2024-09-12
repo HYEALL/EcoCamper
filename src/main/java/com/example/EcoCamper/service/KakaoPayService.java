@@ -48,7 +48,8 @@ public class KakaoPayService {
 		parameters.put("total_amount", Integer.toString(buylist.getProductprice())); // 총금액
 		parameters.put("vat_amount", "0"); // 부가세
 		parameters.put("tax_free_amount", "0"); // 비과세 금액
-		parameters.put("approval_url", "http://localhost:8080/payment/success?partner_order_id=" + buylist.getBuyseq()+"&qty=" + buylist.getProductqty()); // 성공 시 redirect url 
+		parameters.put("approval_url", "http://localhost:8080/payment/success?partner_order_id=" + buylist.getBuyseq()
+				+ "&qty=" + buylist.getProductqty()); // 성공 시 redirect url
 		parameters.put("cancel_url", "http://localhost:8080/payment/cancel"); // 취소 시 redirect url
 		parameters.put("fail_url", "http://localhost:8080/payment/fail"); // 실패 시 redirect url
 
@@ -86,15 +87,21 @@ public class KakaoPayService {
 
 		KakaoApproveResponse approveResponse = restTemplate.postForObject(
 				"https://open-api.kakaopay.com/online/v1/payment/approve", requestEntity, KakaoApproveResponse.class);
-		
-		for (int i = 0; i < pQty+1; i++) {
-		    Buylist buylist = buylistRepository.findById((Integer.parseInt(partnerOrderId))-i).orElse(null);
-		    if (buylist != null) {
-		    	buylist.setBcancel("N");
+
+		for (int i = 0; i < pQty; i++) {
+
+			Buylist buylist = buylistRepository.findById((Integer.parseInt(partnerOrderId)) - i).orElse(null);
+			for (int j = 1; j < buylist.getProductqty(); j++) {
+				i += 1;
+
+			}
+
+			if (buylist != null) {
+				buylist.setBcancel("N");
 				buylistRepository.save(buylist);
-		    }
+			}
 		}
-		
+
 		return approveResponse;
 	}
 

@@ -53,7 +53,6 @@ public class KakaoPayController {
 		dto.setLogtime(new Date());
 		dto.setBcancel("Y");
 		Buylist buylist = BuylistService.pay(dto); // 일단 cacel y로 저장하고 성공하면 n으로
-		System.out.println(dto);
 		KakaoReadyResponse kakaoReadyResponse = kakaoPayService.kakaoPayReady(buylist);
 		// 결제 화면으로 리다이렉트할 URL
 		HttpHeaders headers = new HttpHeaders();
