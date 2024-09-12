@@ -14,8 +14,124 @@
 				th:data-img="${dto.pimg}">
 				<h2>[[${dto.pname}]]</h2>
 				<p class="price">₩ [[${dto.pprice}]]</p>
-				<p class="description">이곳에 상품의 상세 설명을 입력합니다. 상품의 특징, 사용 방법, 재질
-					등에 대한 정보를 포함하세요.</p>
+				<p class="description">
+				<!-- 일반상품 -->
+					<th:block th:if="${dto.pcode}=='0001'">
+						나와 아이 그리고 지구까지 생각한 친환경 세제입니다. 독일 더마테스트에서 엑설런트 등급을 받아 맨손 설거지도 문제 없어요. 전성분 EWG 그린등급, 99.7% 자연유래성분으로 그린 레시피 안전한 1종세제입니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='0002'">
+						우리 아이가 자랄 지구를 위해 도움이 될 수 있는 작은 실천 친환경 에코그린 화장지입니다. 환경부 친환경 인증 제품으로 자원순환성 향상과 유해물질 감소와 같은 환경개선 효과를 볼수 있습니다.도톰한 3겹으로 포름알데히드가 들어있지 않은 무포름알데히드제품이라 더욱 안심하고 사용할 수 있습니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='0003'">
+						자연친화적 제품으로 분리수거가 간단하며 인쇄를 최소화하고 지구의 환경을 생각하였습니다. 분리수거시 간편하게 잘라서 물만 버려주시고 팩은 분리수거 해주시면 됩니다. 냉동고에 얼려 재사용 또한 가능합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='0004'">
+						전분 기반 생분해성 플라스틱으로 완전히 생분해되고 환경 오염이 없습니다. 또한 중금속이 포함되어 있지 않습니다. 사용시 전자레인지 사용가능하고 가벼우며 깨지지 않는 친환경 식기 입니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='0005'">
+						EL-724 환경표지 인증을 받은 생분해 비닐봉투입니다. 생분해성 수지로 제작되었으며 미생물 등 생물적 작용에 의해 쉽게 분해됩니다. 환경호르몬이 검출되지 않아 안전하고 음식물폐기물과 혼합해 퇴비화도 가능합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='0006'">
+						빨간색 응급 처치 키트는 가볍고 컴팩트하도록 특별히 설계되어 일반적인 부상에 대한 응급 처치 용품을 쉽게 보관할 수 있습니다. 구급상자는 면으로 만들어져 사용 후 퇴비로 만들 수 있습니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='0007'">
+						파이어콘은 유독성물질이 첨가된 착화탄과 번거로운 가스토치를 대체하는 옥수수속대로 만든 천연착화제입니다. 불을 붙이기 어려운 어떠한 고체연료에도 쉽게 불이 안착될 수 있도록 강한 화력과 충분한 연소시간을 확보하여 착화지연에 따른 시간낭비를 줄여줍니다. 알코올성분이 있어 개봉시 즉시 사용하시기 바랍니다. 
+					</th:block>
+				<!-- 대여 패키지 -->
+					<th:block th:if="${dto.pcode}=='1001'">
+						8면 메쉬 윈도우로 막힘없이 탁트인 시야 확보 가능하며 높은 천장과 넓은 실내공간으로 쾌적하고 자유로운 리빙공간을 제공합니다. 4인이상 인원 이용하기 충분한 공간을 제공하는 텐트패키지 입니다.
+						<br><br>
+						( 캠핑의자X2 / 테이블X1  / 2-4인용코펠X1 / 그릴X1 / 화로 or 버너X1 / 캠핑박스X2 / 랜턴X2) 
+					</th:block>
+					<th:block th:if="${dto.pcode}=='1002'">
+						2-4인이 잘 수 있는 공간과 비가올시 전실 공간에서 취사가 가능합니다. 날씨가 더운날에는 후라이를 제거하고 이너텐트로만 사용하셔도 좋습니다. 가족들과 바베큐 즐기기에 맞춤인 텐트패키지 입니다.
+						<br><br>
+						( 캠핑의자X2 / 테이블X1  / 2-4인용코펠X1 / 그릴X1 / 화로 or 버너X1 / 타프X1 / 랜턴X2) 
+					</th:block>
+					<th:block th:if="${dto.pcode}=='1003'">
+						5-8인이 사용할수 있는 타프그늘막패키지입니다. 간편하게 친구들과 야외 바베큐 및 간편 피크닉을 즐기기에 좋습니다.
+						<br><br>
+						( 바베큐체어X5 / 테이블X1 / 그릴X1 / 화로 or 버너X1 / 타프X1 / 랜턴X2) 
+					</th:block>
+					<th:block th:if="${dto.pcode}=='1004'">
+						5분이면 설치가능할 정도로 간편하고 2-4인이 사용할수 있는 인디인감성은 지닌 텐트패키지 입니다.
+						<br><br>
+						( 캠핑의자X2 / 테이블X1  / 2-4인용코펠X1 / 그릴X1 / 화로 or 버너X1 / 타프X1 / 랜턴X2) 
+					</th:block>
+					<th:block th:if="${dto.pcode}=='1005'">
+						10초면 설치가 가능한 퀵블럭 시스템이며 튼튼한 통폴대로 만들어진 텐트입니다. 2-4인이 사용할 수 있는 텐트 패키지 입니다.
+						<br><br>
+						( 캠핑의자X2 / 테이블X1  / 2-4인용코펠X1 / 그릴X1 / 화로 or 버너X1 / 캠핑박스X2 / 랜턴X2) 
+					</th:block>
+					<th:block th:if="${dto.pcode}=='3001'">
+						스칸디나비아 디자인의 북유럼을 고스란히 담아낸 노르디스크만의 색채와 친환경 GOTS 인증이 되었으며  최대 4명이 잠잘수 있는 공간을 갖춘 레트로 스카우트  텐트입니다. 스카이 텐트는 측면을 올려 다양한 형태로 사용가능 합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='3002'">
+						4-6인용텐트이며 높이가 180cm로 장비보관이나 휴게실로 사용할수 있는 넓은 공간을 형성합니다. 크기와 부피가 큼에도 불구하고 1인이 혼자서 쉽게 설치하고 관리할수 있습니다. 대규모 그룹 및 가족이 사용할 수 있는 실용적인 기능을 갖춘 대형 텐트입니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='3003'">
+						높은 개방감을 가진 자립형 4면 개방 대형 돔쉘터로 폴컵웨빙 시스템으로 폴대 체결시 힘을 들이지 않고 설치가 가능하며 쉘터의 텐션을 잡기 수월합니다. 상단 4분할 벤틸에이션과 사이드 출입분 상단에도 있어 공기 순환을 도와 결로를 예방합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='3004'">
+						마모와 찢어짐에 강한 150D 옥스퍼드 원단을 사용하였고 내부 다크 그레이코딩으로 자외선을 차단합니다. 탁월한 방수기능과 상단 벤틸레이션으로 환기와 통풍을 더욱 편하게 하였습니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='3005'">
+						TPU에어폴 적용으로 빠른 설치와 해체가 가능하며 압도적인 면적, 공간 활용성이 뛰어난 터널형 에어텐트입니다. 확장 가능한 3룸 구조이며 개인적인 휴식공간 어린이 놀이공간등 다양하게 활용이 가능합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='4001'">
+						친환경 소재의 원목나무 프레임과 100% 코튼 캔버스 침대의 편안함 그리고 캠핑에서 편안한 수면을 취하거나 편안하게 앉을 수 있는 접이식 침대입니다.  40cm 높이로 편안한 수면과 글램핑에서 진정한 hygge(휴식)을 느낄수 있습니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='4002'">
+						고밀도 PU 메모리 폼 사용으로 부드러우며 3D입체 타공 구조로 타공면에 많은 공기량이 들어가 누웠을때 포근하며 편안한 취침이 가능합니다. 일반 매트의 밸브보다 큰 대형 스윙밸브를 적용하여 공기 주입 및 배출이 빠르며 자충식 매트리스로 공기주입이 편리합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='4003'">
+						초경량 초소형으로 중량대비 탁월한 보온성을 자랑합니다. 완전히 펼쳐지는 구조로 매트나 이불로 사용이 가능하고 이중 지퍼로 구성되어 있습니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='5001'">
+						대나무 상판은 1유닛이 2개 하프유닛이 2개로 총 3유닛 사이즈로 구성되어 있습니다. 프레임 측면에는 가스 카트리지를 장착할 수 있는 레일이 있습니다. 멀티 펑션테이블에도 연결이 가능하여 상황에 따라 자유롭게 확장할 수 있습니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='5002'">
+						잠금장치로 고정되어 똑똑한 테크니컬 테이블 롤접이식 구조로 설치가 편리하며 40kg 중량을 버틸수 있는 고강도 프레임입니다. 측면 걸이를 통해 공간 활동도가 높아 유용하게 사용할수 있습니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='5003'">
+						휴대가 간편하고 편안한 릴렉스 체어입니다. 앞,뒤 쏠림 없이 안정적으로 앉을 수 있게 때문에 어린 아이들과 성인 모두에게 잘 어울립니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='5004'">
+						너도밤나무 원목을 사용하여 자연 친화적인 느낌으로 실외/실내 구분없이 어느공간에서나 잘 어울립니다. 캔버스 소재로 두껍고 튼튼하여 내구성이 좋습니다. 접이식 구조이며 시트는 분리세탁이 가능합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='6001'">
+						스테인레스 재질로 위생은 물론 바닥면의 열전도율이 높아 야외에서도 맛있는 요리가 가능합니다. 품질이 우수한 국산 스테인레스를 사용하여 위생적이며 반영구적으로 사용 가능합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='7001'">
+						모닥불도 조리도 제대로 즐길 수 있는 솔로 캠퍼를 위한 화로대 그릴 브릿지를 갖추고 있어 다양한 요리를 즐길 수 있습니다. 바닥 부분에 피해를 최소한으로 억제하도록 디자인을 설계하였습니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='7002'">
+						원터지 점화장치로 안전하며 대형 받침대로 효과적은 성능을 갖추었습니다. 미세한 화력 조절 밸브를 사용하여 정교하게 불꽃을 조절할수 있으며 안전하게 사용됩니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='8001'">
+						봄,여름,가을,겨울 계절 상관없이 사용할 수 있는 냉-온장고로 사계절 모두 사용할 수 있으며 차량용 시거잭으로 차량 이동시에도 시원하게 보관 가능합니다. 캠핑장, 사무실, 실내 어디서나 장소 구애없이 시원하게 따뜻하게 즐기세요!
+					</th:block>
+					<th:block th:if="${dto.pcode}=='8002'">
+						3-4인용 피크닉 박스로 적합합니다. 350ml x 36개 500ml x 18개 2L x 4개 보관 가능합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='9001'">
+						최대 3,500와트까지 사용이 가능한 3구 멀티탭으로 넉넉한 용량으로 전자기기를 더 안전하게 사용할수 있습니다. 이지콕 플러그를 채용함으로 콘센트에 제거시 보다 쉽게 플러그를 제거할 수 있으며 납작한 사이즈로 틈새 사용에 보다 편리 합니다.
+					</th:block>
+					<th:block th:if="${dto.pcode}=='9002'">
+						야외에서도 간편한 전원공급이 가능합니다. 자동차로도 충전이 가능하며 8시간 이내에 완충할 수 있습니다. 태양열로도 충전이 가능하며 패널 이용시 2~8시간이내에 완충할 수 있습니다. 가정용 콘센트로는 1.6시간만에 완충이 가능하고 720Wh의 용량으로 동시에 최대 9개의 장치에 전원 공급이 가능합니다.
+					</th:block>
+				
+				<!-- 친환경캠핑장비 -->
+					<th:block th:if="${dto.pcode}=='0008'">
+						
+					</th:block>
+				
+				<!-- 일반캠핑장비 -->
+					<th:block th:if="${dto.pcode}=='0008'">
+						
+					</th:block>
+				</p>
+				<br>
 				<div>
 					<label class="qty">수량 </label>&emsp;<select id="productqty">
 						<option>1</option>
@@ -48,6 +164,7 @@
 				<h3>상품 리뷰</h3>
 				<button id="" onclick="review()" style="width: 130px; margin-right: 10px;">리뷰남기기</button>
 			</div>
+			
 
 			<div id="reviewForm" style="display: none;">
 				<p>고객님의 따뜻한 상품 후기를 남겨주세요</p>
@@ -89,7 +206,8 @@
 									</th:block>
 								</th:block></td>
 							<td class="review_content"
-								th:text="${reviewdto.shopreviewcontent}"></td>
+								th:text="${reviewdto.shopreviewcontent}"
+								style="min-width: 100px;"></td>
 							<td class="review_date" th:text="${reviewdto.logtime}"></td>
 							<td class="review_delete"><button
 									th:onclick="deleteReview([[${reviewdto.shopreviewseq}]], [[${reviewdto.shopreviewid}]])" 
@@ -97,25 +215,31 @@
 						</tr>
 					</table>
 
-
+					<br>
 					<div align="center">
 						<p>
 							<th:block th:if="${ startPage > 3}">
-						[<a
-									th:href="@{/shop/shopview(pcode=${pcode},pg=${ startPage-1 })}"
+								
+								[<a	th:href="@{/shop/shopview(pcode=${pcode},pg=${ startPage-1 })}"
 									class="paging">이전</a>]
 						</th:block>
 							<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
 								<th:block th:if="${ pg==num }">
+								
+								
 									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
 										class="currentPaging">[[${ num }]]</a>]
 								</th:block>
 								<th:block th:if="${ pg!=num }">
+								
+								
 									[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ num })}"
 										class="paging">[[${ num }]]</a>] 
 								</th:block>
 							</th:block>
 							<th:block th:if="${endPage < totalP}">
+							
+							
 							[<a th:href="@{/shop/shopview(pcode=${pcode},pg=${ endPage+1 })}"
 									class="paging">다음</a>]
 						</th:block>
@@ -410,24 +534,32 @@ main {
 	text-decoration: underline;
 }
 
-.product-details {
-	display: flex;
-	margin-bottom: 30px;
-	height: auto;
-}
-
 .product-reviews {
 	border-top: 1px solid #ddd;
 	padding-top: 20px;
 	height: 35%;
 }
 
-.product-image img {
-	max-width: 500px;
-	width: 100%;
-	height: auto;
+.product-details {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트를 수직으로 정렬 */
+    justify-content: center; /* 이미지와 텍스트를 수평으로 정렬 */
 }
-
+.product-image {
+    width: 100%; /* 너비를 100%로 설정 */
+    height: 50vh; /* 높이 설정 */
+    min-height: 500px; /* 최소 높이 설정 */
+    overflow: hidden; /* 이미지가 컨테이너를 넘어가지 않도록 설정 */
+    display: flex; /* 이미지 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+}
+.product-image img {
+    width: 100%;
+    height: auto; /* 비율 유지 */
+    max-width: 100%;
+    object-fit: cover; /* 이미지가 컨테이너를 덮도록 조정 */
+}
 .productinfo {
 	margin-left: 20px;
 }
@@ -443,6 +575,7 @@ main {
 
 .description {
 	margin: 10px 0;
+	
 }
 
 button {

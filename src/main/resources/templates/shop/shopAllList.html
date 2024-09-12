@@ -6,7 +6,7 @@ main {
 	margin-top: 30px;
 }
 
-.container {
+.container1 {
 	max-width: 2000px;
 	margin: 50px auto;
 	padding: 20px;
@@ -21,21 +21,8 @@ h1 {
 	margin-bottom: 20px;
 }
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 20px;
-}
 
-th, td {
-	padding: 15px;
-	text-align: center;
-	border-bottom: 1px solid #ddd;
-}
 
-th {
-	background-color: #f4f4f4;
-}
 
 .cart-summary {
 	text-align: right;
@@ -47,15 +34,6 @@ th {
 	font-weight: bold;
 }
 
-.delete-button {
-	color: #e74c3c;
-	cursor: pointer;
-	font-weight: bold;
-}
-
-.delete-button:hover {
-	color: #c0392b;
-}
 
 button {
 	padding: 10px 20px;
@@ -71,25 +49,8 @@ button:hover {
 	background-color: #219150;
 }
 
-.order_cancel {
-	background-color: #c0392b;
-}
 
-.order_cancel:hover {
-	background-color: #a93226;
-}
 
-.order-items {
-	border: 1px;
-	padding: 5px;
-	transition: background-color 0.3s, border-radius 0.3s;
-}
-
-.order-items:hover {
-	background-color: #EAEAEA; /* 마우스 오버 시 배경 색상 */
-	border-radius: 8px; /* 모서리 둥글게 설정 */
-	opacity: 0.85;
-}
 
 .search-bar {
 	margin-bottom: 20px;
@@ -97,7 +58,7 @@ button:hover {
 }
 
 .search-bar input {
-	width: 50%;
+	width: 65%;
 	padding: 10px;
 	font-size: 16px;
 	border: 1px solid #ddd;
@@ -149,6 +110,8 @@ button:hover {
 .pagination {
 	margin: 20px 0;
 	text-align: center;
+	display: flex;
+    justify-content: center; /* 수평으로 가운데 정렬 */
 }
 
 .pagination a {
@@ -166,21 +129,49 @@ button:hover {
 }
 
 
-.cart {
-	position: fixed;
-	top: 10px;
-	right: 10px;
-	background-color: #4CAF50;
-	color: white;
-	padding: 10px 20px;
-	border-radius: 5px;
-	cursor: pointer;
-	margin-top: 50px;
+/* 창의 너비가 600px 이하일 때 */
+@media (max-width: 1200px) {
+	.cart {
+		position: fixed;
+		top: 10px;
+		right: 10px;
+		background-color: #4CAF50;
+		color: white;
+		padding: 8px 15px;
+		font-size: 14px;
+		border-radius: 5px;
+		cursor: pointer;
+		margin-top: 90px;
+		margin-right: 40px;
+	}
+}
+/* 창의 너비가 600px 이상일 때 */
+@media (min-width: 1200px) {
+	.cart {
+		position: fixed;
+		top: 10px;
+		right: 10px;
+		background-color: #4CAF50;
+		color: white;
+		padding: 10px 20px;
+		border-radius: 5px;
+		cursor: pointer;
+		margin-top: 90px;
+		margin-right: 30px;
+	}
 }
 
 .cart:hover {
 	background-color: #45a049;
 }
+
+  .no-product-message {
+    display: none;
+    text-align: center;
+    
+    font-weight: bold;
+    margin-top: 20px;
+  }
 
 </style>
 	<div class="cart" onclick="showCart()">
@@ -190,28 +181,102 @@ button:hover {
 		<div class="header">
 			<h1>전체 상품</h1>
 		</div>
-		<div class="container">
+		<div class="">
 			<div class="search-bar">
-				<input type="text" id="search" placeholder="상품 검색..."
-					onkeyup="filterProducts()">
+				<input type="text" id="search" placeholder="상품 검색..." 
+					onkeyup="performSearch()">
 			</div>
+			<br>
+			<div class="no-product-message" id="no-product-message">
+				<br>
+			   검색하신 내용과 일치하는 상품이 없습니다.
+			 </div>
 			<div id="product-list" class="product-list">
 				<div class="product-item" th:each="shopdto : ${list}"
 									     th:data-code="${shopdto.pcode}"
 										 th:data-name="${shopdto.pname}" 
 										 th:data-price="${shopdto.pprice}"
 										 th:data-img="${shopdto.pimg}">
-					<img alt="상품이미지" th:src="@{/images/}+${shopdto.pimg}">
-					<h2>[[${shopdto.pname}]]</h2>
-					<p>[[${shopdto.ptype}]]</p>
-					<div class="price">[[${shopdto.pprice}]]</div>
+					 <th:block><a th:href="@{/shop/shopview(pcode=${shopdto.pcode})}"> 
+					<img alt="상품이미지" th:src="@{/images/}+${shopdto.pimg}" 
+										style="height: 250px; width: 300px; object-fit: cover; margin-bottom: 16px;">
+					
+					<h2>[[${shopdto.pname}]]</h2></a></th:block>
+					<p style="margin-bottom: 1px;">[[${shopdto.ptype}]]</p>
+					<div class="price"><h5>판매가: [[${shopdto.pprice}]]</h5></div>
 					<button onclick="addToCart()" class="add-to-cart">장바구니에 추가</button>
 				</div>
 			</div>
 			<br><br>
-			<div class="pagination" id="pagination">
-				<a href="#">&laquo; 이전</a> <a href="#" class="active">1</a> <a
-					href="#">2</a> <a href="#">3</a> <a href="#">다음 &raquo;</a>
+			<div class="pagination" id="pagination" align="center">
+				<div align="center">
+						<p>
+							<th:block th:if="${ startPage > 3}">
+								
+								<th:block th:if="${search!=null}">
+									<a	th:href="@{/shop/shopAllList(pg=${ startPage-1},search=${search})}"
+										class="paging">&laquo;이전</a>
+								</th:block>
+								<th:block th:if="${search==null}">
+									<a	th:href="@{/shop/shopAllList(pg=${ startPage-1})}"
+										class="paging">&laquo;이전</a>
+								</th:block>
+							</th:block>
+								<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
+									
+									<th:block th:if="${search!=null}">
+									
+										<th:block th:if="${ pg==num }">
+										<a th:href="@{/shop/shopAllList(pg=${ num }, search=${search} )}"
+												class="currentPaging">[[${ num }]]</a>
+										</th:block>
+										
+										<th:block th:if="${ pg!=num }">
+											<a th:href="@{/shop/shopAllList(pg=${ num }, search=${search})}"
+												class="paging">[[${ num }]]</a>
+										</th:block>
+									
+									
+									</th:block>
+
+									<th:block th:if="${search==null}">
+									
+										<th:block th:if="${ pg==num }">
+											<a th:href="@{/shop/shopAllList(pg=${ num } )}"
+								   			
+												class="currentPaging">[[${ num }]]</a>
+										</th:block>
+										
+										<th:block th:if="${ pg!=num }">
+											<a th:href="@{/shop/shopAllList(pg=${ num })}"
+												class="paging">[[${ num }]]</a>
+										</th:block>
+									
+									</th:block>
+								</th:block>
+							
+							<th:block th:if="${endPage < totalP}">
+								
+								<th:block th:if="${search!=null}">
+									<a th:href="@{/shop/shopAllList(pg=${ endPage+1 },search=${search})}"
+										class="paging">다음&raquo;</a>
+								</th:block>
+								<th:block th:if="${search==null}">
+									<a th:href="@{/shop/shopAllList(pg=${ endPage+1 })}"
+										class="paging">다음&raquo;</a>
+								</th:block>
+								
+							</th:block>
+
+						</p>
+				</div>
+					<!-- 		
+						<a href="#">&laquo; 이전</a> 
+						<a href="#" class="active">1</a> 
+						<a href="#">2</a> 
+						<a href="#">3</a> 
+						<a href="#">다음 &raquo;</a>
+					 -->
 			</div>
 		</div>
 
@@ -228,23 +293,53 @@ button:hover {
 			    
 		}
 	}
-
+	
+	function performSearch() {
+		if (event.key === 'Enter') {
+		    const searchTerm = document.getElementById('search').value.trim();
+		    let url = '/shop/shopAllList';
+	
+		    if (searchTerm) {
+		        url += `?search=${encodeURIComponent(searchTerm)}`;
+		    }
+	
+		    window.location.href = url;
+		    filterProducts()
+		}
+	}
+	
+	
+	
 	 function filterProducts() {
 		 if (event.key === 'Enter') {
 	 
          const searchTerm = document.getElementById('search').value.toLowerCase();
-         const allProducts = document.querySelectorAll('.product-item');
          
+         //모든상품담기
+         const allProducts = document.querySelectorAll('.product-item');
+         let no_product=true;
+         
+         
+         	//매칭
 	         allProducts.forEach(product => {
 	             const productName = product.getAttribute('data-name').toLowerCase();
 	
 	             // 검색어가 상품명이나 상품 타입에 포함되면 보이고, 아니면 숨김
 	             if (productName.includes(searchTerm)) {
 	                 product.style.display = 'block';
+	            	 no_product=false;
 	             } else {
 	                 product.style.display = 'none';
-	             }
+		         }
         	 });
+	      // 검색 결과가 없으면 메시지 표시, 있으면 숨김
+	         const messageElement = document.getElementById('no-product-message');
+	         if (no_product) {
+	           messageElement.style.display = 'block';
+	         } else {
+	           messageElement.style.display = 'none';
+	         }
+	        
 		}
 	
 	 }
@@ -293,9 +388,58 @@ button:hover {
 	function showCart() {
 		location.href = '/shop/shopcart';
 	}
+	
+	function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+/*
+    function performSearch(searchTerm) {
+        // 여기에 검색 요청을 보내거나, 필터링 로직을 추가합니다.
+    	document.getElementById('search').value  = searchTerm;
+    	outoSearch(searchTerm);  // 강제로 Enter 키 이벤트를 발생시켜서 필터링을 수행
+        
+    }
+    */
+    
+    function outoSearch(searchTerm) {
+        // 검색창에 값 자동 입력
+        document.getElementById('search').value = searchTerm;
 
+        // 검색어에 맞춰 바로 필터링 수행
+        const allProducts = document.querySelectorAll('.product-item');
+        let no_product = true;
+
+        allProducts.forEach(product => {
+            const productName = product.getAttribute('data-name').toLowerCase();
+
+            if (productName.includes(searchTerm)) {
+                product.style.display = 'block';
+                no_product = false;
+            } else {
+                product.style.display = 'none';
+            }
+        });
+
+     	// 검색 결과가 없으면 메시지 표시, 있으면 숨김
+        const messageElement = document.getElementById('no-product-message');
+        if (no_product) {
+          messageElement.style.display = 'block';
+        } else {
+          messageElement.style.display = 'none';
+        }
+    }
+	
+	
 	// 페이지 로드 시 장바구니 카운트 초기화
 	document.addEventListener('DOMContentLoaded', function() {
+		
+		const searchTerm = getQueryParameter('search');
+        if (searchTerm) {
+            // 페이지가 로드되면 쿼리 파라미터로 받은 검색어로 검색을 수행합니다.
+            outoSearch(searchTerm);
+        }
+		
 		updateCartCount();
 
 		document.querySelectorAll('.add-to-cart').forEach(button => {
