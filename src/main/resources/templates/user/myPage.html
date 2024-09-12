@@ -1,11 +1,9 @@
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.jade.min.css">
 <div class="container">
 	<div class="row">
 		<h2 align="center" style="font-style: italic">Account information</h2>
 		<h5 align="center" th:text="${user.name}+'님, 안녕하세요'"></h5>
-		<div class="col-md-2">
-			<table>
+		<div class="col-md-2 fs-5">
+			<table class="table table-sm">
 				<tr>
 					<td><a href="myPage?mp=/user/editForm">회원정보수정</a></td>
 				</tr>
@@ -17,7 +15,7 @@
 
 				</tr>
 				<tr>
-					<td><a href="myPage?mp=/shop/shopOrderList">주문배송조회</a></td>
+					<td><a href="/shop/shopOrderList">주문배송조회</a></td>
 				</tr>
 
 				<tr>

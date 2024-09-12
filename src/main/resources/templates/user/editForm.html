@@ -1,54 +1,103 @@
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.jade.min.css">
 <script type="text/javascript" src="../js/userScript.js?v=2"></script>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<div align="center">
-	<h3>정보 수정</h3>
-	<form action="edit" name="inputForm" method="post"
-		style="width: 400px;">
-		<fieldset>
-			<label align="left"> 이름 <input type="text" name="name"
-				th:value="${user.name}" placeholder="이름 입력" />
-			</label> <label align="left"> 아이디 </label>
-			<fieldset role="group">
-				<input type="text" name="id" th:value="${user.id}"
-					placeholder="아이디 입력" readonly />
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<section id="comment-form" class="comment-form section">
+	<div class="container">
 
+		<form action="edit" name="inputForm" method="post">
+			<h3>정보 수정</h3>
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label align="left"> 이름 </label>
+					<fieldset role="group">
+						<input type="text" name="name" th:value="${user.name}"
+							placeholder="이름 입력" />
+					</fieldset>
+				</div>
+				<div class="col-md-6 form-group">
 
-			</fieldset>
-			<label align="left"> 비밀번호 <input type="password" name="pwd"
-				placeholder="비밀번호 입력" />
-			</label> <label align="left"> 비밀번호 재확인 <input type="password"
-				name="repwd" placeholder="비밀번호 재확인" />
-			</label> <label align="left">생년월일</label> <input type="date"
-				th:value="${user.age}" readonly /> <label align="left">성별</label>
-			<fieldset role="group">
-				<th:block th:if="${user.gender} == 'm'">
-					<label><input type="radio" name="gender" value="m" checked>남</label>
-					<label><input type="radio" name="gender" value="f">여</label>
-				</th:block>
-				<th:block th:if="${user.gender} == 'f'">
-					<label><input type="radio" name="gender" value="m">남</label>
-					<label><input type="radio" name="gender" value="f" checked>여</label>
-				</th:block>
-			</fieldset>
-			<label align="left"> 이메일 </label>
-			<fieldset role="group">
-				<input type="email" id="email" th:value="${user.email}" readonly />
+					<label align="left"> 아이디 </label>
+					<fieldset role="group">
+						<input type="text" name="id" th:value="${user.id}"
+							placeholder="아이디 입력" readonly />
+					</fieldset>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label align="left"> 비밀번호</label>
+					<fieldset role="group">
+						<input type="password" name="pwd" placeholder="비밀번호 입력" />
+					</fieldset>
 
-			</fieldset>
-			<label align="left"> 핸드폰<input type="tel" name="tel"
-				placeholder="010-1234-5678" th:value="${user.tel}" size="12" />
-			</label> <label align="left"> 주소
-				<fieldset role="group">
-					<input type="text" name="zipcode" id="zipcode"
-						th:value="${user.zipcode}" placeholder="우편번호" readonly> <input
-						type="button" onclick="DaumZipcode()" value="우편번호 찾기">
-				</fieldset> <input type="text" id="addr1" name="addr1" th:value="${user.addr1}"
-				placeholder="주소"><br> <input type="text" id="addr2"
-				name="addr2" th:value="${user.addr2}" placeholder="상세주소">
-			</label> <input type="button" value="정보수정" onclick="editCheck()"> <input
-				type="reset" value="다시 작성">
-		</fieldset>
-	</form>
-</div>
+				</div>
+
+				<div class="col-md-6 form-group">
+					<label align="left"> 비밀번호 재확인</label>
+					<fieldset role="group">
+						<input type="password" name="repwd" placeholder="비밀번호 재확인" />
+					</fieldset>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label align="left">생년월일</label>
+					<fieldset role="group">
+						<input type="date" th:value="${user.age}" readonly />
+					</fieldset>
+				</div>
+				<div class="col-md-6 form-group">
+					<label align="left">성별</label>
+					<fieldset role="group">
+						<th:block th:if="${user.gender} == 'm'">
+							<label><input type="radio" name="gender" value="m"
+								checked>남 </label>
+							<label><input type="radio" name="gender" value="f">여</label>
+						</th:block>
+						<th:block th:if="${user.gender} == 'f'">
+							<label><input type="radio" name="gender" value="m">남
+							</label>
+							<label><input type="radio" name="gender" value="f"
+								checked>여</label>
+						</th:block>
+					</fieldset>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label align="left"> 이메일 </label>
+					<fieldset role="group">
+						<input type="email" id="email" th:value="${user.email}" readonly />
+					</fieldset>
+				</div>
+				<div class="col-md-6 form-group">
+					<label align="left"> 핸드폰</label>
+					<fieldset role="group">
+						<input type="tel" name="tel" placeholder="010-1234-5678"
+							th:value="${user.tel}" size="12" />
+					</fieldset>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 form-group">
+					<label align="left"> 주소
+						<fieldset role="group">
+							<input type="text" name="zipcode" id="zipcode"
+								th:value="${user.zipcode}" placeholder="우편번호" readonly>
+							<input type="button" onclick="DaumZipcode()" value="우편번호 찾기">
+						</fieldset> <input type="text" id="addr1" name="addr1"
+						th:value="${user.addr1}" placeholder="주소"><br> <input
+						type="text" id="addr2" name="addr2" th:value="${user.addr2}"
+						placeholder="상세주소">
+					</label>
+				</div>
+			</div>
+			<div align="center">
+				<input type="button" value="정보수정" onclick="editCheck()"> <input
+					type="reset" value="다시 작성">
+			</div>
+		</form>
+	</div>
+</section>
