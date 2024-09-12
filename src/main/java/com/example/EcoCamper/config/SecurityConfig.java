@@ -24,18 +24,13 @@ public class SecurityConfig {
 	    http.csrf(csrf -> csrf.disable())
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/login/**", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index", "/myPage/**", "/menu", "/shop/**", "/feed/**", "/add/", "/remove/**", "/mail/**", "/confirm/**", "/menu2/"
+	            .requestMatchers("/login/**", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index", "/myPage/**", "/menu", "/shop/**", "/feed/**", "/add/", "/remove/**", "/mail/**", "/confirm/**", "/map"
 	            		,"/js/**", "/css/**", "/images/**",  "/storage/**", "/vendor/**", "/payment/**" ).permitAll()
-	            .requestMatchers("/user/logout", "/user/edit", "/map", "/search").hasAnyRole("USER", "ADMIN")
+	            .requestMatchers("/user/logout", "/user/edit", "/search").hasAnyRole("USER", "ADMIN")
 	            .requestMatchers("/admin/**").hasRole("ADMIN")
 	            .anyRequest().authenticated()
 	        )
 	        .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-	        //.exceptionHandling(exception -> { 
-              //  exception.authenticationEntryPoint(new MyAuthenticationEntryPoint()); // 인증 실패시
-                //exception.accessDeniedHandler(new MyAccessDeniedHandler()); // 인가 실패시
-            //});
-	    	
 	    return http.build();
 	}
 
