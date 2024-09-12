@@ -57,12 +57,12 @@
 	<table>
 		<thead>
 			<tr>
-				<th>상품코드</th>
+				<th colspan="2">상품코드</th>
 				<th>상품명</th>
 				<th>수량</th>
 				<th>금액</th>
 				<th>총액</th>
-				<th>삭제</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody id="cart-items">
@@ -181,6 +181,7 @@
                     totalAmount += itemTotal;
 
                     row.innerHTML = `
+                    	<td><img src="/images/${item.img}" alt="상품 이미지" style="max-width: 100px;"></td>
                         <td>${item.code}</td>
                         <td>${item.name}</td>
                         <td>${item.quantity}</td>
