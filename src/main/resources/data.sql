@@ -80,10 +80,15 @@ drop table Buylist purge;
 insert into Buylist values(seq_Buylist.nextval,'euneun','0002',1,5000,'곽은성', 
                             '서울','010','신용',sysdate);
 insert into Buylist values(seq_Buylist.nextval,'euneun','0001',1,10000,'곽은성', '서울','010','신용',sysdate);
-select*from Buylist;
+select*from Buylist order by buyseq desc;
 
-delete Buylist where buyseq='12';
+UPDATE buylist
+SET Bcancel = 'y'
+WHERE buyseq = 92;
 
+delete Buylist where buyseq='16';
+DELETE FROM Buylist
+WHERE buyseq BETWEEN 30 AND 97;
 create SEQUENCE seq_Buylist NOCACHE NOCYCLE;
 drop SEQUENCE seq_Buylist;
 select *from user_sequences;
@@ -108,6 +113,56 @@ drop table Shop purge;
 insert into Shop values ('0001','친환경세제','자사',3000,2000,0,'cleaner.jpg',sysdate);
 insert into Shop values ('0002','친환경휴지','자사',10000,2000,0,'roll.jpg',sysdate);
 insert into Shop values ('0003','물아이스팩','자사',4000,5000,0,'water.jpg',sysdate);
+insert into Shop values ('0004','밀짚식기세트','자사',35000,1000,0,'plate_set.jpg',sysdate);
+insert into Shop values ('0005','비닐봉투','자사',300,10000,0,'gar_bag.jpg',sysdate);
+insert into Shop values ('0006','응급키트','자사',6000,500,0,'emergency_kit.jpg',sysdate);
+insert into Shop values ('0007','불쏘시개','자사',2500,3000,0,'corn_fire.jpg',sysdate);
+--대여상품
+
+insert into Shop values ('1001','카즈미지오패스PRO텐트패키지','대여',180000,10,0,'rental_set1.jpg',sysdate);
+insert into Shop values ('1002','오토바베큐패키지','대여',120000,10,0,'rental_set2.jpg',sysdate);
+insert into Shop values ('1003','타프피크닉패키지','대여',80000,20,0,'rental_set3.jpg',sysdate);
+insert into Shop values ('1004','블랙인디언패키지','대여',110000,10,0,'rental_set4.jpg',sysdate);
+insert into Shop values ('1005','퀵블랙패키지','대여',130000,10,0,'rental_set5.jpg',sysdate);
+insert into Shop values ('1006','퀵블랙패키지','대여',60000,10,0,'rental_set5.jpg',sysdate);
+insert into Shop values ('1007','퀵블랙패키지','대여',60000,10,0,'rental_set5.jpg',sysdate);
+insert into Shop values ('1008','퀵블랙패키지','대여',60000,10,0,'rental_set5.jpg',sysdate);
+insert into Shop values ('1009','퀵블랙패키지','대여',60000,10,0,'rental_set5.jpg',sysdate);
+insert into Shop values ('1010','퀵블랙패키지','대여',60000,10,0,'rental_set5.jpg',sysdate);
+insert into Shop values ('1011','퀵블랙패키지','대여',60000,10,0,'rental_set5.jpg',sysdate);
+
+--친환경 장비 (X)
+insert into Shop values ('2001','불쏘시개','자사',2500,3000,0,'corn_fire.jpg',sysdate);
+
+
+--일반 장비
+insert into Shop values ('3001','이든스카이캠핑텐트','텐트',920000,30,0,'g_tent1.jpg',sysdate);
+insert into Shop values ('3002','터널형캠핑텐트','텐트',1400000,30,0,'g_tent2.jpg',sysdate);
+insert into Shop values ('3003','대형캠핑텐트','텐트',800000,30,0,'g_tent3.jpg',sysdate);
+insert into Shop values ('3004','돔캠핑텐트','텐트',650000,30,0,'g_tent4.jpg',sysdate);
+insert into Shop values ('3005','티맥스에어캠핑텐트','텐트',1400000,30,0,'g_tent5.jpg',sysdate);
+
+insert into Shop values ('4001','롤드우든캠핑베드','침구',290000,100,0,'g_bed1.jpg',sysdate);
+insert into Shop values ('4002','스위트와이드캠핑매트','침구',228000,100,0,'g_mat1.jpg',sysdate);
+insert into Shop values ('4003','트레일헤드캠핑침낭','침구',290000,100,0,'g_sleepbag1.jpg',sysdate);
+
+insert into Shop values ('5001','엔트리캠핑테이블','테이블의자',257000,100,0,'g_table1.jpg',sysdate);
+insert into Shop values ('5002','와일드롤캠핑테이블','테이블의자',1490000,100,0,'g_table2.jpg',sysdate);
+insert into Shop values ('5003','미드릴렉스캠핑체어','테이블의자',50000,100,0,'g_chair1.jpg',sysdate);
+insert into Shop values ('5004','팬벨라캠핑체어','테이블의자',65000,100,0,'g_chair2.jpg',sysdate);
+
+insert into Shop values ('6001','스텐캠핑코펠세트','코펠',100000,100,0,'g_stove1.jpg',sysdate);
+
+insert into Shop values ('7001','솔캠캠핑화로대','화로버너',215000,200,0,'g_fire1.jpg',sysdate);
+insert into Shop values ('7002','슬림투캠핑버너','화로버너',75000,200,0,'g_fire2.jpg',sysdate);
+
+insert into Shop values ('8001','쿨러워머캠핑전기냉온장고','박스',215000,100,0,'g_refribox1.jpg',sysdate);
+insert into Shop values ('8002','홀리캠핑아이스박스','박스',60000,100,0,'g_refribox2.jpg',sysdate);
+
+insert into Shop values ('9001','스위치캠핑멀티탭','전기',40000,100,0,'g_eleline1.jpg',sysdate);
+insert into Shop values ('9002','파워뱅크캠핑배터리','전기',800000,100,0,'g_battery.jpg',sysdate);
+
+
 select*from Shop;
 select * from Shop where pcode='0001' and pname='친환경세제';
 select * from Shop where pcode='0001';
@@ -203,8 +258,8 @@ INSERT INTO map (
     NULL,                           -- place_oldaddr
     NULL,                           -- place_pic
     NULL,                           -- place_description
-    '와우! 🎉 드디어 주말이에요!\n무엇을 할 계획인가요? 🎮\n즐거운 시간 보내세요! 😄',                           -- place_keypoint
-    '좋은 아침입니다! 🌅\n오늘도 멋진 하루 되세요.\n여러분의 꿈을 응원합니다! 🌟',       -- place_precaution
+    '와우! ? 드디어 주말이에요!\n무엇을 할 계획인가요? ?\n즐거운 시간 보내세요! ?',                           -- place_keypoint
+    '좋은 아침입니다! ?\n오늘도 멋진 하루 되세요.\n여러분의 꿈을 응원합니다! ?',       -- place_precaution
     'http://www.seoulcamp.co.kr',  -- place_bookingLink
     '02-502-3836',                 -- place_tel
     4.5,                           -- place_editorScore
@@ -236,10 +291,10 @@ INSERT INTO map (
     '구월동 201-32',               -- place_oldaddr
     NULL,                          -- place_pic
     NULL,                          -- place_description
-    '안녕하신가요? 🙌\n모두 건강히 잘 지내고 계시길 바랍니다.\n사랑과 행복이 가득한 하루 되세요! 💖
+    '안녕하신가요? ?\n모두 건강히 잘 지내고 계시길 바랍니다.\n사랑과 행복이 가득한 하루 되세요! ?
 
 ',                          -- place_keypoint
-    '오늘도 화이팅입니다! 💥\n모두 함께 힘내봅시다! 🏋️‍♀️\n성공적인 하루 보내세요! 💼',       -- place_precaution
+    '오늘도 화이팅입니다! ?\n모두 함께 힘내봅시다! ???♀?\n성공적인 하루 보내세요! ?',       -- place_precaution
     NULL,                          -- place_bookingLink
     '010-3999-5847',               -- place_tel
     4.0,                           -- place_editorScore
@@ -270,8 +325,8 @@ INSERT INTO map (
     '06805',                       -- place_postcode
     '원지동 207-1',                -- place_oldaddr
     NULL,                          -- place_pic
-    '드디어 봄이 왔어요! 🌷\n꽃들이 활짝 피고 있어요. 🌻\n모두들 꽃 구경 다녀오세요! 🌸',                          -- place_description
-    '지금은 휴식 시간이네요. 🛋️\n따뜻한 차 한 잔 어떠세요? ☕\n잠시 쉬어가는 것도 중요해요. 😌',            -- place_keypoint
+    '드디어 봄이 왔어요! ?\n꽃들이 활짝 피고 있어요. ?\n모두들 꽃 구경 다녀오세요! ?',                          -- place_description
+    '지금은 휴식 시간이네요. ??\n따뜻한 차 한 잔 어떠세요? ?\n잠시 쉬어가는 것도 중요해요. ?',            -- place_keypoint
     '입실 14시 / 퇴실 11시',       -- place_precaution
     'https://www.instagram.com/azurevalley_', -- place_bookingLink
     '0507-1387-3699',              -- place_tel
@@ -304,8 +359,8 @@ INSERT INTO map (
     NULL,                          -- place_oldaddr
     NULL,                          -- place_pic
     NULL,                          -- place_description
-    '새로운 도전을 시작해보세요! 🛫\n두려워하지 말고, 도전하세요! 💪\n응원합니다! 🎯',                          -- place_keypoint
-    '오늘도 고생 많으셨어요! 😌\n편안한 밤 보내세요. 🌙\n내일도 힘내서 파이팅! 💪',                          -- place_precaution
+    '새로운 도전을 시작해보세요! ?\n두려워하지 말고, 도전하세요! ?\n응원합니다! ?',                          -- place_keypoint
+    '오늘도 고생 많으셨어요! ?\n편안한 밤 보내세요. ?\n내일도 힘내서 파이팅! ?',                          -- place_precaution
     NULL,                          -- place_bookingLink
     NULL,                          -- place_tel
     3.8,                           -- place_editorScore
@@ -337,8 +392,8 @@ INSERT INTO map (
     '가평읍 이화리 43-4',           -- place_oldaddr
     NULL,                          -- place_pic
     NULL,                          -- place_description
-    '모두들 즐거운 저녁시간 되세요! 🍽️\n맛있는 저녁 식사하시고요. 🍲\n행복한 시간 보내세요! 😊',                          -- place_keypoint
-    '일주일이 벌써 끝났네요! 📅\n주말엔 푹 쉬세요. 🛌\n모두들 좋은 주말 되시길! 🌈',                          -- place_precaution
+    '모두들 즐거운 저녁시간 되세요! ??\n맛있는 저녁 식사하시고요. ?\n행복한 시간 보내세요! ?',                          -- place_keypoint
+    '일주일이 벌써 끝났네요! ?\n주말엔 푹 쉬세요. ?\n모두들 좋은 주말 되시길! ?',                          -- place_precaution
     'https://redskis.modoo.at',    -- place_bookingLink
     '010-6228-1328',               -- place_tel
     4.7,                           -- place_editorScore
@@ -370,7 +425,7 @@ INSERT INTO map (
     '용두동 118-12',               -- place_oldaddr
     NULL,                          -- place_pic
     NULL,                          -- place_description
-    '오늘은 특별한 날이에요! 🎂\n모두 함께 축하해요! 🎈\n행복 가득한 하루 되세요! 🎉',           -- place_keypoint
+    '오늘은 특별한 날이에요! ?\n모두 함께 축하해요! ?\n행복 가득한 하루 되세요! ?',           -- place_keypoint
     '사전 예약 필수',              -- place_precaution
     'http://www.paragliding.co.kr', -- place_bookingLink
     '02-929-9296',                 -- place_tel
@@ -403,7 +458,7 @@ INSERT INTO map (
     NULL,                          -- place_oldaddr
     NULL,                          -- place_pic
     NULL,                          -- place_description
-    '좋은 아침입니다! 🌞\n오늘도 밝게 웃으며 시작해봐요. 😊\n화이팅입니다! 💪',                 -- place_keypoint
+    '좋은 아침입니다! ?\n오늘도 밝게 웃으며 시작해봐요. ?\n화이팅입니다! ?',                 -- place_keypoint
     NULL,                 -- place_precaution
     NULL,                          -- place_bookingLink
     NULL,                          -- place_tel
@@ -531,5 +586,3 @@ drop table save purge;
 
 select * from save; 
 commit;
-
-
