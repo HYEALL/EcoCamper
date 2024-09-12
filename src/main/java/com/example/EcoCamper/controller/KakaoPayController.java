@@ -42,8 +42,8 @@ public class KakaoPayController {
 		dto.setBuyid(request.getParameter("userId"));
 		dto.setProductcode(request.getParameter("pcode"));
 		dto.setLogtime(new Date());
-		dto.setBcancel("N");
-		Buylist buylist = BuylistService.pay(dto); // 일단 저장하고 실패하면 cancel yes로
+		dto.setBcancel("Y");
+		Buylist buylist = BuylistService.pay(dto); // 일단 cacel y로 저장하고 성공하면 n으로
 		System.out.println(dto);
 		KakaoReadyResponse kakaoReadyResponse = kakaoPayService.kakaoPayReady(buylist);
 		// 결제 화면으로 리다이렉트할 URL

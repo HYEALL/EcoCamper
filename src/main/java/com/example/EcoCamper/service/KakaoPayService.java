@@ -31,7 +31,7 @@ public class KakaoPayService {
 	private final BuylistRepository buylistRepository;
 	static final String cid = "TC0ONETIME"; // 가맹점 테스트 코드
 
-	@Value("${kakao.admin_key}")
+	@Value("${kakao.admin_key}") // admin key에서 scret key로 변경
 	private String admin_Key;
 	@Value("${kakaopay.secret_key}")
 	private String secret_Key;
@@ -85,7 +85,8 @@ public class KakaoPayService {
 
 		KakaoApproveResponse approveResponse = restTemplate.postForObject(
 				"https://open-api.kakaopay.com/online/v1/payment/approve", requestEntity, KakaoApproveResponse.class);
-
+		buylist.setBcancel("N");
+		buylistRepository.save(buylist);
 		return approveResponse;
 	}
 
