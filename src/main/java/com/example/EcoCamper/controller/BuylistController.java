@@ -203,7 +203,6 @@ public class BuylistController {
 		int startNum = endNum - 4;
 		
 		List<OrderlistDTO> list=service_buy.orderList(userId);
-		
 		int total = (int) service_buy.getTotal(userId); // 총 글 수
 		int totalP = (total + 4) / 5; // 총 페이지
 
@@ -227,8 +226,8 @@ public class BuylistController {
 		
 		model.addAttribute("list", list);
 		model.addAttribute("userId",userId);
-		
-		return "/shop/shopOrderList";
+		model.addAttribute("req", "/shop/shopOrderList");
+		return "/index";
 	}
 	
 	@PostMapping("/shop/shopOrderListDelete")

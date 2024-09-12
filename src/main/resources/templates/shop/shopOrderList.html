@@ -116,7 +116,7 @@ button:hover {
 				<td th:text="${orderdto.productprice }"></td>
 				<td th:text="${orderdto.logtime }"></td>
 				<td th:text="${orderdto.receivename }"></td>
-				<td th:text="${orderdto.baddress}"></td>
+				<td th:text="${orderdto.baddr1} + ' ' +${orderdto.baddr2}"></td>
 			</tr>
 		</tbody>
 	</table>

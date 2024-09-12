@@ -39,7 +39,7 @@ public class OrderlistDTO {
 		this.receivename = receivename;
 		this.bzipcode = bzipcode;
 		this.baddr1 = baddr1;
-		this.baddr1 = baddr2;
+		this.baddr2 = baddr2;
 		this.bphone = bphone;
 		this.bpayment = bpayment;
 		this.bcancel = bcancel;

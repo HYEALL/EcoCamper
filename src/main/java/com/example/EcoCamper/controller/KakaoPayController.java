@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.EcoCamper.dto.BuylistDTO;
 import com.example.EcoCamper.dto.KakaoApproveResponse;
@@ -46,9 +47,9 @@ public class KakaoPayController {
 		System.out.println(dto);
 		KakaoReadyResponse kakaoReadyResponse = kakaoPayService.kakaoPayReady(buylist);
 		// 결제 화면으로 리다이렉트할 URL
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setLocation(URI.create(kakaoReadyResponse.getNext_redirect_pc_url()));
-	    
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(URI.create(kakaoReadyResponse.getNext_redirect_pc_url()));
+
 		return new ResponseEntity<>(headers, HttpStatus.FOUND);
 	}
 
@@ -56,14 +57,19 @@ public class KakaoPayController {
 	 * 결제 성공
 	 */
 	@GetMapping("/success")
-	public ResponseEntity afterPayRequest(@RequestParam("pg_token") String pgToken, @RequestParam("partner_order_id") String partnerOrderId, Model model) {
-		
+	public ModelAndView afterPayRequest(@RequestParam("pg_token") String pgToken,
+			@RequestParam("partner_order_id") String partnerOrderId, Model model) {
+
 		KakaoApproveResponse kakaoApprove = kakaoPayService.approveResponse(pgToken, partnerOrderId);
-		model.addAttribute("result", true);
-		return new ResponseEntity<>(kakaoApprove, HttpStatus.OK);
-		//return ResponseEntity.status(HttpStatus.FOUND)
-          //      .location(URI.create("/shop/shoppay"))
-            //    .build();
+		//model.addAttribute("result", true);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/shop/shoppay");
+		//modelAndView.addObject("kakaoApprove", kakaoApprove);
+		modelAndView.addObject("result", true);
+		return modelAndView;
+		// return ResponseEntity.status(HttpStatus.FOUND)
+		// .location(URI.create("/shop/shoppay"))
+		// .build();
 	}
 
 	/**
@@ -81,15 +87,14 @@ public class KakaoPayController {
 	public ResponseEntity<String> fail() {
 		return new ResponseEntity<>("Payment failed. Please try again.", HttpStatus.BAD_REQUEST);
 	}
-/*
-	
-	 // 환불
-	
-	@PostMapping("/refund")
-	public ResponseEntity refund() {
-
-		KakaoCancelResponse kakaoCancelResponse = kakaoPayService.kakaoCancel();
-
-		return new ResponseEntity<>(kakaoCancelResponse, HttpStatus.OK);
-	}*/
+	/*
+	 * 
+	 * // 환불
+	 * 
+	 * @PostMapping("/refund") public ResponseEntity refund() {
+	 * 
+	 * KakaoCancelResponse kakaoCancelResponse = kakaoPayService.kakaoCancel();
+	 * 
+	 * return new ResponseEntity<>(kakaoCancelResponse, HttpStatus.OK); }
+	 */
 }
