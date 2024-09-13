@@ -14,7 +14,7 @@ public class OrderlistDTO {
 	private String  buyid;
 	private String  productcode;
 	private int		productqty;
-	private int		productprice ;
+	private int		productprice;
 	private String  receivename;
 	private String bzipcode;
 	private String  baddr1;
@@ -25,11 +25,11 @@ public class OrderlistDTO {
 	@Temporal(TemporalType.DATE)
 	private Date    logtime;
 	private String pname;
-	
+	private String pimg;
 	
 	public OrderlistDTO(int buyseq, String buyid, String productcode, int productqty, int productprice,
 			String receivename, String bzipcode, String baddr1, String baddr2, String bphone, String bpayment, String bcancel, Date logtime,
-			String pname) {
+			String pname, String pimg) {
 		super();
 		this.buyseq = buyseq;
 		this.buyid = buyid;
@@ -45,6 +45,7 @@ public class OrderlistDTO {
 		this.bcancel = bcancel;
 		this.logtime = logtime;
 		this.pname = pname;
+		this.pimg = pimg;
 	}
 	
 	

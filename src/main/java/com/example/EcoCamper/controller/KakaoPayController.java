@@ -156,7 +156,7 @@ public class KakaoPayController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/shop/shoppay");
 		//modelAndView.addObject("kakaoApprove", kakaoApprove);
-		modelAndView.addObject("result", true);
+		modelAndView.addObject("result", "pay");
 		return modelAndView;
 		// return ResponseEntity.status(HttpStatus.FOUND)
 		// .location(URI.create("/shop/shoppay"))

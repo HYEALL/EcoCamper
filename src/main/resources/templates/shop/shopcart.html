@@ -78,7 +78,7 @@ button:hover {
 		<table>
 			<thead>
 				<tr>
-					<th>상품코드</th>
+					<th colspan="2">상품코드</th>
 					<th>상품명</th>
 					<th>수량</th>
 					<th>금액</th>
@@ -152,6 +152,8 @@ button:hover {
                     totalAmount += itemTotal;
 
                     row.innerHTML = `
+                    	
+                    	<td><a href="/shop/shopview?pcode=${item.code}"> <img src="/images/${item.img}" alt="상품 이미지" style="max-width: 100px;"></a></td>
                         <td>${item.code}</td>
                         <td>${item.name}</td>
                         <td>${item.quantity}</td>

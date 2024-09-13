@@ -94,7 +94,7 @@ button:hover {
 		<thead>
 			<tr>
 				<th>선택</th>
-				<th>주문번호</th>
+				<th colspan="2">주문번호</th>
 				<th>상품명</th>
 				<th>수량</th>
 				<th>총액</th>
@@ -110,6 +110,7 @@ button:hover {
 									 th:data-pname="${orderdto.pname}" 
 									 th:data-productqty="${orderdto.productqty}" 
 									 class="order-checkbox"></td>
+				<td><a th:href="@{/shop/shopview(pcode=${orderdto.productcode})}"> <img th:src="@{/images/}+${orderdto.pimg}" alt="상품 이미지" style="max-width: 100px;"></a></td>
 				<td th:text="${orderdto.buyseq }"></td>
 				<td th:text="${orderdto.pname }"></td>
 				<td th:text="${orderdto.productqty }"></td>
