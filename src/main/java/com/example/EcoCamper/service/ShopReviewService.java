@@ -31,4 +31,11 @@ public class ShopReviewService {
 		return dao.shopReviewDelete(shopreviewseq);
 	}
 	
+	public List<ShopReview> myReview(String userId ,int startNum,int endNum) {
+		return dao.myReview(userId, startNum, endNum);
+	}
+	
+	public int count(String userId){
+		return dao.count(userId);
+	}
 }

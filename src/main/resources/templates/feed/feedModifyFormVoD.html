@@ -10,10 +10,9 @@ function addVideo(event) {
     if (videoIcon) {
         videoIcon.style.display = 'none';
     }
-    
-    var existingVideo = videoList.querySelector('video');
 
-    // 비디오가 이미 있는 경우, 기존 비디오를 제거
+    // 기존 비디오가 있는 경우 제거
+    var existingVideo = videoList.querySelector('video');
     if (existingVideo) {
         videoList.removeChild(existingVideo);
     }
@@ -35,26 +34,84 @@ function addVideo(event) {
         videoCountElement.textContent = '0'; // 파일이 없으면 0으로 설정
     }
 }
-        // 이모지 클릭 시 텍스트에 추가
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
-                emoji.addEventListener('click', function() {
-                    const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
-                    const textArea = document.getElementById('text-input');
-                    const cursorPos = textArea.selectionStart;
-                    const textBefore = textArea.value.substring(0, cursorPos);
-                    const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
-                    textArea.value = textBefore + emojiValue + textAfter;
-                    textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
-                    textArea.focus();
-                });
-            });
-        });
 
-        function resizeTextarea(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight) + 'px';
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+        emoji.addEventListener('click', function() {
+            const emojiValue = this.textContent;
+            const textArea = document.getElementById('text-input');
+            const cursorPos = textArea.selectionStart;
+            const textBefore = textArea.value.substring(0, cursorPos);
+            const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
+            textArea.value = textBefore + emojiValue + textAfter;
+            textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+            textArea.focus();
+        });
+    });
+
+    // 페이지 로드 시 기존 태그 로드
+    loadExistingTags();
+});
+
+function resizeTextarea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = (textarea.scrollHeight) + 'px';
+}
+
+function loadExistingTags() {
+    const existingTags = document.getElementById('existing-tags').value.split(',').filter(tag => tag.trim() !== '');
+    const hashtagContainer = document.getElementById('hashtag-container');
+
+    existingTags.forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.dataset.tag = tag.trim();
+        tagElement.innerHTML = `${tag.trim()} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+        hashtagContainer.appendChild(tagElement);
+    });
+}
+
+function addHashtag() {
+    const tagInput = document.getElementById('tag-input');
+    const hashtagContainer = document.getElementById('hashtag-container');
+    const tagsInput = document.getElementById('tags-input');
+    let hashtag = tagInput.value.trim();
+
+    if (!tagsInput) {
+        console.error('tags-input 요소가 존재하지 않습니다.');
+        return;
+    }
+
+    if (hashtag && !hashtag.startsWith('#')) {
+        hashtag = `#${hashtag}`;
+    }
+
+    const existingTags = tagsInput.value.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag !== '');
+
+    if (existingTags.includes(hashtag.toLowerCase())) {
+        alert('이미 존재하는 해시태그입니다.');
+    } else {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.dataset.tag = hashtag;
+        tagElement.innerHTML = `${hashtag} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+        hashtagContainer.appendChild(tagElement);
+        tagInput.value = '';
+
+        tagsInput.value = existingTags.concat(hashtag.toLowerCase()).join(',');
+    }
+}
+
+function removeHashtag(button) {
+    const tagElement = button.parentElement;
+    const hashtag = tagElement.dataset.tag;
+    tagElement.remove();
+
+    const tagsInput = document.getElementById('tags-input');
+    const existingTags = tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    const updatedTags = existingTags.filter(tag => tag !== hashtag.toLowerCase());
+    tagsInput.value = updatedTags.join(',');
+}
     </script>
 
 <style>
@@ -312,10 +369,38 @@ hr {
     max-height: 100px;
     object-fit: cover;
 }
+
+        
+               .remove-tag-button {
+	background: transparent;
+	border: none;
+	color: #f44336;
+	font-size: 16px;
+	cursor: pointer;
+	margin-left: 10px;
+}
+
+.remove-tag-button:hover {
+	color: #d32f2f;
+}
+
+
+.tag {
+    background: #e0f7fa; /* 배경색 유지 */
+    border-radius: 4px;
+    padding: 5px;
+    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    color: #FF6F61; /* 주황색 */
+    font-weight: bold; /* 글씨를 두껍게 */
+    font-size: 16px; /* 글씨 크기 조정 */
+}
 </style>
 <body>
 <form action="feedModifyVoD" name="form1" method="post" enctype="multipart/form-data">
-
+<input type="hidden" id="existing-tags" th:value="${tagsString}">
+<input type="hidden" id="tags-input" name="tags">
 <div class="form-container">
 <h2>동영상 편집</h2>
 <div style="color: red">※ 기존 동영상도 재등록 해야합니다</div>
@@ -403,10 +488,14 @@ hr {
 
     <div align="center">
         <div class="part">
-            <div id="label">태그</div>
-            <div>
-                <input type="text" name="feed_tag" th:value="${feed.feed_tag}">
-            </div>
+            <div id="label">해시태그</div>
+					<div id="hashtag-container">
+        			<!-- 해시태그가 동적으로 추가될 부분 -->
+   					 </div>
+    					<div>
+       						 <input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
+    						 <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
+    					</div>
         </div>
 
         <div class="part">

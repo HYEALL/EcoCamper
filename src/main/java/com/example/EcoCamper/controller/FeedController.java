@@ -260,22 +260,34 @@ public class FeedController {
 
 	@GetMapping("feed/feedModifyFormPh")
 	public String boardModifyFormPh(Model model, @RequestParam("seq") int seq) {
+	    Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
 
-		Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
-		model.addAttribute("feed", feed);
-		model.addAttribute("seq", seq);
-		model.addAttribute("req", "/feed/feedModifyFormPh");
-		return "/index"; // JSP 파일의 경로
+	    // 태그 리스트에서 tag_name만 추출하여 문자열로 변환
+	    String tagsString = feed.getTags().stream()
+	        .map(Tag::getTag_name) // Tag 객체에서 tag_name 추출
+	        .collect(Collectors.joining(",")); // 콤마로 구분된 문자열로 변환
+
+	    model.addAttribute("feed", feed);
+	    model.addAttribute("tagsString", tagsString); // 변환된 문자열을 모델에 추가
+	    model.addAttribute("seq", seq);
+	    model.addAttribute("req", "/feed/feedModifyFormPh");
+	    return "/index"; // JSP 파일의 경로
 	}
 
 	@GetMapping("/feed/feedModifyFormVoD")
 	public String boardModifyFormVoD(Model model, @RequestParam("seq") int seq) {
 
 		// 한줄 데이터 불러오기
-		Feed feed = service.feedView(seq);
+		Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
+	    
+	    // 태그 리스트에서 tag_name만 추출하여 문자열로 변환
+	    String tagsString = feed.getTags().stream()
+	        .map(Tag::getTag_name) // Tag 객체에서 tag_name 추출
+	        .collect(Collectors.joining(",")); // 콤마로 구분된 문자열로 변환
 
-		model.addAttribute("feed", feed);
-		model.addAttribute("seq", seq);
+	    model.addAttribute("feed", feed);
+	    model.addAttribute("tagsString", tagsString); // 변환된 문자열을 모델에 추가
+	    model.addAttribute("seq", seq);
 		model.addAttribute("req", "/feed/feedModifyFormVoD");
 
 		return "/index";
@@ -283,7 +295,7 @@ public class FeedController {
 
 	@PostMapping("/feed/feedModifyPh")
 	public String feedModifyFormPh(FeedDTO dto, Model model, HttpServletRequest request,
-			@RequestParam("feed_file1") List<MultipartFile> uploadFiles) {
+			@RequestParam("feed_file1") List<MultipartFile> uploadFiles, @RequestParam("tags") String tags) {
 		File uploadDir = new File(uploadpath);
 		if (!uploadDir.exists()) {
 			uploadDir.mkdirs();
@@ -325,6 +337,15 @@ public class FeedController {
 		dto.setFeed_file(String.join(",", fileNames)); // 파일 이름들을 콤마로 구분하여 설정
 		dto.setLogtime(new Date());
 		dto.setFeed_type("img");
+		// 태그 문자열을 List<String>으로 변환
+		List<String> tagList = new ArrayList<>();
+		if (tags != null && !tags.trim().isEmpty()) {
+		    String[] tagArray = tags.split(",");
+		    for (String tag : tagArray) {
+		        tagList.add(tag.trim()); // 각 태그에 대한 공백 제거 후 추가
+		    }
+		}
+		dto.setTags(tagList); // DTO에 태그 리스트 설정
 
 		boolean result = service.feedUpdate(dto, seq);
 		model.addAttribute("result", result);
@@ -335,7 +356,7 @@ public class FeedController {
 
 	@PostMapping("/feed/feedModifyVoD")
 	public String feedModifyVoD(FeedDTO dto, Model model, HttpServletRequest request,
-			@RequestParam("feed_file1") MultipartFile uploadFile) {
+			@RequestParam("feed_file1") MultipartFile uploadFile,@RequestParam("tags") String tags) {
 		// 데이터 처리
 		System.out.println("dto = " + dto);
 
@@ -370,6 +391,16 @@ public class FeedController {
 		String userId = tokenProvider.validateAndGetUserId(token);
 		int seq = Integer.parseInt(request.getParameter("seq"));
 		dto.setId(userId);
+	    // 태그 문자열을 List<String>으로 변환
+	    List<String> tagList = new ArrayList<>();
+	    if (tags != null && !tags.trim().isEmpty()) {
+	        String[] tagArray = tags.split(",");
+	        for (String tag : tagArray) {
+	            tagList.add(tag.trim()); // 각 태그에 대한 공백 제거 후 추가
+	        }
+	    }
+	    dto.setTags(tagList); // DTO에 태그 리스트 설정
+
 
 		// DB 저장
 		boolean result = service.feedUpdate(dto, seq);

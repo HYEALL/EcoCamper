@@ -33,4 +33,13 @@ public class ShopReviewDAO {
 		}
 		return !shopReviewRepository.existsById(shopreviewseq);
 	}
+	
+	public List<ShopReview> myReview(String userId,int startNum,int endNum) {
+		return shopReviewRepository.findbyStartNumAndEndNumWithUserId(userId, startNum, endNum);
+	}
+	
+	public int count(String userId){
+		return shopReviewRepository.countByUserId(userId);
+	}
+	
 }

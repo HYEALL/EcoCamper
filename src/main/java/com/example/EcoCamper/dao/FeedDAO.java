@@ -1,7 +1,10 @@
 package com.example.EcoCamper.dao;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,24 +120,37 @@ public class FeedDAO {
 			feed.setFeed_subject(dto.getFeed_subject());
 			feed.setFeed_content(dto.getFeed_content());
 			feed.setPlace(dto.getPlace());
-			List<String> tagNames = feed.getTags().stream()
-	                .map(Tag::getTag_name)
-	                .collect(Collectors.toList());
-	            dto.setTags(tagNames); // 태그 이름 리스트로 설정
 			feed.setGoods(dto.getGoods());
 			feed.setFeed_file(dto.getFeed_file());
 			feed.setFeed_type(dto.getFeed_type());
 			feed.setLogtime(dto.getLogtime());
             repository.save(feed);
-            
-            result = true;
-            
-        	return result;	
-		} else {
-			return result;
-		}
+			// 기존 태그 제거
+	        
+
+            Set<Tag> existingTags = new HashSet<>(feed.getTags()); // 기존 태그를 유지하기 위한 Set
+            for (String tagName : dto.getTags()) {
+                Tag tag = tagRepository.findByTagName(tagName);
+                if (tag == null) {
+                    tag = new Tag();
+                    tag.setTag_name(tagName);
+                    tag = tagRepository.save(tag); // 새 태그 저장
+                }
+                existingTags.add(tag); // 새로운 태그 추가
+            }
+            feed.setTags(new ArrayList<>(existingTags)); // 태그 설정
+
+            // 피드 저장
+            repository.save(feed);
+
+	       
+	        result = true;
+	    }
+
+	    return result;
 	}
-	
+
+            
 	 public List<Feed> getFeedsById(String id) {
 	        // 로그인한 사용자의 피드만 가져오는 DAO 또는 Repository 호출
 	        return repository.findByIdOrderByLogtimeDesc(id);

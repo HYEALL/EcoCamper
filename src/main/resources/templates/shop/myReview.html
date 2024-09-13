@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<section class="product-reviews">
+	<div class="reviews-header" >
+				<h3>상품 리뷰</h3>
+	</div>
+	
+	
+	
+	<th:block th:if="${!list.isEmpty()}">
+				<div class="review_Text">
+					<table class="review_list" th:each="reviewdto : ${list}"
+						style="width: 100%">
+						<tr class="review_item" th:data-seq="${reviewdto.shopreviewseq}"
+							th:data-id="${reviewdto.shopreviewid}">
+
+							<td class="review_author" th:text="${reviewdto.shopreviewid}"></td>
+							<td class="" th:text="${reviewdto.shopreviewpcode}" style="width: 70px;"></td>
+							<td class="review_rating"><th:block
+									th:each="i : ${#numbers.sequence(1, reviewdto.rating)}">
+									<span class="star on" th:value="${i}"></span>
+								</th:block> <th:block th:if="${reviewdto.rating < 5}">
+									<th:block
+										th:each="i : ${#numbers.sequence(reviewdto.rating+1, 5)}">
+										<span class="star" th:value="${i}"></span>
+									</th:block>
+								</th:block></td>
+							
+							<td class="review_content"
+								th:text="${reviewdto.shopreviewcontent}"
+								style="min-width: 100px;"></td>
+							<td class="review_date" th:text="${reviewdto.logtime}"></td>
+							<td class="review_delete"><button
+									th:onclick="deleteReview([[${reviewdto.shopreviewseq}]], [[${reviewdto.shopreviewid}]], 
+																[[${reviewdto.shopreviewpcode}]])" 
+									style="margin-left: 10%; width: 100px; font-size: 15px;">리뷰삭제</button></td>
+						</tr>
+					</table>
+
+					<br>
+					<div align="center">
+						<p>
+							<th:block th:if="${ startPage > 3}">
+								
+								[<a	th:href="@{/shop/myReview(pg=${ startPage-1 })}"
+									class="paging">이전</a>]
+						</th:block>
+							<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
+								<th:block th:if="${ pg==num }">
+								
+								
+									[<a th:href="@{/shop/myReview(pg=${ num })}"
+										class="currentPaging">[[${ num }]]</a>]
+								</th:block>
+								<th:block th:if="${ pg!=num }">
+								
+								
+									[<a th:href="@{/shop/myReview(pg=${ num })}"
+										class="paging">[[${ num }]]</a>] 
+								</th:block>
+							</th:block>
+							<th:block th:if="${endPage < totalP}">
+							
+							
+							[<a th:href="@{/shop/myReview(pg=${ endPage+1 })}"
+									class="paging">다음</a>]
+						</th:block>
+
+						</p>
+					</div>
+				</div>
+			</th:block>
+			<th:block th:if="${list.isEmpty()}">
+				<p>작성하신 리뷰가 없습니다.</p>
+			</th:block>
+</section>
+
+<style>
+button {
+	padding: 8px 13px;
+	background-color: #3399ff;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+button:hover {
+	background-color: #004494;
+}
+
+.product-reviews {
+	border-top: 1px solid #ddd;
+	padding-top: 20px;
+	height: 35%;
+}
+.reviews-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px; /* 하단 간격 조정 */
+}
+
+
+.review_list {
+	border-bottom: 1px solid #ddd;
+	padding: 10px 0;
+	border-collapse: collapse;
+}
+
+.review_item {
+	border: 1px;
+	padding: 5px;
+	transition: background-color 0.3s, border-radius 0.3s;
+	/* 부드러운 효과를 위한 트랜지션 */
+}
+
+.review_item td {
+	border: 1px;
+	padding: 5px;
+	transition: background-color 0.3s, border-radius 0.3s;
+	/* 부드러운 효과를 위한 트랜지션 */
+}
+
+.review_item:hover {
+	background-color: #f0f0f0; /* 마우스 오버 시 배경 색상 */
+	border-radius: 8px; /* 모서리 둥글게 설정 */
+	background-image: url('../images/wastebasket.png');
+	background-repeat: no-repeat; /* 이미지 반복 방지 */
+	background-position: calc(100% - 3.5px) center; /* 이미지 위치 */
+	background-size: 28px; /* 이미지 크기 */
+	opacity: 0.65; /* 흐릿하게 보이도록 투명도 조절 */
+}
+
+.review_author {
+	width: 120px; /* 작성자 칼럼의 너비 설정 */
+	text-align: center;
+	white-space: nowrap;
+}
+
+.review_content {
+	width: auto; /* 내용 칼럼의 너비 설정 */
+}
+
+.review_date {
+	width: 20px; /* 날짜 칼럼의 너비 설정 */
+	font-size: 14px;
+	white-space: nowrap; /*내용이 한줄 넘쳐도 한줄로 고정*/
+}
+
+.review_delete {
+	width: 13%;
+}
+
+.currentPaging {
+	color: red;
+	text-decoration: underline;
+}
+
+.paging {
+	color: blue;
+	text-decoration: none;
+}
+
+#subjectA:link {
+	color: black;
+	text-decoration: none;
+}
+
+#subjectA:visited {
+	color: black;
+	text-decoration: none;
+}
+
+#subjectA:active {
+	color: black;
+	text-decoration: none;
+}
+
+#subjectA:hover {
+	color: green;
+	text-decoration: underline;
+}
+
+.review_rating {
+	width: 100px;
+	white-space: nowrap;
+}
+
+.star_rating {
+	width: 100%;
+	box-sizing: border-box;
+	margin-bottom: 3px;
+}
+
+.star_rating .star {
+	width: 30px;
+	height: 30px;
+	margin-right: 8px;
+	display: inline-block;
+	background-image: url("../images/non-star.png");
+	background-size: 100%;
+	box-sizing: border-box;
+}
+
+.star_rating .star.on {
+	width: 30px;
+	height: 30px;
+	margin-right: .8px;
+	display: inline-block;
+	background-image: url("../images/star.png");
+	background-size: 100%;
+	box-sizing: border-box;
+	background-size: 100%;
+}
+
+.review_item .star {
+	width: 13px;
+	height: 13px;
+	margin-right: 1px;
+	display: inline-block;
+	background-image: url("../images/non-star.png");
+	background-size: 100%;
+	box-sizing: border-box;
+}
+
+.review_item .star.on {
+	width: 13px;
+	height: 13px;
+	margin-right: 1px;
+	display: inline-block;
+	background-image: url("../images/star.png");
+	background-size: 100%;
+	box-sizing: border-box;
+	background-size: 100%;
+}
+
+</style>
+
+<script type="text/javascript">
+
+function deleteReview(reviewseq, reviewid, reviewcode) {
+	if("[[${userId}]]" != "" ){
+		if("[[${userId}]]"== reviewid){
+			if(confirm("작성하신 리뷰를 정말 삭제하시겠습니까?")){
+				location.href="/shop/shopReviewDelete?shopreviewseq="+reviewseq+"&pcode="+reviewcode					
+			}
+		}else{
+			alert("리뷰 작성자만 삭제가 가능합니다.")
+		}
+		
+		
+		
+	}else {
+		alert("로그인 후 리뷰 삭제가 가능합니다.")
+		if(confirm("로그인 창으로 이동하시겠습니까?"))	location.href="/loginForm"
+		    
+	}
+	
+}
+
+</script>
+</body>
+</html>

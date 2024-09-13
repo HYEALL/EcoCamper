@@ -1,6 +1,7 @@
 package com.example.EcoCamper.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,7 +60,10 @@ public class ShopReviewController {
    @GetMapping("/shop/shopReviewDelete")
    public String shopReviewDelete(HttpServletRequest request,Model model) {
       int shopreviewseq=Integer.parseInt(request.getParameter("shopreviewseq"));
+     
       String pcode=request.getParameter("pcode");
+      String pcode1=request.getParameter("reviewcode");
+      
       
       //System.out.println(pcode);
       boolean result=service_re.shopReviewDelete(shopreviewseq);
@@ -68,9 +72,55 @@ public class ShopReviewController {
       model.addAttribute("result",result);
       model.addAttribute("pcode",pcode);
       
+      if(pcode==null) {
+    	  model.addAttribute("pcode1",pcode1);
+      }
+      
       return "/shop/shopReviewDelete";
    }
    
-   
+   @GetMapping("/shop/myReview")
+   public String myReview(HttpServletRequest request,Model model) {
+	   String token = tokenProvider.resolveTokenFromCookie(request);
+		//System.out.println("token : " + token);
+		String userId = null;
+		if(token != null) {
+			userId = tokenProvider.validateAndGetUserId(token);
+		}
+		
+		int pg = 1;
+
+		if (request.getParameter("pg") != null && !request.getParameter("pg").equals("")) {
+			pg = Integer.parseInt(request.getParameter("pg"));
+		}
+		
+		int endNum = pg * 12;
+		int startNum = endNum - 11;
+		
+		List<ShopReview> list=service_re.myReview( userId, startNum, endNum);
+		
+		int total=service_re.count(userId);
+		
+		int totalP = (total + 11) / 12; // 총 페이지
+
+		int startPage = (pg - 1) / 3 * 3 + 1;
+		int endPage = startPage + 2;
+		if (endPage > totalP)
+			endPage = totalP;
+		
+		//System.out.println(total);
+		//System.out.println(list);
+		
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("pg", pg);
+		model.addAttribute("totalP", totalP);
+		model.addAttribute("list", list);
+		
+		model.addAttribute("userId",userId);
+		model.addAttribute("req", "/shop/myReview");
+	
+		return "/index";   
+}
    
 }

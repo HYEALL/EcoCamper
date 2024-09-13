@@ -2,6 +2,7 @@ package com.example.EcoCamper.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,6 +30,7 @@ public class SecurityConfig {
 	            .requestMatchers("/user/logout", "/user/edit", "/search").hasAnyRole("USER", "ADMIN")
 	            .requestMatchers("/admin/**").hasRole("ADMIN")
 	            .anyRequest().authenticated()
+
 	        )
 	        .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 	    return http.build();
