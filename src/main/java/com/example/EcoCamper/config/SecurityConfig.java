@@ -22,18 +22,22 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	    http.csrf(csrf -> csrf.disable())
-	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/login/**", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index", "/myPage/**", "/menu", "/shop/**", "/feed/**", "/add/", "/remove/**", "/mail/**", "/confirm/**", "/map"
-	            		,"/js/**", "/css/**", "/images/**",  "/storage/**", "/vendor/**", "/payment/**" ).permitAll()
-	            .requestMatchers("/user/logout", "/user/edit", "/search").hasAnyRole("USER", "ADMIN")
-	            .requestMatchers("/admin/**").hasRole("ADMIN")
-	            .anyRequest().authenticated()
+		http.csrf(csrf -> csrf.disable())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/login/**", "/loginForm", "/join", "/joinForm", "/user/checkId", "/index",
+								"/myPage/**", "/menu", "/shop/**", "/feed/**", "/add/", "/remove/**", "/mail/**",
+								"/confirm/**", "/map", "/js/**", "/css/**", "/images/**", "/storage/**", "/vendor/**",
+								"/payment/**")
+						.permitAll().requestMatchers("/user/logout", "/user/edit", "/search")
+						.hasAnyRole("USER", "ADMIN").requestMatchers("/admin/**").hasRole("ADMIN").anyRequest()
+						.authenticated())
+				.formLogin(form -> form.usernameParameter("loginId").passwordParameter("password") // 나머지 페이지 authentication 함. 나머지 페이지 요청시 로그인 요청
+						.loginPage("/loginForm").defaultSuccessUrl("/index")
+						.failureUrl("/index"))
+				.addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 
-	        )
-	        .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-	    return http.build();
+		return http.build();
 	}
 
 }
