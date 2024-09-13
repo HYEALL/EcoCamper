@@ -3,10 +3,13 @@ package com.example.EcoCamper.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.example.EcoCamper.dao.MapDAO;
+import com.example.EcoCamper.dao.PlacefilterSpecification;
 import com.example.EcoCamper.entity.Map;
+import com.example.EcoCamper.repository.MapRepository;
 
 @Service
 public class MapService {
@@ -14,15 +17,26 @@ public class MapService {
 	@Autowired
 	MapDAO dao;
 	
-	public List<Map> findPlacesByFilters(
-            String keyword,
-            List<String> regions,
-            List<String> categories,
-            List<String> facilities,
-            List<String> environments,
-            List<String> seasons) {
+	@Autowired
+	MapRepository mapRepository;
+	
+	@Autowired
+	PlacefilterSpecification placefilterSpecification;
+	
+	// 필터 조건에 맞는 장소 리스트를 반환하는 메서드
+    public List<Map> filterPlaces(
+            List<String> regionCodes,
+            List<String> categoryCodes,
+            List<String> facilityCodes,
+            List<String> environmentCodes,
+            List<String> seasonCodes,
+            String keywordCode) {
 
-        // MapDAO에서 동적 쿼리를 실행하여 필터된 데이터 가져오기
-        return dao.findPlacesByFilters(keyword, regions, categories, facilities, environments, seasons);
+        // Specification을 사용해 필터 조건을 동적으로 적용
+        Specification<Map> spec = PlacefilterSpecification.filterByRegionCategoryFacilityEnvironmentSeasonKeyword(
+                regionCodes, categoryCodes, facilityCodes, environmentCodes, seasonCodes, keywordCode);
+
+        // 필터된 장소 리스트를 반환
+        return mapRepository.findAll(spec);
     }
 }

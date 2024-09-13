@@ -116,67 +116,47 @@ function createMarkerImage(category) {
 
 // 검색 & 필터 기능
 function searchPlaces() {
-	// 검색어 값 (검색어가 없을 경우 빈 문자열로 처리)
-	const keyword = document.getElementById('keyword').value || '';
+    const keyword = document.getElementById('keyword').value || '';
 
-	// 선택된 지역 필터 값 (없으면 null로 설정)
-	let selectedRegions = Array.from(document.querySelectorAll('input[name="region"]:checked')).map(cb => cb.value);
-	if (selectedRegions.length === 0) {
-		selectedRegions = null;
-	}
+    let regions = Array.from(document.querySelectorAll('input[name="region"]:checked')).map(cb => cb.value);
+    if (regions.length === 0) regions = [];
 
-	// 선택된 공간유형 필터 값 (없으면 null로 설정)
-	let selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
-	if (selectedCategories.length === 0) {
-		selectedCategories = null;
-	}
+    let categories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value); 
+    if (categories.length === 0) categories = [];
 
-	// 선택된 편의시설 필터 값 (없으면 null로 설정)
-	let selectedFacilities = Array.from(document.querySelectorAll('input[name="facility"]:checked')).map(cb => cb.value);
-	if (selectedFacilities.length === 0) {
-		selectedFacilities = null;
-	}
+    let facilities = Array.from(document.querySelectorAll('input[name="facilities"]:checked')).map(cb => cb.value);
+    if (facilities.length === 0) facilities = [];
 
-	// 선택된 주변환경 필터 값 (없으면 null로 설정)
-	let selectedEnvironments = Array.from(document.querySelectorAll('input[name="environment"]:checked')).map(cb => cb.value);
-	if (selectedEnvironments.length === 0) {
-		selectedEnvironments = null;
-	}
+    let environments = Array.from(document.querySelectorAll('input[name="environment"]:checked')).map(cb => cb.value);
+    if (environments.length === 0) environments = [];
 
-	// 선택된 계절 필터 값 (없으면 null로 설정)
-	let selectedSeasons = Array.from(document.querySelectorAll('input[name="season"]:checked')).map(cb => cb.value);
-	if (selectedSeasons.length === 0) {
-		selectedSeasons = null;
-	}
+    let seasons = Array.from(document.querySelectorAll('input[name="season"]:checked')).map(cb => cb.value);
+    if (seasons.length === 0) seasons = [];
 
-	// 필터와 검색어 데이터를 JSON으로 서버에 전달
-	const searchData = {
-		keyword: keyword,
-		regions: selectedRegions,
-		categories: selectedCategories,
-		facilities: selectedFacilities,
-		environments: selectedEnvironments,
-		seasons: selectedSeasons
-	};
-	console.log('필터와 검색어 데이터를 JSON으로 서버에 전달', searchData);
+    const searchData = {
+        keyword: keyword,
+        regions: regions,
+        categories: categories, 
+        facilities: facilities,
+        environments: environments,
+        seasons: seasons
+    };
+	
+	console.log(searchData);
 
-	// 서버로 POST 요청
-	fetch('/search', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(searchData)
-	})
-		.then(response => response.json())
-		.then(data => {
-			console.log("서버에서 받아온 데이터:", data);
-
-			// 결과 처리 (검색 목록과 마커를 표출)
-			displayResults(data);
-		})
-		.catch(error => console.error('Fetch  Error:', error));
+    fetch('/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(searchData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayResults(data);
+    })
+    .catch(error => console.error('Fetch Error:', error));
 }
+
+
 
 // 검색 결과 목록과 마커를 표출하는 함수
 function displayResults(data) {
