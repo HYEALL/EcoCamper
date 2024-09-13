@@ -48,6 +48,19 @@
 
 		}
 	}
+	function searchMenu() {
+		//a href = "/shop/shopAllList?search=";
+		const searchTerm = document.getElementById('searchMenu').value.trim();
+		let url = '/shop/shopAllList';
+
+		if (searchTerm) {
+			url += `?search=${encodeURIComponent(searchTerm)}`;
+		}
+
+		window.location.href = url;
+		filterProducts()
+
+	}
 </script>
 <body class="index-page">
 
@@ -70,10 +83,18 @@
 							<li class="dropdown"><a href="#"><span>상품목록</span> <i
 									class="bi bi-chevron-down toggle-dropdown"></i></a>
 								<ul>
+									<li><a href="/shop/shopAllList">전체상품</a></li>
 									<li><a href="/shop/shopmain#products1">대여</a></li>
 									<li><a href="/shop/shopmain#products2">일반캠핑장비</a></li>
+
 								</ul></li>
-							<li><a href="/shop/shopAllList">전체상품</a></li>
+							<li class="dropdown"><a href="#"><span>상품검색</span> <i
+									class="bi bi-chevron-down toggle-dropdown"></i></a>
+								<ul>
+									<li style="display: flex;"><input type="text" id="searchMenu" placeholder="상품 검색..." style="width:130px;">
+									<a href="#" onclick="searchMenu()">검색</a></li>
+									
+								</ul></li>
 							<li><a href="#" onclick="confirm_orderList()">주문내역</a></li>
 							<li><a href="/shop/shopcart">장바구니</a></li>
 						</ul></li>
