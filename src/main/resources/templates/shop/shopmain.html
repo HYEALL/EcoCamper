@@ -95,11 +95,11 @@
 }
 
 .container1 {
-    margin-bottom: 10px;  /* 제목과 더보기 링크 사이의 간격 설정 */
+    margin-bottom: 20px;  /* 제목과 더보기 링크 사이의 간격 설정 */
 }
 
 .more-alink {
-    margin-bottom: 20px;  /* 더보기 링크와 제품들 사이의 간격 설정 */
+    margin-bottom: 40px;  /* 더보기 링크와 제품들 사이의 간격 설정 */
     text-align: right;  /* 더보기 링크를 오른쪽으로 정렬 */
 }
 
@@ -378,11 +378,14 @@ var swiper2 = new Swiper('.swiper-container-2', {
 <div id="products1"></div>
 <br ><br><br>
 <div class="product-container">
-    <div class="container1">
+   <a href="#" id="link_rent">
+    <div class="container1" >
         <h2 align="center">대여 패키지 목록</h2>
     </div>
+    </a>
+    
     <div class="more-alink" align="right" style="font-size: 17px;">
-        <a href="#" id="link_rent"> 더보기</a>
+        
     </div>
     <!-- 제품들을 나란히 배치할 행 -->
     <div class="product-row">
@@ -445,11 +448,13 @@ var swiper2 = new Swiper('.swiper-container-2', {
 <div id="products2"></div>
 <br ><br><br>
 <div class="product-container" >
+    <a href="#" id="link_gener"> 
    <div class="container1">
    <h2 align="center">캠핑장비 목록</h2>
    </div>
+   </a>
    <div class="more-alink"  align="right" style="font-size: 17px;">
-      <a href="#" id="link_gener"> 더보기</a></div>
+     </div>
    <div class="product-row">
       <div class="product">
          <a href="/shop/shopview?pcode=4001">  <img src="../images/g_bed1.jpg" alt="제품1"></a>

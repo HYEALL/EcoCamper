@@ -48,4 +48,8 @@ public class ShopDAO {
 		return shoprepository.findByPtypeLike(search);
 	}
 
+	public List<Shop> shopTop() {
+		return shoprepository.findbyTop();
+	}
+
 }

@@ -47,4 +47,8 @@ public class ShopService {
 		return dao.test(search);
 	}
 
+	public List<Shop> shopTop() {
+		return dao.shopTop();
+	}
+
 }

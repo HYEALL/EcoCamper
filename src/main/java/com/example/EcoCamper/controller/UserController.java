@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,9 +29,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.EcoCamper.dto.UserDTO;
+import com.example.EcoCamper.entity.Shop;
 import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.jwt.KakaoApi;
 import com.example.EcoCamper.jwt.TokenProvider;
+import com.example.EcoCamper.service.ShopService;
 import com.example.EcoCamper.service.UserService;
 
 import jakarta.servlet.http.Cookie;
@@ -46,7 +49,8 @@ public class UserController {
 	private TokenProvider tokenProvider;
 
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
+	@Autowired
+	ShopService shopService;
 	@Autowired
 	private KakaoApi kakaoApi;
 
@@ -60,7 +64,7 @@ public class UserController {
 		User kakaoUser = service.kakaoLogin(userInfo);
 		String email = (String) userInfo.get("email");
 		String nickname = (String) userInfo.get("nickname");
-		
+
 		// 카카오 email로 정보가 있으면 로그인
 		if (kakaoUser != null) {
 			// 토큰 생성
@@ -76,21 +80,18 @@ public class UserController {
 
 			System.out.println("kakao login: " + token);
 			return "/index";
-		// 카카오 email로 정보가 없으면 회원가입
+			// 카카오 email로 정보가 없으면 회원가입
 		} else {
 			model.addAttribute("req", "/user/joinForm");
 			model.addAttribute("email", email);
 			model.addAttribute("name", nickname);
 			return "/index";
 		}
-		
-		
-		
-/*
-		System.out.println("email = " + email);
-		System.out.println("nickname = " + nickname);
-		System.out.println("accessToken = " + accessToken);
-*/
+
+		/*
+		 * System.out.println("email = " + email); System.out.println("nickname = " +
+		 * nickname); System.out.println("accessToken = " + accessToken);
+		 */
 
 	}
 
@@ -195,8 +196,15 @@ public class UserController {
 			if (userId != null) {
 				User user = service.getUser(userId);
 				model.addAttribute("userId", userId);
-			} 
-		} 
+			}
+		}
+
+		List<Shop> list_shop = shopService.shopTop();
+
+		System.out.println(list_shop);
+
+		model.addAttribute("list_shop", list_shop);
+
 		return "/index";
 	}
 

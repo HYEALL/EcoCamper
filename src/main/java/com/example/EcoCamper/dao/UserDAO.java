@@ -89,35 +89,33 @@ public class UserDAO {
 
 	public User kakaoLogin(Map<String, Object> userInfo) {
 		String email = (String) userInfo.get("email");
-		//String nickname = (String) userInfo.get("nickname");
-     
-        // 카카오 로그인 토큰은 email 과 password 로 만들어줌 
-        //String username = email;
-        // 패스워드 = 카카오 Id + ADMIN TOKEN
-        //String password = kakaoId + ADMIN_TOKEN;
+		// String nickname = (String) userInfo.get("nickname");
 
-        // DB 에 Kakao email과 같은 회원이 있는지 확인
-        User kakaoUser = repository.findByEmail(email).orElse(null);
-        
-        // 있으면 로그인
-        if (kakaoUser != null) {
-        	 return kakaoUser;
-        } else {
-        	return null;
-        }
-       /* // 없으면 카카오 정보로 회원가입
-        if (kakaoUser == null) {
-            // 패스워드 인코딩
-            String encodedPassword = passwordEncoder.encode(password);
-            // ROLE = 사용자
+		// 카카오 로그인 토큰은 email 과 password 로 만들어줌
+		// String username = email;
+		// 패스워드 = 카카오 Id + ADMIN TOKEN
+		// String password = kakaoId + ADMIN_TOKEN;
+
+		// DB 에 Kakao email과 같은 회원이 있는지 확인
+		User kakaoUser = repository.findByEmail(email).orElse(null);
+
+		// 있으면 로그인
+		if (kakaoUser != null) {
+			return kakaoUser;
+		} else {
+			return null;
+		}
+		/*
+		 * // 없으면 카카오 정보로 회원가입 if (kakaoUser == null) { // 패스워드 인코딩 String
+		 * encodedPassword = passwordEncoder.encode(password); // ROLE = 사용자
+		 * 
+		 * 
+		 * kakaoUser = new User(username, encodedPassword, nickname, kakaoId);
+		 * userRepository.save(kakaoUser); }
+		 */
+
+	}
 
 
-            kakaoUser = new User(username, encodedPassword, nickname,  kakaoId);
-            userRepository.save(kakaoUser);
-        }*/
-        
 
-        
-    }
-	
 }
