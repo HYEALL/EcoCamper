@@ -629,6 +629,17 @@ body {
     object-fit: contain;
 } 
 
+.feed-tag {
+    margin-top: 20px; /* '장소'와 해시태그 사이의 간격 추가 */
+}
+
+.feed-tag span {
+    color: #007bff; /* 파란색으로 설정 */
+    font-weight: bold; /* 글씨 두께를 굵게 설정 */
+    font-size: 16px; /* 글씨 크기 설정 */
+    margin-right: 5px; /* 태그 사이에 간격 추가 */
+    
+}
 
 </style>
 <body th:data-user-id="${userId}">
@@ -667,6 +678,12 @@ body {
 			<span th:text="${feed.goods}"></span><br><br>
 			<span class="label">장소 :</span>
 			<span th:text="${feed.place}"></span>
+			<p class="feed-tag">
+    			<span th:each="tag, iterStat : ${feed.tags}">
+        			<span th:text="${tag.tag_name}"></span>
+        			<span th:if="${iterStat.index < iterStat.size - 1}">, </span>
+    			</span>
+			</p>
         </div>
         <hr>
 		

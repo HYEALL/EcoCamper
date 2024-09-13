@@ -1,76 +1,78 @@
 <script type="text/javascript" src="../js/feed.js?v=2"></script>
 <script>
-var selectedImages = [];
-
-//페이지 로드 시 기존 이미지를 미리 보기로 추가
-function loadExistingImages() {
- var existingImages = document.querySelectorAll('#photo-list img.uploaded-img');
- selectedImages = Array.from(existingImages).map(img => img.src);
- document.getElementById('image-count').textContent = selectedImages.length;
-}
-
-//새 이미지를 추가하고 기존 이미지와 수를 초기화
-function addPhoto() {
- var files = event.target.files;
- var photoList = document.getElementById('existing-images');
- var imageCountElement = document.getElementById('image-count');
-
- // 기존 이미지 삭제
- photoList.innerHTML = '';
-
- // 이미지 수 초기화
- selectedImages = [];
- imageCountElement.textContent = '0';
-
- // 새 이미지 추가
- if (files.length > 10) {
-     alert('최대 10개의 이미지만 선택할 수 있습니다.');
-     return;
- }
-
- for (var i = 0; i < files.length; i++) {
-     var file = files[i];
-     if (file && file.type.startsWith('image/')) {
-         var reader = new FileReader();
-
-         reader.onload = function(e) {
-             var img = document.createElement('img');
-             img.src = e.target.result;
-             img.className = 'uploaded-img';
-             photoList.appendChild(img);
-             selectedImages.push(e.target.result);
-
-             // 이미지 수 업데이트
-             document.getElementById('image-count').textContent = selectedImages.length;
-         }
-
-         reader.readAsDataURL(file);
-     }
- }
- 
-}
-
-//이모지 클릭 시 텍스트에 추가
 document.addEventListener('DOMContentLoaded', () => {
- loadExistingImages(); // 페이지 로드 시 기존 이미지 불러오기
+    loadExistingImages(); // 페이지 로드 시 기존 이미지 불러오기
+    loadExistingTags();  // 페이지 로드 시 기존 해시태그 불러오기
 
- document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
-     emoji.addEventListener('click', function() {
-         const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
-         const textArea = document.getElementById('text-input');
-         const cursorPos = textArea.selectionStart;
-         const textBefore = textArea.value.substring(0, cursorPos);
-         const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
-         textArea.value = textBefore + emojiValue + textAfter;
-         textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
-         textArea.focus();
-     });
- });
+    document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+        emoji.addEventListener('click', function() {
+            const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
+            const textArea = document.getElementById('text-input');
+            const cursorPos = textArea.selectionStart;
+            const textBefore = textArea.value.substring(0, cursorPos);
+            const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
+            textArea.value = textBefore + emojiValue + textAfter;
+            textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+            textArea.focus();
+        });
+    });
+
+    document.getElementById('tag-input').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            addHashtag();
+        }
+    });
 });
 
-function resizeTextarea(textarea) {
- textarea.style.height = 'auto';
- textarea.style.height = (textarea.scrollHeight) + 'px';
+function loadExistingImages() {
+    const existingImages = document.querySelectorAll('#existing-images img.uploaded-img');
+    selectedImages = Array.from(existingImages).map(img => img.src);
+    document.getElementById('image-count').textContent = selectedImages.length;
+}
+
+function loadExistingTags() {
+    const existingTags = document.getElementById('existing-tags').value.split(',').filter(tag => tag.trim() !== '');
+    const hashtagContainer = document.getElementById('hashtag-container');
+
+    existingTags.forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.dataset.tag = tag;
+        tagElement.innerHTML = `${tag} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+        hashtagContainer.appendChild(tagElement);
+    });
+}
+
+function addHashtag() {
+    const tagInput = document.getElementById('tag-input');
+    const hashtagContainer = document.getElementById('hashtag-container');
+    let hashtag = tagInput.value.trim();
+
+    if (hashtag && !hashtag.startsWith('#')) {
+        hashtag = `#${hashtag}`;
+    }
+
+    const existingTag = document.querySelector(`#hashtag-container .tag[data-tag="${hashtag}"]`);
+    if (!existingTag) {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.dataset.tag = hashtag;
+        tagElement.innerHTML = `${hashtag} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+        hashtagContainer.appendChild(tagElement);
+        tagInput.value = '';
+
+        // 해시태그 값을 숨겨진 입력 필드에 추가
+        const tagsInput = document.getElementById('tags-input');
+        tagsInput.value += (tagsInput.value ? ',' : '') + hashtag;
+    } else {
+        alert('이미 존재하는 해시태그입니다.');
+    }
+}
+
+function removeHashtag(button) {
+    const tagElement = button.parentElement;
+    tagElement.remove();
 }
     </script>
 
@@ -326,6 +328,7 @@ hr {
 </style>
 <body>
 <form action="feedModifyPh" name="form1" method="post" enctype="multipart/form-data">
+<input type="hidden" id="existing-tags" value="${feed.tags}">
 <div class="form-container">
 <h2>사진 편집</h2>
 <div style="color: red">※ 기존 이미지도 재등록 해야합니다</div>
@@ -342,10 +345,10 @@ hr {
 
     <!-- 기존 이미지 미리보기 -->
     <div id="existing-images">
-        <th:block th:each="image : ${feed.imageFileNames}">
-            <img th:src="@{'/storage/' + ${image}}" alt="이미지 미리보기" class="uploaded-img">
-        </th:block>
-    </div>
+    <th:block th:each="image : ${feed.imageFileNames}">
+        <img th:src="@{'/storage/' + ${image}}" alt="이미지 미리보기" class="uploaded-img">
+    </th:block>
+	</div>
 </div>
         <br>
         <div>
@@ -416,10 +419,14 @@ hr {
 
     <div align="center">
         <div class="part">
-            <div id="label">태그</div>
-            <div>
-                <input type="text" name="feed_tag" th:value="${feed.feed_tag}">
-            </div>
+           <div id="label">해시태그</div>
+					<div id="hashtag-container">
+        			<!-- 해시태그가 동적으로 추가될 부분 -->
+   					 </div>
+    					<div>
+       						 <input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
+    						 <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
+    					</div>
         </div>
 
         <div class="part">

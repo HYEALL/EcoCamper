@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,11 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.EcoCamper.dto.FeedDTO;
 import com.example.EcoCamper.entity.Feed;
 import com.example.EcoCamper.entity.Likes;
+import com.example.EcoCamper.entity.Tag;
 import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.FeedService;
 import com.example.EcoCamper.service.LikesService;
+import com.example.EcoCamper.service.TagService;
 
+import io.jsonwebtoken.lang.Arrays;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -32,6 +36,8 @@ public class FeedController {
 	FeedService service;
 	@Autowired
 	LikesService LikesService;
+	@Autowired
+	TagService tagService;
 
 	@Value("${project.upload.path}")
 	private String uploadpath;
@@ -50,7 +56,8 @@ public class FeedController {
 	}
 
 	@GetMapping("/feed/feedWriteFormVideo")
-	public String feedWriteFormVideo(HttpServletRequest request, FeedDTO dto, Model model) {
+	public String feedWriteFormVideo(HttpServletRequest request, FeedDTO dto, Model model
+			) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		String userId = tokenProvider.validateAndGetUserId(token);
 		dto.setId(userId);
@@ -61,57 +68,71 @@ public class FeedController {
 
 	@PostMapping("/feed/feedWritePh")
 	public String feedWritePh(FeedDTO dto, Model model, HttpServletRequest request,
-			@RequestParam("feed_file1") List<MultipartFile> uploadFiles) {
-		File uploadDir = new File(uploadpath);
-		if (!uploadDir.exists()) {
-			uploadDir.mkdirs();
-		}
+	        @RequestParam("feed_file1") List<MultipartFile> uploadFiles, 
+	        @RequestParam("tags") String tags) {
 
-		// 파일 이름 저장을 위한 리스트 초기화
-		List<String> fileNames = new ArrayList<>();
+	    File uploadDir = new File(uploadpath);
+	    if (!uploadDir.exists()) {
+	        uploadDir.mkdirs();
+	    }
 
-		// 이미지 파일 처리
-		for (MultipartFile uploadFile : uploadFiles) {
-			if (!uploadFile.isEmpty()) {
-				String fileName = uploadFile.getOriginalFilename();
-				File file = new File(uploadpath, fileName);
+	    // 파일 이름 저장을 위한 리스트 초기화
+	    List<String> fileNames = new ArrayList<>();
 
-				// 중복된 파일 확인: 동일한 이름과 크기를 가진 파일이 이미 존재하는지 체크
-				boolean check = file.exists() && file.length() == uploadFile.getSize();
+	    // 이미지 파일 처리
+	    for (MultipartFile uploadFile : uploadFiles) {
+	        if (!uploadFile.isEmpty()) {
+	            String fileName = uploadFile.getOriginalFilename();
+	            File file = new File(uploadpath, fileName);
 
-				if (!check) {
-					try {
-						uploadFile.transferTo(file); // 파일을 지정된 경로로 저장
-					} catch (IOException e) {
-						e.printStackTrace();
-						model.addAttribute("result", false); // 실패 시 결과를 모델에 추가
-						return "feed/feedWritePh";
-					}
-				} else {
-					// 중복된 파일 처리 (선택 사항): 이미 존재하는 경우 처리 로직 추가
-					System.out.println("already: " + fileName);
-				}
+	            // 중복된 파일 확인
+	            boolean check = file.exists() && file.length() == uploadFile.getSize();
 
-				fileNames.add(fileName); // 저장된 파일 이름을 리스트에 추가
-			}
-		}
+	            if (!check) {
+	                try {
+	                    uploadFile.transferTo(file); // 파일을 지정된 경로로 저장
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                    model.addAttribute("result", false); // 실패 시 결과를 모델에 추가
+	                    return "feed/feedWritePh";
+	                }
+	            } else {
+	                System.out.println("already: " + fileName);
+	            }
 
-		String token = tokenProvider.resolveTokenFromCookie(request);
-		String userId = tokenProvider.validateAndGetUserId(token);
-		dto.setId(userId);
-		dto.setFeed_file(String.join(",", fileNames)); // 파일 이름들을 콤마로 구분하여 설정
-		dto.setLogtime(new Date());
-		dto.setFeed_type("img");
+	            fileNames.add(fileName); // 저장된 파일 이름을 리스트에 추가
+	        }
+	    }
 
-		boolean result = service.feedWritePhoto(dto);
-		model.addAttribute("result", result);
-		model.addAttribute("req", "/feed/feedWritePh");
-		return "/index";
+	    String token = tokenProvider.resolveTokenFromCookie(request);
+	    String userId = tokenProvider.validateAndGetUserId(token);
+	    dto.setId(userId);
+	    dto.setFeed_file(String.join(",", fileNames)); // 파일 이름들을 콤마로 구분하여 설정
+	    dto.setLogtime(new Date());
+	    dto.setFeed_type("img");
+
+
+
+	    // 태그 문자열을 List<String>으로 변환
+	    List<String> tagList = new ArrayList<>();
+	    if (tags != null && !tags.trim().isEmpty()) {
+	        String[] tagArray = tags.split(",");
+	        for (String tag : tagArray) {
+	            tagList.add(tag.trim()); // 각 태그에 대한 공백 제거 후 추가
+	        }
+	    }
+	    dto.setTags(tagList); // DTO에 태그 리스트 설정
+
+
+	    boolean result = service.feedWritePhoto(dto);
+	    model.addAttribute("result", result);
+	    model.addAttribute("req", "/feed/feedWritePh");
+	    return "/index";
 	}
 
 	@PostMapping("/feed/feedWriteVoD")
 	public String feedWriteVoD(FeedDTO dto, Model model, HttpServletRequest request,
-			@RequestParam("feed_file1") MultipartFile uploadFile) {
+			@RequestParam("feed_file1") MultipartFile uploadFile,@RequestParam("tags") String tags) {
 		// 데이터 처리
 		System.out.println("dto = " + dto);
 
@@ -145,6 +166,17 @@ public class FeedController {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		String userId = tokenProvider.validateAndGetUserId(token);
 		dto.setId(userId);
+		
+		
+		 // 태그 문자열을 List<String>으로 변환
+	    List<String> tagList = new ArrayList<>();
+	    if (tags != null && !tags.trim().isEmpty()) {
+	        String[] tagArray = tags.split(",");
+	        for (String tag : tagArray) {
+	            tagList.add(tag.trim()); // 각 태그에 대한 공백 제거 후 추가
+	        }
+	    }
+	    dto.setTags(tagList); // DTO에 태그 리스트 설정
 
 		// DB 저장
 		boolean result = service.feedWriteVideo(dto);

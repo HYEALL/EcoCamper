@@ -1,59 +1,94 @@
 
 <script type="text/javascript" src="../js/feed.js?v=2"></script>
 <script>
-        var selectedImages = [];
+var selectedImages = [];
 
-        function addPhoto() {
-            var files = event.target.files;
-            var photoList = document.getElementById('photo-list');
-            var imageCountElement = document.getElementById('image-count');
+function addPhoto() {
+    var files = event.target.files;
+    var photoList = document.getElementById('photo-list');
+    var imageCountElement = document.getElementById('image-count');
 
-            // 기존 이미지와 새로 추가된 이미지 수를 합산하여 체크
-            if (files.length + selectedImages.length > 10) {
-                alert('최대 10개의 이미지만 선택할 수 있습니다.');
-                return;
+    if (files.length + selectedImages.length > 10) {
+        alert('최대 10개의 이미지만 선택할 수 있습니다.');
+        return;
+    }
+
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        if (file && file.type.startsWith('image/')) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                var img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'uploaded-img';
+                photoList.appendChild(img);
+                selectedImages.push(e.target.result);
+                imageCountElement.textContent = selectedImages.length;
             }
 
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                if (file && file.type.startsWith('image/')) {
-                    var reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        var img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'uploaded-img';
-                        photoList.appendChild(img);
-                        selectedImages.push(e.target.result);
-                        
-                        // 이미지 수 업데이트
-                        imageCountElement.textContent = selectedImages.length;
-                    }
-
-                    reader.readAsDataURL(file);
-                }
-            }
+            reader.readAsDataURL(file);
         }
-        // 이모지 클릭 시 텍스트에 추가
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
-                emoji.addEventListener('click', function() {
-                    const emojiValue = this.textContent; // textContent를 사용하여 이모지 값 얻기
-                    const textArea = document.getElementById('text-input');
-                    const cursorPos = textArea.selectionStart;
-                    const textBefore = textArea.value.substring(0, cursorPos);
-                    const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
-                    textArea.value = textBefore + emojiValue + textAfter;
-                    textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
-                    textArea.focus();
-                });
-            });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#emoji-container .emoji').forEach(emoji => {
+        emoji.addEventListener('click', function() {
+            const emojiValue = this.textContent;
+            const textArea = document.getElementById('text-input');
+            const cursorPos = textArea.selectionStart;
+            const textBefore = textArea.value.substring(0, cursorPos);
+            const textAfter = textArea.value.substring(cursorPos);
+            textArea.value = textBefore + emojiValue + textAfter;
+            textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
+            textArea.focus();
         });
+    });
 
-        function resizeTextarea(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight) + 'px';
+    document.getElementById('tag-input').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            addHashtag();
         }
+    });
+});
+
+function resizeTextarea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = (textarea.scrollHeight) + 'px';
+}
+
+function addHashtag() {
+    const tagInput = document.getElementById('tag-input');
+    const hashtagContainer = document.getElementById('hashtag-container');
+    let hashtag = tagInput.value.trim();
+
+    if (hashtag && !hashtag.startsWith('#')) {
+        hashtag = `#${hashtag}`;
+    }
+
+    const existingTag = document.querySelector(`#hashtag-container .tag[data-tag="${hashtag}"]`);
+    if (!existingTag) {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.dataset.tag = hashtag;
+        tagElement.innerHTML = `${hashtag} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+        hashtagContainer.appendChild(tagElement);
+        tagInput.value = '';
+
+        // 해시태그 값을 숨겨진 입력 필드에 추가
+        const tagsInput = document.getElementById('tags-input');
+        tagsInput.value += (tagsInput.value ? ',' : '') + hashtag;
+    } else {
+        alert('이미 존재하는 해시태그입니다.');
+    }
+}
+
+function removeHashtag(button) {
+    const tagElement = button.parentElement;
+    tagElement.remove();
+}
     </script>
 <style>
 body {
@@ -305,12 +340,39 @@ hr {
             cursor: pointer;
             margin: 5px;
         }
+        .remove-tag-button {
+	background: transparent;
+	border: none;
+	color: #f44336;
+	font-size: 16px;
+	cursor: pointer;
+	margin-left: 10px;
+}
+
+.remove-tag-button:hover {
+	color: #d32f2f;
+}
+
+
+.tag {
+    background: #e0f7fa; /* 배경색 유지 */
+    border-radius: 4px;
+    padding: 5px;
+    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    color: #FF6F61; /* 주황색 */
+    font-weight: bold; /* 글씨를 두껍게 */
+    font-size: 16px; /* 글씨 크기 조정 */
+}
+        
 </style>
 </head>
 <body>
 	
 	<form action="feedWritePh" name="form1" method="post"
 		enctype="multipart/form-data">
+		<input type="hidden" name="tags" id="tags-input">
 		<div class="form-container">
 		<h2>사진 올리기</h2>
 			<div class="section content">
@@ -393,11 +455,14 @@ hr {
 			<div align="center">
 				<div class="part">
 					<div id="label">해시태그</div>
-					<div>
-						<input type="text" name="feed_tag">
-					</div>
+					<div id="hashtag-container">
+        			<!-- 해시태그가 동적으로 추가될 부분 -->
+   					 </div>
+    					<div>
+       						 <input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
+    						 <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
+    					</div>
 				</div>
-
 				<div class="part">
 					<div id="label">장소</div>
 					<div>

@@ -50,12 +50,50 @@
                    textArea.focus();
                });
            });
+       
+       document.getElementById('tag-input').addEventListener('keydown', function(event) {
+           if (event.key === 'Enter') {
+               event.preventDefault();
+               addHashtag();
+           }
        });
+   });
 
        function resizeTextarea(textarea) {
            textarea.style.height = 'auto';
            textarea.style.height = (textarea.scrollHeight) + 'px';
        }
+       
+       function addHashtag() {
+    	    const tagInput = document.getElementById('tag-input');
+    	    const hashtagContainer = document.getElementById('hashtag-container');
+    	    let hashtag = tagInput.value.trim();
+
+    	    if (hashtag && !hashtag.startsWith('#')) {
+    	        hashtag = `#${hashtag}`;
+    	    }
+
+    	    const existingTag = document.querySelector(`#hashtag-container .tag[data-tag="${hashtag}"]`);
+    	    if (!existingTag) {
+    	        const tagElement = document.createElement('div');
+    	        tagElement.className = 'tag';
+    	        tagElement.dataset.tag = hashtag;
+    	        tagElement.innerHTML = `${hashtag} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+    	        hashtagContainer.appendChild(tagElement);
+    	        tagInput.value = '';
+
+    	        // 해시태그 값을 숨겨진 입력 필드에 추가
+    	        const tagsInput = document.getElementById('tags-input');
+    	        tagsInput.value += (tagsInput.value ? ',' : '') + hashtag;
+    	    } else {
+    	        alert('이미 존재하는 해시태그입니다.');
+    	    }
+    	}
+
+    	function removeHashtag(button) {
+    	    const tagElement = button.parentElement;
+    	    tagElement.remove();
+    	}
     </script>
 <style>
 h2 {
@@ -320,12 +358,39 @@ hr {
     max-height: 100px;
     object-fit: cover;
 }
+
+        .remove-tag-button {
+	background: transparent;
+	border: none;
+	color: #f44336;
+	font-size: 16px;
+	cursor: pointer;
+	margin-left: 10px;
+}
+
+.remove-tag-button:hover {
+	color: #d32f2f;
+}
+
+
+.tag {
+    background: #e0f7fa; /* 배경색 유지 */
+    border-radius: 4px;
+    padding: 5px;
+    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    color: #FF6F61; /* 주황색 */
+    font-weight: bold; /* 글씨를 두껍게 */
+    font-size: 16px; /* 글씨 크기 조정 */
+}
 </style>
 </head>
 <body>
 	
 	<form action="feedWriteVoD" name="form1" method="post"
 		enctype="multipart/form-data">
+		<input type="hidden" name="tags" id="tags-input">
 		<div class="form-container">
 		<h2>동영상 올리기</h2>
 			<div class="section content">
@@ -407,9 +472,13 @@ hr {
 			<div align="center">
 				<div class="part">
 					<div id="label">해시태그</div>
-					<div>
-						<input type="text" name="feed_tag">
-					</div>
+					<div id="hashtag-container">
+        			<!-- 해시태그가 동적으로 추가될 부분 -->
+   					 </div>
+    					<div>
+       						 <input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
+    						 <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
+    					</div>
 				</div>
 
 				<div class="part">

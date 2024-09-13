@@ -55,6 +55,9 @@ public class FeedService {
 	 public List<Feed> findFeedsBySaveSeq(String id) {
 	        return dao.findFeedsBySaveSeq(id);
 	    }
-	 
+	
+	 public List<Feed> getFeedsByTag(String tagName) {
+	        return dao.findFeedsByTag(tagName);
+	    }
 	 
 }
