@@ -28,8 +28,7 @@ function addPhoto(event) {
      return;
  }
 
- for (var i = 0; i < files.length; i++) {
-     var file = files[i];
+ Array.from(files).forEach(file => {
      if (file && file.type.startsWith('image/')) {
          var reader = new FileReader();
 
@@ -41,12 +40,12 @@ function addPhoto(event) {
              selectedImages.push(e.target.result);
 
              // 이미지 수 업데이트
-             document.getElementById('image-count').textContent = selectedImages.length;
+             imageCountElement.textContent = selectedImages.length;
          }
 
          reader.readAsDataURL(file);
      }
- }
+ });
 }
 
 //페이지 로드 시 기존 이미지와 태그 불러오기
@@ -59,15 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
          const emojiValue = this.textContent;
          const textArea = document.getElementById('text-input');
          const cursorPos = textArea.selectionStart;
-         const textBefore = textArea.value.substring(0, cursorPos);
-         const textAfter = textArea.value.substring(cursorPos, textArea.value.length);
-         textArea.value = textBefore + emojiValue + textAfter;
+         textArea.value = textArea.value.slice(0, cursorPos) + emojiValue + textArea.value.slice(cursorPos);
          textArea.selectionStart = textArea.selectionEnd = cursorPos + emojiValue.length;
          textArea.focus();
      });
  });
 
- document.getElementById('tag-input').addEventListener('keydown', function(event) {
+ const tagInput = document.getElementById('tag-input');
+ tagInput.addEventListener('keydown', function(event) {
      if (event.key === 'Enter') {
          event.preventDefault();
          addHashtag();
@@ -81,11 +79,14 @@ function resizeTextarea(textarea) {
 }
 
 function loadExistingTags() {
- // 기존 태그 값을 가져와서 ','로 분리합니다.
  const existingTags = document.getElementById('existing-tags').value.split(',').filter(tag => tag.trim() !== '');
  const hashtagContainer = document.getElementById('hashtag-container');
+ const tagInput = document.getElementById('tag-input');
 
- // 기존 태그 목록을 순회하여 화면에 추가합니다.
+ if (existingTags.length > 0) {
+     tagInput.disabled = true; // 태그 입력란 비활성화
+ }
+
  existingTags.forEach(tag => {
      const tagElement = document.createElement('div');
      tagElement.className = 'tag';
@@ -96,42 +97,42 @@ function loadExistingTags() {
 }
 
 function addHashtag() {
- const tagInput = document.getElementById('tag-input');
- const hashtagContainer = document.getElementById('hashtag-container');
- const tagsInput = document.getElementById('tags-input');
- let hashtag = tagInput.value.trim();
+    const tagInput = document.getElementById('tag-input');
+    const hashtagContainer = document.getElementById('hashtag-container');
+    let hashtag = tagInput.value.trim();
 
- if (!tagsInput) {
-     console.error('tags-input 요소가 존재하지 않습니다.');
-     return;
- }
+    if (hashtag && !hashtag.startsWith('#')) {
+        hashtag = `#${hashtag}`;
+    }
 
- if (hashtag && !hashtag.startsWith('#')) {
-     hashtag = `#${hashtag}`;
- }
+    // 기존 태그와 동일한 태그가 있는지 확인
+    const existingTag = Array.from(hashtagContainer.querySelectorAll('.tag'))
+        .find(tagElement => tagElement.dataset.tag === hashtag);
 
- // 기존 해시태그 목록 가져오기
- const existingTags = tagsInput.value.split(',').filter(tag => tag.trim() !== '');
+    if (!existingTag) {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.dataset.tag = hashtag;
+        tagElement.innerHTML = `${hashtag} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+        hashtagContainer.appendChild(tagElement);
+        tagInput.value = '';
 
- // 해시태그가 기존 목록에 있는지 확인
- if (existingTags.includes(hashtag)) {
-     alert('이미 존재하는 해시태그입니다.');
- } else {
-     // 새로운 해시태그 추가
-     const tagElement = document.createElement('div');
-     tagElement.className = 'tag';
-     tagElement.dataset.tag = hashtag;
-     tagElement.innerHTML = `${hashtag} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
-     hashtagContainer.appendChild(tagElement);
-     tagInput.value = '';
+        // 해시태그 값을 숨겨진 입력 필드에 추가
+        const tagsInput = document.getElementById('tags-input');
+        const currentTags = tagsInput.value.split(',').filter(tag => tag.trim() !== '');
 
-     // 해시태그 값을 숨겨진 입력 필드에 추가
-     tagsInput.value = existingTags.concat(hashtag).join(',');
- }
+        // 중복된 태그를 제외한 새로운 태그 목록 생성
+        const updatedTags = new Set([...currentTags, hashtag]);
+        tagsInput.value = Array.from(updatedTags).join(',');
+
+        // 태그가 추가되면 태그 입력란 비활성화
+        tagInput.disabled = true;
+    } else {
+        alert('이미 존재하는 해시태그입니다.');
+    }
 }
 
 function removeHashtag(button) {
-    // 해시태그 요소와 해당 해시태그 값을 찾습니다.
     const tagElement = button.parentElement;
     const hashtag = tagElement.dataset.tag.trim();
 
@@ -144,11 +145,15 @@ function removeHashtag(button) {
 
     // 삭제할 해시태그를 필터링하여 새로운 목록을 만듭니다.
     const updatedTags = existingTags.filter(tag => tag !== hashtag);
-    
+
     // 업데이트된 해시태그 목록을 숨겨진 입력 필드에 저장합니다.
     tagsInput.value = updatedTags.join(',');
 
-    console.log(`Updated tags: ${tagsInput.value}`);  // 디버그용 출력
+    // 모든 태그가 제거되면 태그 입력란을 다시 활성화
+    const tagInput = document.getElementById('tag-input');
+    if (updatedTags.length === 0) {
+        tagInput.disabled = false;
+    }
 }
     </script>
 

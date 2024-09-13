@@ -73,7 +73,7 @@
     	        hashtag = `#${hashtag}`;
     	    }
 
-    	    const existingTag = document.querySelector(`#hashtag-container .tag[data-tag="${hashtag}"]`);
+    	    const existingTag = document.querySelector(`#hashtag-container .tag`);
     	    if (!existingTag) {
     	        const tagElement = document.createElement('div');
     	        tagElement.className = 'tag';
@@ -84,15 +84,26 @@
 
     	        // 해시태그 값을 숨겨진 입력 필드에 추가
     	        const tagsInput = document.getElementById('tags-input');
-    	        tagsInput.value += (tagsInput.value ? ',' : '') + hashtag;
+    	        tagsInput.value = hashtag;
+
+    	        // 태그 입력란 비활성화
+    	        tagInput.disabled = true;
     	    } else {
-    	        alert('이미 존재하는 해시태그입니다.');
+    	        alert('이미 태그가 추가되었습니다. 먼저 기존 태그를 삭제하세요.');
     	    }
     	}
 
     	function removeHashtag(button) {
     	    const tagElement = button.parentElement;
     	    tagElement.remove();
+
+    	    // 태그 입력란 활성화
+    	    const tagInput = document.getElementById('tag-input');
+    	    tagInput.disabled = false;
+
+    	    // 숨겨진 태그 값도 제거
+    	    const tagsInput = document.getElementById('tags-input');
+    	    tagsInput.value = '';
     	}
     </script>
 <style>

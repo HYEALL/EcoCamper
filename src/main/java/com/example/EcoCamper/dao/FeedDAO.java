@@ -124,32 +124,40 @@ public class FeedDAO {
 			feed.setFeed_file(dto.getFeed_file());
 			feed.setFeed_type(dto.getFeed_type());
 			feed.setLogtime(dto.getLogtime());
-            repository.save(feed);
-			// 기존 태그 제거
-	        
+			 // 현재 피드의 태그 가져오기
+            Set<Tag> existingTags = new HashSet<>(feed.getTags());
 
-            Set<Tag> existingTags = new HashSet<>(feed.getTags()); // 기존 태그를 유지하기 위한 Set
-            for (String tagName : dto.getTags()) {
-                Tag tag = tagRepository.findByTagName(tagName);
-                if (tag == null) {
-                    tag = new Tag();
-                    tag.setTag_name(tagName);
-                    tag = tagRepository.save(tag); // 새 태그 저장
-                }
-                existingTags.add(tag); // 새로운 태그 추가
+            // 새로운 태그 생성
+            Set<Tag> newTags = dto.getTags().stream()
+                .map(tagName -> {
+                    Tag tag = tagRepository.findByTagName(tagName);
+                    if (tag == null) {
+                        tag = new Tag();
+                        tag.setTag_name(tagName);
+                        tag = tagRepository.save(tag); // 새 태그 저장
+                    }
+                    return tag;
+                })
+                .collect(Collectors.toSet());
+
+            // 기존 태그와 새로운 태그를 비교하여 업데이트
+            if (newTags.isEmpty()) {
+                // 새로운 태그가 없는 경우 기존 태그 유지
+                feed.setTags(new ArrayList<>(existingTags));
+            } else {
+                // 새로운 태그가 있는 경우 새로운 태그로 업데이트
+                existingTags.clear(); // 기존 태그 제거
+                existingTags.addAll(newTags); // 새로운 태그 추가
+                feed.setTags(new ArrayList<>(existingTags));
             }
-            feed.setTags(new ArrayList<>(existingTags)); // 태그 설정
 
-            // 피드 저장
-            repository.save(feed);
+            repository.save(feed); // 피드 저장
 
-	       
-	        result = true;
-	    }
-
-	    return result;
-	}
-
+            return true;
+        }
+        return false;
+    }
+    
             
 	 public List<Feed> getFeedsById(String id) {
 	        // 로그인한 사용자의 피드만 가져오는 DAO 또는 Repository 호출
