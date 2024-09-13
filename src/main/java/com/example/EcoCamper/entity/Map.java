@@ -37,6 +37,7 @@ public class Map {
     private String place_address;
     private String place_oldaddr;
     private String place_postcode;
+    private String place_pic;
     private String place_name;
     private String place_description;
     private String place_keypoint;

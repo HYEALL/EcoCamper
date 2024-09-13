@@ -19,7 +19,6 @@ import com.example.EcoCamper.service.MapService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -42,25 +41,10 @@ public class MapController {
 		String userId = tokenProvider.validateAndGetUserId(token);
 		System.out.println("userId = " + userId);
 
-		// db에 있는 정보 다 읽어오기
-		List<Map> list = service.placeList();
-
 		// 데이터 공유
-
-		// 데이터 공유 (JSON으로 변환)
-		ObjectMapper objectMapper = new ObjectMapper();
-		String jsonList = null;
-		try {
-			jsonList = objectMapper.writeValueAsString(list);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		model.addAttribute("list", jsonList);
-		// model.addAttribute("list", list);
-
+		model.addAttribute("req", "/place/map");
 		// view 파일 선택
-		return "place/map";
+		return "/index";
 	}
 
 	// 필터와 검색어에 따른 검색 결과를 처리하는 POST 메서드

@@ -11,10 +11,9 @@ import com.example.EcoCamper.entity.Map;
 
 @Repository
 public interface MapRepository extends JpaRepository<Map, Integer>{
-
 	@Query("SELECT m FROM Map m WHERE " +
 			   "(:keyword IS NULL OR m.place_name LIKE %:keyword% OR m.place_description LIKE %:keyword%) AND " +
-	           "(:regions IS NULL OR m.place_address IN :regions) AND " +
+			   "(:regions IS NULL OR m.place_address LIKE %:regions%) AND " +
 	           "(:categories IS NULL OR m.place_category IN :categories) AND " +
 	           "(:facilities IS NULL OR m.place_facility IN :facilities) AND " +
 	           "(:environments IS NULL OR m.place_environment IN :environments) AND " +
@@ -28,4 +27,3 @@ public interface MapRepository extends JpaRepository<Map, Integer>{
 	        @Param("seasons") List<String> seasons
 	    );
 }
-

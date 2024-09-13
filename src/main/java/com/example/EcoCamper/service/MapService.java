@@ -13,11 +13,6 @@ public class MapService {
 
 	@Autowired
 	MapDAO dao;
-
-	// 목록
-	public List<Map> placeList() {
-		return dao.placeList();
-	}
 	
 	public List<Map> findPlacesByFilters(
             String keyword,
