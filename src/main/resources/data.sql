@@ -10,9 +10,9 @@ create table usertable(
     logtime date not null,
     role varchar2(20) not null
 );
-select * from usertable;
-delete usertable where id='hyeall';
-update usertable set role='ADMIN' where id='admin';
+--select * from usertable;
+--delete usertable where id='hyeall';
+--update usertable set role='ADMIN' where id='admin';
 alter table usertable add unique(email);
 -- 주소 바꾸기
 alter table usertable add zipcode varchar2(7); -- 우편번호
@@ -20,8 +20,8 @@ alter table usertable rename column addr to addr1; --- 도로명 주소
 alter table usertable add addr2 varchar2(200); -- 상세 주소
 -- abcdefg9876 gil
 commit;
-desc usertable;
-drop table usertable purge;
+--desc usertable;
+--drop table usertable purge;
 -----------------------------
 create table Shop_Review(
     shopreviewseq number not null,
@@ -35,19 +35,19 @@ create table Shop_Review(
     foreign key (shopreviewpcode) references  Shop(pcode)    
 );
 create SEQUENCE seq_Shop_Review NOCACHE NOCYCLE;
-drop SEQUENCE seq_Shop_Review;
-select *from user_sequences;
+--drop SEQUENCE seq_Shop_Review;
+--select *from user_sequences;
 
-drop table Shop_Review purge;
-select*from Shop_Review;
+--drop table Shop_Review purge;
+--select*from Shop_Review;
 insert into Shop_Review values (seq_Shop_Review.nextval,'0001','euneun','친환경휴지',0,sysdate);
-delete Shop_Review where shopreviewid='hong';
+--delete Shop_Review where shopreviewid='hong';
 
-select shopreviewseq, shopreviewid, shopreviewcontent, shopreviewhit, 
-            to_char(logtime,'YYYY.MM.DD')as logtime from 
-             (select rownum rn, tt.*from
-             (select * from ShopReview order by logtime desc) tt)
-              where rn >=1 and rn <=5;
+--select shopreviewseq, shopreviewid, shopreviewcontent, shopreviewhit, 
+ --           to_char(logtime,'YYYY.MM.DD')as logtime from 
+ --            (select rownum rn, tt.*from
+ --            (select * from ShopReview order by logtime desc) tt)
+ --             where rn >=1 and rn <=5;
 
 commit;
 ---------------------------------------------------
@@ -75,22 +75,22 @@ alter table buylist rename column baddress to baddr1; --- 도로명 주소
 alter table buylist add baddr2 varchar2(200); -- 상세 주소
 
 
-drop table Buylist purge;
+--drop table Buylist purge;
 
 insert into Buylist values(seq_Buylist.nextval,'euneun','0002',1,5000,'곽은성', 
                             '서울','010','신용',sysdate);
 insert into Buylist values(seq_Buylist.nextval,'euneun','0001',1,10000,'곽은성', '서울','010','신용',sysdate);
 select*from Buylist order by buyseq desc;
 
-UPDATE buylist
-SET Bcancel = 'y'
-WHERE buyseq = 92;
+--UPDATE buylist
+--SET Bcancel = 'y'
+--WHERE buyseq = 92;
 
-delete Buylist where buyseq='16';
-DELETE FROM Buylist
-WHERE buyseq BETWEEN 30 AND 97;
+--delete Buylist where buyseq='16';
+--DELETE FROM Buylist
+--WHERE buyseq BETWEEN 30 AND 97;
 create SEQUENCE seq_Buylist NOCACHE NOCYCLE;
-drop SEQUENCE seq_Buylist;
+--drop SEQUENCE seq_Buylist;
 select *from user_sequences;
 
 commit;
@@ -108,7 +108,7 @@ create table Shop(
     logtime date default sysdate            -- 작성일
 );
 
-drop table Shop purge;
+--drop table Shop purge;
 
 insert into Shop values ('0001','친환경세제','자사',3000,2000,0,'cleaner.jpg',sysdate);
 insert into Shop values ('0002','친환경휴지','자사',10000,2000,0,'roll.jpg',sysdate);
@@ -174,7 +174,7 @@ commit;
 -----------------------------
 -- 테이블 생성
 
-drop table map;
+--drop table map;
 create SEQUENCE place_seq NOCACHE NOCYCLE;
 CREATE TABLE map (
     place_seq NUMBER PRIMARY KEY,                     -- 장소 고유번호, key값
@@ -540,8 +540,8 @@ select * from likes;
    -- 시퀀스 객체 생성
 create sequence likes_num nocycle nocache;
 -- 시퀀스 삭제
-drop sequence likes_num;
-delete likes where review_id=5;
+--drop sequence likes_num;
+--delete likes where review_id=5;
 commit;
 -- 테이블 생성
 create table feed (
@@ -561,13 +561,31 @@ create table feed (
    logtime date default sysdate -- 작성일
   
 );
+ALTER TABLE feed DROP COLUMN hit;
+
 select * from feed;
 -- 시퀀스 객체 생성
 create sequence seq nocycle nocache;
 -- 시퀀스 삭제
-drop sequence seq;
+--drop sequence seq;
 commit;
-drop table feed purge;
+--drop table feed purge;
+------------
+
+CREATE TABLE tag (
+    tag_seq NUMBER PRIMARY KEY, -- 태그의 고유 ID
+    tag_name VARCHAR2(100) NOT NULL -- 태그 이름
+);
+
+select * from tag;
+CREATE TABLE feed_tag (
+    feed_id NUMBER, -- Feed 테이블의 기본 키
+    tag_id NUMBER, -- Tag 테이블의 기본 키
+    PRIMARY KEY (feed_id, tag_id),
+    FOREIGN KEY (feed_id) REFERENCES feed(seq) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tag(tag_seq) ON DELETE CASCADE
+);
+select * from feed_tag;
 ---------------------
 create table save (
 
@@ -580,9 +598,9 @@ create table save (
 
 create sequence save_num nocycle nocache;
 -- 시퀀스 삭제
-drop sequence save_num;
+--drop sequence save_num;
 
-drop table save purge;
+--drop table save purge;
 
 select * from save; 
 commit;
