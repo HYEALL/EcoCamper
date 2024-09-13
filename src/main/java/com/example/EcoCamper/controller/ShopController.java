@@ -187,7 +187,6 @@ public class ShopController {
 	public String shopAllList(Model model, HttpServletRequest request) {
 
 		String search = request.getParameter("search");
-		String search1 = search;
 		model.addAttribute("search", search);
 
 		String token = tokenProvider.resolveTokenFromCookie(request);
@@ -237,7 +236,7 @@ public class ShopController {
 		model.addAttribute("pg", pg);
 		model.addAttribute("totalP", totalP);
 		model.addAttribute("list", list);
-
+		System.out.println(list);
 		model.addAttribute("req", "/shop/shopAllList");
 		return "/index";
 	}

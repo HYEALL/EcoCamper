@@ -14,13 +14,14 @@ public interface ShopRepository extends JpaRepository<Shop, String> {
 			+ "  where rn >=:startNum and rn <=:endNum", nativeQuery = true)
 	List<Shop> findbyStartNumAndEndNum(@Param("startNum") int startNum, @Param("endNum") int endNum);
 
-	@Query(value = "select *from (select rownum rn, tt.*from"
-			+ " (select * from Shop where  ((pname like %:search%) or (ptype  like %:search%)) order by pcode desc) tt)"
-			+ "  where rn >=:startNum and rn <=:endNum", nativeQuery = true)
+	@Query(value = "SELECT * FROM (SELECT ROWNUM rn, tt.* FROM"
+	        + " (SELECT * FROM Shop WHERE ((pname LIKE %:search%) OR (ptype LIKE %:search%)) ORDER BY pcode DESC) tt)"
+	        + " WHERE rn >= :startNum AND rn <= :endNum", nativeQuery = true)
 	List<Shop> findByStartNumAndEndNumWithSearch(@Param("search") String search, @Param("startNum") int startNum,
-			@Param("endNum") int endNum);
+	        @Param("endNum") int endNum);
 
-	@Query(value = "select COUNT(*) from Shop where pname like %:search%", nativeQuery = true)
+
+	@Query(value = "select COUNT(*) from Shop where ((pname LIKE %:search%) OR (ptype LIKE %:search%))", nativeQuery = true)
 	int countBySearch(@Param("search") String search);
 
 	List<Shop> findByPtypeLike(String ptype);

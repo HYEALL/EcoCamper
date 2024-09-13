@@ -224,7 +224,7 @@ button:hover {
 							</th:block>
 								<th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
 									
-									<th:block th:if="${search!=null}">
+									<th:block th:if="${!list.isEmpty()}">
 									
 										<th:block th:if="${ pg==num }">
 										<a th:href="@{/shop/shopAllList(pg=${ num }, search=${search} )}"
@@ -239,20 +239,7 @@ button:hover {
 									
 									</th:block>
 
-									<th:block th:if="${search==null}">
 									
-										<th:block th:if="${ pg==num }">
-											<a th:href="@{/shop/shopAllList(pg=${ num } )}"
-								   			
-												class="currentPaging">[[${ num }]]</a>
-										</th:block>
-										
-										<th:block th:if="${ pg!=num }">
-											<a th:href="@{/shop/shopAllList(pg=${ num })}"
-												class="paging">[[${ num }]]</a>
-										</th:block>
-									
-									</th:block>
 								</th:block>
 							
 							<th:block th:if="${endPage < totalP}">
@@ -413,7 +400,7 @@ button:hover {
         allProducts.forEach(product => {
             const productName = product.getAttribute('data-name').toLowerCase();
 
-            if (productName.includes(searchTerm)) {
+            if (productName.includes(searchTerm) || productType.includes(searchTerm)) {
                 product.style.display = 'block';
                 no_product = false;
             } else {
