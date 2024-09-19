@@ -29,10 +29,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.EcoCamper.dto.UserDTO;
+import com.example.EcoCamper.entity.Feed;
 import com.example.EcoCamper.entity.Shop;
 import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.jwt.KakaoApi;
 import com.example.EcoCamper.jwt.TokenProvider;
+import com.example.EcoCamper.service.FeedService;
 import com.example.EcoCamper.service.ShopService;
 import com.example.EcoCamper.service.UserService;
 
@@ -53,6 +55,9 @@ public class UserController {
 	ShopService shopService;
 	@Autowired
 	private KakaoApi kakaoApi;
+	
+	@Autowired
+	FeedService feedService;
 
 	// 카카오 로그인
 	@GetMapping(value = "/login/oauth2/code/kakao")
@@ -190,11 +195,22 @@ public class UserController {
 
 	@GetMapping("/index")
 	public String index(HttpServletRequest request, Model model) {
+		String token = tokenProvider.resolveTokenFromCookie(request); // 쿠키에서 token 가져오기
+		String userId = null;
+		if (token != null) {
+			userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
+			if (userId != null) {
+				model.addAttribute("userId", userId);
+			}
+		}
+
 		List<Shop> list_shop = shopService.shopTop();
-
+		List<Feed> list_feed = feedService.feedTop();
+		
 		System.out.println(list_shop);
-
+		System.out.println(list_feed);
 		model.addAttribute("list_shop", list_shop);
+		model.addAttribute("list_feed", list_feed);
 
 		return "/index";
 	}

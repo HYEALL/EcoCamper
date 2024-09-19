@@ -1,5 +1,5 @@
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 <script type="text/javascript" src="/js/userScript.js?v=2"></script>
 <script type="text/javascript">
 	window.onload = function() {
@@ -59,81 +59,188 @@
 		});
 	}
 </script>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<div align="center">
-	<h3>회원 가입</h3>
-	<form action="/join" name="inputForm" method="post"
-		style="width: 550px;">
-		<fieldset>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<section class="vh-100">
+	<div class="container h-100">
+		<div
+			class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-lg-12 col-xl-11">
+				<div class="card text-black" style="border-radius: 25px;">
+					<div class="card-body p-md-5">
+						<div class="row justify-content-center">
+							<div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-			<label align="left"> 이름 <th:block th:if="${name} == null">
-					<input type="text" name="name" placeholder="이름 입력" />
-				</th:block> <th:block th:unless="${name} == null">
-					<input type="text" name="name" placeholder="이름 입력"
-						th:value="${name}" />
-				</th:block>
-			</label> <label align="left"> 아이디 </label>
-			<fieldset role="group">
-				<input type="text" name="id" placeholder="아이디 입력" /> <input
-					type="button" value="중복체크" onclick="checkId()"> <input
-					type="hidden" name="checkIdOk" value="false">
+								<p class="text-center h2 fw-bold mb-4 mx-1 mx-md-3 mt-3">회원가입</p>
 
-			</fieldset>
-			<label align="left"> 비밀번호 <input type="password" name="pwd"
-				placeholder="비밀번호 입력" />
-			</label> <label align="left"> 비밀번호 재확인 <input type="password"
-				name="repwd" placeholder="비밀번호 재확인" />
-			</label> <label align="left">생년월일</label>
-			<fieldset role="group">
-				<select class="box" id="birth-year" name="birthYear">
-					<option value="" disabled selected>출생 연도</option>
-				</select> <select class="box" id="birth-month" name="birthMonth">
-					<option value="" disabled selected>월</option>
-				</select> <select class="box" id="birth-day" name="birthDay">
-					<option value="" disabled selected>일</option>
-				</select>
-			</fieldset>
-			<label align="left">성별</label>
-			<fieldset role="group">
-				<label><input type="radio" name="gender" value="m" checked>남</label>
-				<label><input type="radio" name="gender" value="f">여</label>
-			</fieldset>
-			<label align="left"> 이메일 </label>
-			<th:block th:if="${email} == null">
-				<fieldset role="group">
-					<input type="email" id="email" name="email"
-						placeholder="이메일을 입력하세요" size="20" /> <input type="button"
-						value="인증메일발송" onclick="sendNumber()">
+								<form class="mx-1 mx-md-4" action="/join" name="inputForm"
+									method="post">
 
-				</fieldset>
-				<fieldset role="group" name="mail_number" id="mail_number"
-					style="display: none">
-					<input type="text" name="valid_number" id="valid_number"
-						placeholder="인증번호 입력" /> <input type="button" value="인증하기"
-						onclick="confirmNumber()"> <input type="hidden"
-						name="checkEmailOk" value="false">
-				</fieldset>
-			</th:block>
-			<th:block th:unless="${email} == null">
-				<label>카카오 계정으로 인증하셨습니다</label>
-				<fieldset role="group">
-					<input type="email" id="email" name="email" th:value="${email}"
-						size="20" readonly /> <input type="hidden" name="checkEmailOk"
-						value="true">
 
-				</fieldset>
-			</th:block>
-			<label align="left"> 핸드폰<input type="tel" name="tel"
-				placeholder="010-1234-5678" size="12" />
-			</label> <label align="left"> 주소
-				<fieldset role="group">
-					<input type="text" name="zipcode" id="zipcode" placeholder="우편번호" readonly>
-					<input type="button" onclick="DaumZipcode()"
-						value="우편번호 찾기">
-				</fieldset> <input type="text" id="addr1" name="addr1" placeholder="주소"><br>
-				<input type="text" id="addr2" name="addr2" placeholder="상세주소">
-			</label> <input type="button" value="회원가입" onclick="inputCheck()"> <input
-				type="reset" value="다시 작성">
-		</fieldset>
-	</form>
-</div>
+
+									<div>
+										<th:block th:if="${name} == null">
+											<label class="form-label" for="name">이름</label>
+											<div class="input-group">
+												<span class="input-group-text"><i
+													class="bi bi-person-fill"></i></span> <input type="text"
+													name="name" id="name" class="form-control"
+													placeholder="이름 입력" />
+											</div>
+										</th:block>
+									</div>
+									<div>
+										<th:block th:unless="${name} == null">
+											<label class="form-label" for="name">이름</label>
+											<div class="input-group">
+												<span class="input-group-text"><i
+													class="bi bi-person-fill"></i></span> <input type="text"
+													name="name" id="name" class="form-control"
+													placeholder="이름 입력" th:value="${name}" />
+											</div>
+										</th:block>
+
+									</div>
+									<div>
+										<label class="form-label" for="id">아이디</label>
+										<div class="input-group">
+											<span class="input-group-text"><i
+												class="bi bi-emoji-smile"></i></span> <input type="text" name="id"
+												id="id" class="form-control" placeholder="아이디 입력" /> <input
+												type="button" data-mdb-button-init data-mdb-ripple-init
+												class="btn btn-success btn-lg" value="중복체크"
+												onclick="checkId()"> <input type="hidden"
+												name="checkIdOk" value="false">
+										</div>
+									</div>
+									<div>
+										<label class="form-label" for="password">비밀번호</label>
+										<div class="input-group">
+											<span class="input-group-text"><i
+												class="bi bi-lock-fill"></i></span> <input type="password"
+												name="pwd" id="password" class="form-control"
+												placeholder="비밀번호 입력" />
+										</div>
+									</div>
+									<div>
+										<label class="form-label" for="password">비밀번호 재확인</label>
+										<div class="input-group">
+											<span class="input-group-text"><i class="bi bi-lock"></i></span>
+											<input type="password" name="repwd" id="password"
+												class="form-control" placeholder="비밀번호 재확인" />
+										</div>
+									</div>
+									<div>
+										<label class="form-label">생년월일</label>
+										<div class="input-group">
+											<select class="form-select" id="birth-year" name="birthYear">
+												<option value="" disabled selected>출생 연도</option>
+											</select> <select class="form-select" id="birth-month"
+												name="birthMonth">
+												<option value="" disabled selected>월</option>
+											</select> <select class="form-select" id="birth-day" name="birthDay">
+												<option value="" disabled selected>일</option>
+											</select>
+										</div>
+									</div>
+									<div>
+										<label class="form-label">성별</label>
+										<div class="input-group">
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="gender"
+													value="m" checked><label class="form-check-label">남</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input type="radio" class="form-check-input" name="gender"
+													value="f"><label class="form-check-label">여</label>
+											</div>
+										</div>
+									</div>
+									<div>
+
+										<th:block th:if="${email} == null">
+											<label class="form-label" for="email">이메일</label>
+											<div class="input-group">
+												<span class="input-group-text"><i
+													class="bi bi-envelope-at"></i></span> <input type="email"
+													name="email" id="email" class="form-control"
+													placeholder="이메일을 입력하세요" size="20" /> <input type="button"
+													data-mdb-button-init data-mdb-ripple-init
+													class="btn btn-success btn-lg" value="인증메일발송"
+													onclick="sendNumber()">
+											</div>
+											<div class="input-group" id="mail_number"
+												style="display: none">
+												<input type="text" name="valid_number" id="valid_number"
+													class="form-control" placeholder="인증번호 입력" /> <input
+													type="button" data-mdb-button-init data-mdb-ripple-init
+													class="btn btn-success btn-lg" value="인증하기"
+													onclick="confirmNumber()"> <input type="hidden"
+													name="checkEmailOk" value="false">
+											</div>
+										</th:block>
+										<th:block th:unless="${email} == null">
+											<label class="form-label">카카오 계정으로 인증하셨습니다</label>
+											<input type="email" name="email" id="email"
+												class="form-control" th:value="${email}" size="20" readonly />
+											<input type="hidden" name="checkEmailOk" value="true">
+										</th:block>
+									</div>
+									<div>
+										<label class="form-label" for="tel">핸드폰</label>
+										<div class="input-group">
+											<span class="input-group-text"><i
+												class="bi bi-phone-fill"></i></span> <input type="tel" name="tel"
+												id="tel" class="form-control" placeholder="010-1234-5678"
+												size="12" />
+										</div>
+									</div>
+									<div>
+										<label class="form-label" for="zipcode">주소</label>
+										<div class="input-group">
+											<span class="input-group-text"><i
+												class="bi bi-house-door"></i></span> <input type="text"
+												name="zipcode" id="zipcode" class="form-control"
+												placeholder="우편번호" readonly> <input type="button"
+												onclick="DaumZipcode()" data-mdb-button-init
+												data-mdb-ripple-init class="btn btn-success btn-lg"
+												value="우편번호 찾기">
+										</div>
+										<input type="text" class="form-control" id="addr1"
+											name="addr1" placeholder="주소"> <input type="text"
+											class="form-control" id="addr2" name="addr2"
+											placeholder="상세주소">
+									</div>
+									<div class="form-check d-flex justify-content-center mb-5">
+										<input class="form-check-input me-2" type="checkbox" value=""
+											id="form2Example3c" /> <label class="form-check-label"
+											for="form2Example3"> 위 <a href="#!">개인정보 수집·이용</a>에
+											동의합니다.
+										</label>
+									</div>
+
+									<div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+										<input type="button" data-mdb-button-init data-mdb-ripple-init
+											class="btn btn-success btn-lg" onclick="inputCheck()"
+											value="회원가입"> <input type="reset"
+											data-mdb-button-init data-mdb-ripple-init
+											class="btn btn-secondary btn-lg" value="다시 작성">
+									</div>
+
+								</form>
+
+							</div>
+							<div
+								class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+								<img src="https://i.postimg.cc/mDyCbPmw/join-Form-Image.png" class="img-fluid"
+									alt="Sample image">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

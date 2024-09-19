@@ -49,13 +49,6 @@ function checkinput() {
 	   		alert("글 종류를 선택해 주세요.");
 	   		return false;
 	}
-	
-	
-	if(!frm.feed_file1.value) {
-			   alert("자료를 등록하세요.");
-			   frm.img.focus();
-			   return false;
-			}	
 
    frm.submit();
 }

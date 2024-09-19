@@ -10,10 +10,10 @@
 		if("[[${result}]]" == "true"){
 			alert("정상적으로 선택하신 리뷰가 삭제되었습니다.")
 			sessionStorage.removeItem('cart')
-			if("[[${pcode}]]"==null){
-			location.href = "/shop/shopview?pcode=[[${pcode}]]";
-			}else{
+			if("[[${pcode}]]"== ""){
 				location.href = "/shop/myReview";
+			}else if("[[${pcode}]]"!=null){
+				location.href = "/shop/shopview?pcode=[[${pcode}]]";
 				
 			}
 		}else{

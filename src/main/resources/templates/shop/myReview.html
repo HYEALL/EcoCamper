@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-
 <section class="product-reviews">
 	<div class="reviews-header" >
 				<h3>상품 리뷰</h3>
@@ -21,7 +13,7 @@
 							th:data-id="${reviewdto.shopreviewid}">
 
 							<td class="review_author" th:text="${reviewdto.shopreviewid}"></td>
-							<td class="" th:text="${reviewdto.shopreviewpcode}" style="width: 70px;"></td>
+							<td class="review_pname" th:text="${reviewdto.pname}" style="width: 150px;" th:onclick="go_shopview([[${reviewdto.shopreviewpcode}]])"></td>
 							<td class="review_rating"><th:block
 									th:each="i : ${#numbers.sequence(1, reviewdto.rating)}">
 									<span class="star on" th:value="${i}"></span>
@@ -127,7 +119,9 @@ button:hover {
 	transition: background-color 0.3s, border-radius 0.3s;
 	/* 부드러운 효과를 위한 트랜지션 */
 }
-
+.review_pname{
+	cursor: pointer; 
+}
 .review_item:hover {
 	background-color: #f0f0f0; /* 마우스 오버 시 배경 색상 */
 	border-radius: 8px; /* 모서리 둥글게 설정 */
@@ -245,11 +239,17 @@ button:hover {
 
 <script type="text/javascript">
 
+function go_shopview(pcode){
+	
+	location.href="/shop/shopview?pcode="+pcode;
+	
+}
+
 function deleteReview(reviewseq, reviewid, reviewcode) {
 	if("[[${userId}]]" != "" ){
 		if("[[${userId}]]"== reviewid){
 			if(confirm("작성하신 리뷰를 정말 삭제하시겠습니까?")){
-				location.href="/shop/shopReviewDelete?shopreviewseq="+reviewseq+"&pcode="+reviewcode					
+				location.href="/shop/shopReviewDelete?shopreviewseq="+reviewseq					
 			}
 		}else{
 			alert("리뷰 작성자만 삭제가 가능합니다.")
@@ -266,5 +266,3 @@ function deleteReview(reviewseq, reviewid, reviewcode) {
 }
 
 </script>
-</body>
-</html>

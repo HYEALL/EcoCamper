@@ -1,10 +1,19 @@
 package com.example.EcoCamper.entity;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -37,6 +46,7 @@ public class Map {
     private String place_address;
     private String place_oldaddr;
     private String place_postcode;
+    @Column(name = "place_pic", length = 4000)
     private String place_pic;
     private String place_name;
     private String place_description;
@@ -61,4 +71,54 @@ public class Map {
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date upload_date;
+    
+    // 다대다 관계: 지역 필터 선택
+    @ManyToMany
+    @JoinTable(
+    		name = "placefilter_region",
+    		joinColumns = @JoinColumn(name = "place_seq"),
+    		inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    private List<Region> regions = new ArrayList<>();
+    
+    // 다대다 관계: 공간유형 필터 선택
+    @ManyToMany
+    @JoinTable(
+    		name = "placefilter_category",
+    		joinColumns = @JoinColumn(name = "place_seq"),
+    		inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    private List<Category> categories = new ArrayList<>();
+
+    // 다대다 관계: 편의시설 필터 선택
+    @ManyToMany
+    @JoinTable(
+    		name = "placefilter_facility",
+    		joinColumns = @JoinColumn(name = "place_seq"),
+    		inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    private List<Facility> facilities = new ArrayList<>();
+
+    // 다대다 관계: 주변환경 필터 선택
+    @ManyToMany
+    @JoinTable(
+    		name = "placefilter_environment",
+    		joinColumns = @JoinColumn(name = "place_seq"),
+    		inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    private List<Environment> environments = new ArrayList<>();
+
+    // 다대다 관계: 계절 필터 선택
+    @ManyToMany
+    @JoinTable(
+    		name = "placefilter_season",
+    		joinColumns = @JoinColumn(name = "place_seq"),
+    		inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    private List<Season> seasons = new ArrayList<>();
+    
+    // 다대일 관계: 검색어 하나에 여러개의 장소
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private Keyword keyword;
 }

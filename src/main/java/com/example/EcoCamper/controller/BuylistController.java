@@ -157,7 +157,7 @@ public class BuylistController {
 					dto.setReceivename(receivename);
 					dto.setBzipcode(bzipcode);
 					dto.setBaddr1(baddr1);
-					dto.setBaddr1(baddr2);
+					dto.setBaddr2(baddr2);
 					dto.setBphone(bphone);
 					dto.setBcancel("N");
 					dto.setBpayment(bpayment);

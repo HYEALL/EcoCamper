@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.EcoCamper.dao.ShopReviewDAO;
+import com.example.EcoCamper.dto.MyReviewDTO;
 import com.example.EcoCamper.dto.ShopReviewDTO;
 import com.example.EcoCamper.entity.ShopReview;
 import com.example.EcoCamper.jwt.TokenProvider;
@@ -51,7 +52,13 @@ public class ShopReviewController {
       //System.out.println("result"+result);
       
       model.addAttribute("result",result);
+      
+      //System.out.println(result);
+      
       model.addAttribute("pcode",pcode);
+      
+      //System.out.println(pcode);
+      
       model.addAttribute("dto",dto);
       
       return "/shop/shopReview";
@@ -62,7 +69,7 @@ public class ShopReviewController {
       int shopreviewseq=Integer.parseInt(request.getParameter("shopreviewseq"));
      
       String pcode=request.getParameter("pcode");
-      String pcode1=request.getParameter("reviewcode");
+     
       
       
       //System.out.println(pcode);
@@ -72,9 +79,7 @@ public class ShopReviewController {
       model.addAttribute("result",result);
       model.addAttribute("pcode",pcode);
       
-      if(pcode==null) {
-    	  model.addAttribute("pcode1",pcode1);
-      }
+      
       
       return "/shop/shopReviewDelete";
    }
@@ -97,7 +102,9 @@ public class ShopReviewController {
 		int endNum = pg * 12;
 		int startNum = endNum - 11;
 		
-		List<ShopReview> list=service_re.myReview( userId, startNum, endNum);
+		List<MyReviewDTO> list=service_re.myReview(userId);
+		
+		//System.out.println(list);
 		
 		int total=service_re.count(userId);
 		

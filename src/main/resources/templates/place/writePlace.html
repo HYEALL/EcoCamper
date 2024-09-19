@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>장소 입력</title>
+<!-- 외부 CSS 로드 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Map 데이터 입력</h1>
+        <form id="mapForm" action="/savePlace" method="post">
+            <!-- 장소 카테고리 -->
+            <label for="place_category">장소 카테고리</label>
+            <select id="place_category" name="place_category" required aria-invalid="true">
+                <option value="">장소 카테고리를 선택하세요</option>
+                <option value="place_c01">캠핑장</option>
+                <option value="place_c02">차박, 노지</option>
+                <option value="place_c03">글램핑, 카라반</option>
+                <option value="place_c04">백패킹, 하이킹</option>
+                <option value="place_c05">낚시스팟</option>
+                <option value="place_c06">여행</option>
+                <option value="place_c07">액티비티</option>
+                <option value="place_c08">워터스포츠</option>
+                <option value="place_c09">스토어</option>
+            </select>
+            <small id="categoryError">장소 카테고리를 선택해주세요.</small>
+
+            <!-- 장소명 -->
+            <label for="place_name">장소명</label>
+            <input type="text" id="place_name" name="place_name" aria-invalid="true"><br>
+
+            <!-- 주소 -->
+            <label for="place_address">주소</label>
+            <input type="text" id="place_address" name="place_address" aria-invalid="true"><br>
+            
+            <!-- 우편번호 -->
+            <label for="place_postcode">우편번호</label>
+            <input type="text" id="place_postcode" name="place_postcode"><br>
+
+            <!-- 지번 -->
+            <label for="place_oldaddr">지번</label>
+            <input type="text" id="place_oldaddr" name="place_oldaddr"><br>
+
+            <!-- 사진 -->
+            <label for="place_pic">대표 사진 (url)</label>
+            <input type="text" id="place_pic" name="place_pic"><br>
+
+            <!-- 설명 -->
+            <label for="place_description">장소 설명</label>
+            <textarea id="place_description" name="place_description" aria-invalid="true"></textarea><br>
+
+            <!-- 주요사항 -->
+            <label for="place_keypoint">주요사항</label>
+            <textarea id="place_keypoint" name="place_keypoint"></textarea><br>
+
+            <!-- 주의사항 -->
+            <label for="place_precaution"> 이용객 주의사항</label>
+            <textarea id="place_precaution" name="place_precaution"></textarea><br>
+
+            <!-- 예약 링크 -->
+            <label for="place_bookingLink">예약 링크 (홈페이지 링크)</label>
+            <input type="text" id="place_bookingLink" name="place_bookingLink"><br>
+
+            <!-- 전화번호 -->
+            <label for="place_tel">전화번호</label>
+            <input type="text" id="place_tel" name="place_tel"><br>
+
+            <!-- 에디터 평점 -->
+            <label for="place_editorScore">에디터 평점</label>
+            <input type="number" step="0.5" id="place_editorScore" name="place_editorScore"><br>
+
+            <!-- 청결도 -->
+            <label for="place_cleanScore">청결도</label>
+            <input type="number" step="0.5" id="place_cleanScore" name="place_cleanScore"><br>
+
+            <!-- 경치 -->
+            <label for="place_sceneScore">경치</label>
+            <input type="number" step="0.5" id="place_sceneScore" name="place_sceneScore"><br>
+
+            <!-- 독립성 -->
+            <label for="place_independenceScore">독립성</label>
+            <input type="number" step="0.5" id="place_independenceScore" name="place_independenceScore"><br>
+
+            <!-- 시설 점수 -->
+            <label for="place_facilityScore">시설 점수</label>
+            <input type="number" step="0.5" id="place_facilityScore" name="place_facilityScore"><br>
+
+            <!-- 편의시설 -->
+            <fieldset>
+                <legend>편의시설</legend>
+                <label><input type="checkbox" name="place_facility" value="place_f01"> 화장실</label>
+                <label><input type="checkbox" name="place_facility" value="place_f02"> 샤워실</label>
+                <label><input type="checkbox" name="place_facility" value="place_f03"> 매점</label>
+                <label><input type="checkbox" name="place_facility" value="place_f04"> 낚시</label>
+                <label><input type="checkbox" name="place_facility" value="place_f05"> 개수대</label>
+                <label><input type="checkbox" name="place_facility" value="place_f06"> 전기사용</label>
+                <label><input type="checkbox" name="place_facility" value="place_f07"> 장비대여</label>
+                <label><input type="checkbox" name="place_facility" value="place_f08"> 수영장</label>
+                <label><input type="checkbox" name="place_facility" value="place_f09"> 뷰맛집</label>
+                <label><input type="checkbox" name="place_facility" value="place_f10"> 체험 프로그램</label>
+                <label><input type="checkbox" name="place_facility" value="place_f11"> 놀이시설</label>
+                <label><input type="checkbox" name="place_facility" value="place_f12"> 액티비티</label>
+                <label><input type="checkbox" name="place_facility" value="place_f13"> 노키즈</label>
+                <label><input type="checkbox" name="place_facility" value="place_f14"> 반려견 동반</label>
+                <label><input type="checkbox" name="place_facility" value="place_f15"> 방송출연</label>
+                <label><input type="checkbox" name="place_facility" value="place_f16"> 에어컨</label>
+                <label><input type="checkbox" name="place_facility" value="place_f17"> 주차</label>
+            </fieldset>
+
+            <!-- 주변 환경 -->
+            <fieldset>
+                <legend>주변 환경</legend>
+                <label><input type="checkbox" name="place_environment" value="place_e01"> 바다</label>
+                <label><input type="checkbox" name="place_environment" value="place_e02"> 호수, 강</label>
+                <label><input type="checkbox" name="place_environment" value="place_e03"> 계곡</label>
+                <label><input type="checkbox" name="place_environment" value="place_e04"> 산, 숲</label>
+                <label><input type="checkbox" name="place_environment" value="place_e05"> 섬</label>
+                <label><input type="checkbox" name="place_environment" value="place_e06"> 공원, 유원지</label>
+                <label><input type="checkbox" name="place_environment" value="place_e07"> 도심</label>
+                <label><input type="checkbox" name="place_environment" value="place_e08"> 농촌</label>
+            </fieldset>
+
+            <!-- 계절 -->
+            <fieldset>
+                <legend>방문하기 좋은 계절 (추천)</legend>
+                <label><input type="checkbox" name="place_season" value="place_s01"> 봄</label>
+                <label><input type="checkbox" name="place_season" value="place_s02"> 여름</label>
+                <label><input type="checkbox" name="place_season" value="place_s03"> 가을</label>
+                <label><input type="checkbox" name="place_season" value="place_s04"> 겨울</label>
+            </fieldset>
+
+            <!-- 유튜브 링크 -->
+            <label for="place_youtubeLink">유튜브 링크</label>
+            <input type="text" id="place_youtubeLink" name="place_youtubeLink"><br>
+
+            <!-- 유튜브 제목 -->
+            <label for="place_youtubeTitle">유튜브 제목</label>
+            <input type="text" id="place_youtubeTitle" name="place_youtubeTitle"><br>
+
+            <!-- 유튜브 썸네일 -->
+            <label for="place_youtubeVideo">유튜브 썸네일</label>
+            <input type="text" id="place_youtubeVideo" name="place_youtubeVideo"><br>
+
+            <button type="submit">저장</button>
+        </form>
+
+        <script>
+            const form = document.getElementById('mapForm');
+            const categorySelect = document.getElementById('place_category');
+            const placeNameInput = document.getElementById('place_name');
+            const placeAddressInput = document.getElementById('place_address');
+            const placeDescriptionInput = document.getElementById('place_description');
+            
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+        
+                // Check if the category select is valid
+                if (!categorySelect.value) {
+                    categorySelect.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    categorySelect.setAttribute('aria-invalid', 'false');
+                }
+        
+                // Check if the place name is valid
+                if (!placeNameInput.value.trim()) {
+                    placeNameInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    placeNameInput.setAttribute('aria-invalid', 'false');
+                }
+        
+                // Check if the address is valid
+                if (!placeAddressInput.value.trim()) {
+                    placeAddressInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    placeAddressInput.setAttribute('aria-invalid', 'false');
+                }
+        
+                // Check if the description is valid
+                if (!placeDescriptionInput.value.trim()) {
+                    placeDescriptionInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    placeDescriptionInput.setAttribute('aria-invalid', 'false');
+                }
+        
+                if (!isValid) {
+                    event.preventDefault();  // Prevent form submission if invalid
+                }
+            });
+        
+            // Listen for changes in the category select field
+            categorySelect.addEventListener('change', function() {
+                if (categorySelect.value) {
+                    categorySelect.setAttribute('aria-invalid', 'false');
+                } else {
+                    categorySelect.setAttribute('aria-invalid', 'true');
+                }
+            });
+            
+            // Real-time validation for place name
+            placeNameInput.addEventListener('input', function() {
+                if (placeNameInput.value.trim()) {
+                    placeNameInput.setAttribute('aria-invalid', 'false');
+                } else {
+                    placeNameInput.setAttribute('aria-invalid', 'true');
+                }
+            });
+        
+            // Real-time validation for place address
+            placeAddressInput.addEventListener('input', function() {
+                if (placeAddressInput.value.trim()) {
+                    placeAddressInput.setAttribute('aria-invalid', 'false');
+                } else {
+                    placeAddressInput.setAttribute('aria-invalid', 'true');
+                }
+            });
+        
+            // Real-time validation for place description
+            placeDescriptionInput.addEventListener('input', function() {
+                if (placeDescriptionInput.value.trim()) {
+                    placeDescriptionInput.setAttribute('aria-invalid', 'false');
+                } else {
+                    placeDescriptionInput.setAttribute('aria-invalid', 'true');
+                }
+            });
+        </script>
+
+    </main>
+</body>
+</html>

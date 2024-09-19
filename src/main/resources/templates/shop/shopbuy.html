@@ -150,7 +150,7 @@
 			} else {
 				// Simple form validation (can be expanded)
 				if (name && addr1 && phone && payment) {
-					alert(`주문이 완료되었습니다!\n상품: [[${dto.pname}]] \n금액: [[${productprice}]] 원\n받는사람: ${name}\n배송지: ${addr1}\n전화번호: ${phone}\n결제 방법: ${payment}`);
+					alert(`주문이 완료되었습니다!\n상품: [[${dto.pname}]] \n금액: [[${productprice}]] 원\n 받는사람: ${name}\n배송지: ${addr1} ${addr2} \n전화번호: ${phone}\n결제 방법: ${payment}`);
 					// Here you can add code to send the data to the server
 				} else {
 					alert('모든 필드를 입력해 주세요.');

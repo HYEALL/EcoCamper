@@ -28,7 +28,7 @@ import java.util.List;
 public class MapController {
 	@Autowired
 	MapService mapService;
-	
+
 	@Autowired
 	MapRepository mapRepository;
 
@@ -37,10 +37,9 @@ public class MapController {
 
 	@Value("${project.upload.path}")
 	private String uploadpath;
-	
+
 	@GetMapping("/map")
 	public String map(Model model, HttpServletRequest request) {
-
 		// 로그인된 아이디를 토큰에 저장
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		System.out.println("token : " + token);
@@ -54,35 +53,47 @@ public class MapController {
 	}
 
 	// 필터와 검색어에 따른 검색 결과를 처리하는 POST 메서드
-    @PostMapping("/search")
-    @Transactional
-    public ResponseEntity<List<Map>> searchPlaces(@RequestBody java.util.Map<String, Object> requestData) {
-        // 클라이언트로부터 전달된 필터링 조건을 받아옵니다.
-        String keyword = (String) requestData.get("keyword");
-        List<String> regions = (List<String>) requestData.get("regions");
-        List<String> categories = (List<String>) requestData.get("categories");
-        List<String> facilities = (List<String>) requestData.get("facilities");
-        List<String> environments = (List<String>) requestData.get("environments");
-        List<String> seasons = (List<String>) requestData.get("seasons");
-        
-        System.out.println(keyword);
-        System.out.println(regions);
-        System.out.println(categories);
-        System.out.println(facilities);
-        System.out.println(environments);
-        System.out.println(seasons);
+	@PostMapping("/search")
+	@Transactional
+	public ResponseEntity<List<Map>> searchPlaces(@RequestBody java.util.Map<String, Object> requestData) {
+		// 클라이언트로부터 전달된 필터링 조건을 받아옵니다.
+		String keyword = (String) requestData.get("keyword");
+		List<String> regions = (List<String>) requestData.get("regions");
+		List<String> categories = (List<String>) requestData.get("categories");
+		List<String> facilities = (List<String>) requestData.get("facilities");
+		List<String> environments = (List<String>) requestData.get("environments");
+		List<String> seasons = (List<String>) requestData.get("seasons");
 
-        // PlacefilterSpecification의 정적 메서드를 사용하여 Specification을 생성합니다.
-        Specification<Map> spec = PlacefilterSpecification.filterByRegionCategoryFacilityEnvironmentSeasonKeyword(
-            regions, categories, facilities, environments, seasons, keyword);
+		System.out.println(keyword);
+		System.out.println(regions);
+		System.out.println(categories);
+		System.out.println(facilities);
+		System.out.println(environments);
+		System.out.println(seasons);
 
-        // 필터링된 결과를 가져옵니다.
-        List<Map> results = mapRepository.findAll(spec);
-        
-        // 필터링된 결과를 클라이언트에 반환합니다.
-        return ResponseEntity.ok(results);
-    }
+		// PlacefilterSpecification의 정적 메서드를 사용하여 Specification을 생성합니다.
+		Specification<Map> spec = PlacefilterSpecification.filterByRegionCategoryFacilityEnvironmentSeasonKeyword(
+				regions, categories, facilities, environments, seasons, keyword);
 
+		// 필터링된 결과를 가져옵니다.
+		List<Map> results = mapService.findAll(spec);
+
+		// 필터링된 결과를 클라이언트에 반환합니다.
+		return ResponseEntity.ok(results);
+	}
+
+	@GetMapping("/writePlace")
+	public String showMapForm(Model model) {
+		model.addAttribute("map", new Map());
+		model.addAttribute("req", "place/writePlace"); // map 데이터를 입력하는 폼
+		return "/index"; 
+	}
+
+	@PostMapping("/savePlace")
+	public String saveMap(Map map) {
+		mapService.save(map);
+		return "redirect:/writePlace"; // 데이터 저장 후 다시 입력 폼으로 리다이렉트
+	}
 
 	@GetMapping("/placeForm")
 	public String placeForm(Model model, HttpServletRequest request) {

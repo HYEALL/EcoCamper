@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.example.EcoCamper.dto.MyReviewDTO;
+import com.example.EcoCamper.dto.OrderlistDTO;
 import com.example.EcoCamper.entity.ShopReview;
 
 public interface ShopReviewRepository extends JpaRepository<ShopReview, Integer>{
@@ -22,9 +24,11 @@ public interface ShopReviewRepository extends JpaRepository<ShopReview, Integer>
 	int countByUserId(@Param("userId")String userId);
 	
 	
-	@Query(value = "select *from (select rownum rn, tt.*from"
-			   + " (select * from Shop_Review  where shopreviewid=:userId order by logtime desc) tt)"
-			   + "  where rn >=:startNum and rn <=:endNum", nativeQuery = true)
-	List<ShopReview> findbyStartNumAndEndNumWithUserId(@Param("userId") String userId, 
-						@Param("startNum") int startNum,@Param("endNum") int endNum);
+	@Query("SELECT new com.example.EcoCamper.dto.MyReviewDTO(r.shopreviewseq, r.shopreviewpcode, r.shopreviewid, "
+	        + "r.shopreviewcontent, r.rating, r.logtime, s.pname) "
+	        + "FROM ShopReview r "
+	        + "JOIN Shop s ON r.shopreviewpcode = s.pcode "
+	        + "WHERE r.shopreviewid = :userId "
+	        + "ORDER BY r.logtime DESC")
+	List<MyReviewDTO> findbyUserId(@Param("userId")String userId);
 }

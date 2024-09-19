@@ -1,195 +1,236 @@
 <div th:replace="~{layouts/header}"></div>
 <div class="container">
-   <div th:if="${req == null}">
+	<div th:if="${req == null}">
+		<!-- index 사진 추가 -->
+		<div class="swiper-container" >
+			<div class="swiper-wrapper">
+				<div class="swiper-slide option">
+					<img alt="" src="../images/index_1.jpg" style="height: 40vh;">
+				</div>
+				<div class="swiper-slide option">
+					<img alt="" src="../images/index_2.jpg" style="height: 40vh;">
+				</div>
+				<div class="swiper-slide option">
+					<img alt="" src="../images/index_3.jpg" style="height: 40vh;">
+				</div>
+				<div class="swiper-slide option">
+					<img alt="" src="../images/index_4.jpg" style="height: 40vh;">
+				</div>
 
-      <!-- index 사진 추가 --> 
-      <div class="swiper-container">
-         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-               <img alt="" src="../images/index_1.jpg">
-            </div>
-            <div class="swiper-slide">
-               <img alt="" src="../images/index_2.jpg">
-            </div>
-            <div class="swiper-slide">
-               <img alt="" src="../images/index_3.jpg">
-            </div>
-            <div class="swiper-slide">
-               <img alt="" src="../images/index_4.jpg">
-            </div>
-
-            <div class="swiper-slide">
-               <img alt="" src="../images/index_5.jpg">
-            </div>
-         </div>
-         <!-- Add Scrollbar -->
-         <!-- 
+				<div class="swiper-slide option">
+					<img alt="" src="../images/index_5.jpg" style="height: 40vh;">
+				</div>
+			</div>
+			<!-- Add Scrollbar -->
+			<!-- 
    <div class="swiper-scrollbar"></div>
     -->
-      </div>
-
-      <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-      <script>
-         var swiper = new Swiper('.swiper-container', {
-            effect : 'fade', // 페이드 효과
-            fadeEffect : {
-               crossFade : true, // 슬라이드 간 부드러운 전환
-            },
-            slidesPerView : 1,
-            spaceBetween : 0,
-            loop : true, // 슬라이드가 끝나면 다시 시작
-            autoplay : {
-               delay : 3000, // 슬라이드 전환 간격 (밀리초)
-               disableOnInteraction : false, // 사용자 상호작용 시 자동 재생 유지
-            },
-            scrollbar : {
-               el : '.swiper-scrollbar',
-               draggable : true,
-            },
-            speed : 1000, // 슬라이드 전환 속도 (밀리초)
-            mousewheel : true,
-            keyboard : true,
-         });
-      </script>
+		</div>
 
 
-      <!-- SHOP TOP 5-->
-      <br> <br> <br>
-      <div align="center">
-         <h4>SHOP 인기 TOP5</h4>
-         <h5 style="font-size: 18px;"></h5>
-      </div>
-      <div class="slider swiper-container-2">
-         <div class="swiper-wrapper slides" >
-            <div class="swiper-slide" th:each="shopdto : ${list_shop}">
-               <a th:href="@{/shop/shopview(pcode=${shopdto.pcode})}"> <img
-                  th:src="@{/images/}+${shopdto.pimg}" width="100" height="100">
-               </a>
-            </div>
-            
-            <!-- 추가적인 이미지들 -->
-         </div>
-         <div class="swiper-button-prev prev"></div>
-         <div class="swiper-button-next next"></div>
-      </div>
 
-      <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-      <script>
-         var swiper2 = new Swiper('.swiper-container-2', {
-            slidesPerView : 3,
-            slidesPerGroup : 1,
-            loop : true,
-            autoplay : {
-               delay : 3000,
-               disableOnInteraction : false,
-            },
-            navigation : {
-               nextEl : '.swiper-button-next',
-               prevEl : '.swiper-button-prev',
-            },
-            spaceBetween : 10,
-         });
-      </script>
+		<!-- SHOP TOP 5-->
+		<br> <br> <br>
+		<div align="center">
+			<h4>SHOP 인기 TOP5</h4>
+			<h5 style="font-size: 18px;"></h5>
+		</div>
+		<div class="slider swiper-container-2">
+			<div class="swiper-wrapper slides">
+				<div class="swiper-slide option" th:each="shopdto : ${list_shop}">
+					<a th:href="@{/shop/shopview(pcode=${shopdto.pcode})}"> <img
+						th:src="@{/images/}+${shopdto.pimg}" width="100" height="100">
+					</a>
+				</div>
 
-   </div>
-   <div th:if="${req != null}">
-      <div th:replace="~{${req}}"></div>
-   </div>
+				<!-- 추가적인 이미지들 -->
+			</div>
+			<div class="swiper-button-prev prev"></div>
+			<div class="swiper-button-next next"></div>
+		</div>
+
+		<!-- FEED TOP 5-->
+		<br> <br> <br>
+		<div align="center">
+			<h4>FEED 인기 TOP5</h4>
+			<h5 style="font-size: 18px;"></h5>
+		</div>
+		<div class="slider swiper-container-2">
+			<div class="swiper-wrapper slides">
+				<div class="swiper-slide option" th:each="feed : ${list_feed}">
+					
+
+					<!-- 피드 컨테이너 -->
+					<!-- 비디오 파일인 경우 -->
+					<div th:if="${feed.feed_type} == 'video'" class="feed-video">
+						<!-- 피드 링크 추가 -->
+						<a th:href="@{/feed/feedView?(seq=${feed.seq})}" class="feed-link"><video
+								controls>
+								<source
+									th:src="@{/storage/{filename}(filename=${feed.feed_file})}"
+									type="video/mp4">
+							</video></a>
+					</div>
+					<!-- 이미지 파일인 경우 -->
+					<div th:if="${feed.feed_type} != 'video'" class="feed-img">
+						<div th:if="${feed.getImageFileNames().size() > 0}">
+							
+							<!-- 피드 링크 추가 -->
+							<a th:href="@{/feed/feedView?(seq=${feed.seq})}"
+								class="feed-link"> 
+								<!-- 첫 번째 이미지 만 표시 -->
+								<img th:src="@{/storage/{filename}(filename=${feed.getImageFileNames()[0]})}"
+								alt="Feed Image"></a>
+						</div>
+					</div>
+					</a>
+				</div>
+
+			</div>
+
+			<!-- 추가적인 피드들 -->
+			<div class="swiper-button-prev prev"></div>
+			<div class="swiper-button-next next"></div>
+		</div>
+
+
+
+		<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+		<script>
+			var swiper = new Swiper('.swiper-container', {
+				effect : 'fade', // 페이드 효과
+				fadeEffect : {
+					crossFade : true, // 슬라이드 간 부드러운 전환
+				},
+				slidesPerView : 1,
+				spaceBetween : 0,
+				loop : true, // 슬라이드가 끝나면 다시 시작
+				autoplay : {
+					delay : 3000, // 슬라이드 전환 간격 (밀리초)
+					disableOnInteraction : false, // 사용자 상호작용 시 자동 재생 유지
+				},
+				scrollbar : {
+					el : '.swiper-scrollbar',
+					draggable : true,
+				},
+				speed : 1000, // 슬라이드 전환 속도 (밀리초)
+				mousewheel : true,
+				keyboard : true,
+			});
+			var swiper2 = new Swiper('.swiper-container-2', {
+				slidesPerView : 3,
+				slidesPerGroup : 1,
+				loop : true,
+				autoplay : {
+					delay : 3000,
+					disableOnInteraction : false,
+				},
+				navigation : {
+					nextEl : '.swiper-button-next',
+					prevEl : '.swiper-button-prev',
+				},
+				spaceBetween : 10,
+			});
+		</script>
+
+	</div>
+	<div th:if="${req != null}">
+		<div th:replace="~{${req}}"></div>
+	</div>
 </div>
+
+<div th:replace="~{layouts/footer}"></div>
+
 <style>
 /* 슬리이더 1 */
 .swiper-container {
-   width: 100%;
-   height: auto;
-   position: relative;
+	width: 100%;
+	height: auto;
+	position: relative;
 }
-.swiper-wrapper{
 
-}
 
 .swiper-container-2 {
-    width: 100%;
-    height: auto;
-    position: relative;
+	width: 100%;
+	height: auto;
+	position: relative;
 }
 
-.swiper-slide {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   font-size: 18px;
-   text-align: center;
-   background: #fff;
-   transition: opacity 1s ease-in-out; /* 부드러운 페이드 효과를 위해 transition 추가 */
-   width: 100%;
-   height: 100%;
-   overflow: hidden;
+.option {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+	text-align: center;
+	background: #fff;
+	transition: opacity 1s ease-in-out; /* 부드러운 페이드 효과를 위해 transition 추가 */
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
 }
 
-.swiper-slide img {
-   width: 100%; /* 이미지가 슬라이드 너비에 맞게 조정 */
-   height: 40vh; /* 이미지의 비율 유지 */
-   object-fit: cover; /* 이미지의 비율 유지하며 크기 조정 */
-   overflow: hidden;
+.option img {
+	width: 100%; /* 이미지가 슬라이드 너비에 맞게 조정 */
+	height: 20vh; /* 이미지의 비율 유지 */
+	object-fit: cover; /* 이미지의 비율 유지하며 크기 조정 */
+	overflow: hidden;
+}
+
+.option video {
+    width: 100%; /* 슬라이드 너비에 맞게 조정 */
+    height: 40vh; /* 높이를 40vh로 변경 */
+    object-fit: cover; /* 비율 유지하며 크기 조정 */
+    overflow: hidden;
 }
 
 /* 슬리이더 2 */
 .slider {
-   position: relative;
-   margin: auto;
-   overflow: hidden;
-   border: 2px solid #ddd;
-   border-radius: 10px;
-   margin-top: 30px;
-   display: flex; /* 가로 중앙 정렬 */
-   align-items: center; /* 세로 중앙 정렬 */
-   justify-content: center; /* 가로 중앙 정렬 */
-   height: 50vh; /* 브라우저 창 높이에 대한 비율로 설정 */
-   height: 300px;
-   width: 90%;
-   max-width: 1300px;
+	position: relative;
+	margin: auto;
+	overflow: hidden;
+	border: 2px solid #ddd;
+	border-radius: 10px;
+	margin-top: 30px;
+	display: flex; /* 가로 중앙 정렬 */
+	align-items: center; /* 세로 중앙 정렬 */
+	justify-content: center; /* 가로 중앙 정렬 */
+	height: 50vh; /* 브라우저 창 높이에 대한 비율로 설정 */
+	height: 300px;
+	width: 90%;
+	max-width: 1300px;
 }
 
-.slider .swiper-slide {
-   width: 100%;
-   height: 100%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   box-sizing: border-box;
-   padding: 0;
-   overflow: hidden;
-}
-
-.slider .swiper-slide img {
-   width: 100%;
-   height: 100%;
-   object-fit: cover;
-   margin: 0;
-   overflow: hidden;
+.slider .option {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	padding: 0;
+	overflow: hidden;
 }
 
 .prev, .next {
-   cursor: pointer;
-   position: absolute;
-   top: 50%;
-   width: auto;
-   padding: 16px;
-   margin-top: -22px;
-   color: white;
-   font-weight: bold;
-   font-size: 18px;
-   border-radius: 3px;
-   user-select: none;
-   background-color: rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+	position: absolute;
+	top: 50%;
+	width: auto;
+	padding: 16px;
+	margin-top: -22px;
+	color: white;
+	font-weight: bold;
+	font-size: 18px;
+	border-radius: 3px;
+	user-select: none;
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .prev {
-   left: 10px;
+	left: 10px;
 }
 
 .next {
-   right: 10px;
+	right: 10px;
 }
 </style>
-<div th:replace="~{layouts/footer}"></div>

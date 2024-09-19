@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.EcoCamper.dao.ShopReviewDAO;
+import com.example.EcoCamper.dto.MyReviewDTO;
 import com.example.EcoCamper.dto.ShopReviewDTO;
 import com.example.EcoCamper.entity.ShopReview;
 
@@ -31,8 +32,8 @@ public class ShopReviewService {
 		return dao.shopReviewDelete(shopreviewseq);
 	}
 	
-	public List<ShopReview> myReview(String userId ,int startNum,int endNum) {
-		return dao.myReview(userId, startNum, endNum);
+	public List<MyReviewDTO> myReview(String userId) {
+		return dao.myReview(userId);
 	}
 	
 	public int count(String userId){

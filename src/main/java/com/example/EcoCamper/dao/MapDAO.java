@@ -12,4 +12,6 @@ import com.example.EcoCamper.repository.MapRepository;
 public class MapDAO {
 	@Autowired
 	MapRepository mapRepository;
+	
+	
 }

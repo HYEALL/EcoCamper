@@ -171,7 +171,7 @@ public class FeedController {
 
 		} 
 		List<FeedDTO> list = service.getAllFeeds();
-		System.out.println("list = " + list);
+		
 		model.addAttribute("list", list);
 		model.addAttribute("userId", userId);
 		model.addAttribute("req", "/feed/feedList");
@@ -207,7 +207,7 @@ public class FeedController {
 			userId = tokenProvider.validateAndGetUserId(token);
 			int seq = Integer.parseInt(request.getParameter("seq"));
 			Feed feed = service.feedView(seq);
-			System.out.println("feed =" + feed);
+
 			model.addAttribute("userId", userId);
 			model.addAttribute("feed", feed);
 			model.addAttribute("seq", seq);

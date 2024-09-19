@@ -60,5 +60,9 @@ public class FeedService {
 	    public List<Feed> findFeedsByTagName(String tagName) {
 	        return dao.findFeedsByTagName(tagName);
 	    }
+	    
+	    public List<Feed> feedTop(){
+	    	return dao.feedBytopfeeds();
+	    }
 	 
 }

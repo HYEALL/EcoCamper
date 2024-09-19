@@ -26,4 +26,7 @@ public interface FeedRepository extends JpaRepository<Feed, Integer> {
     @Query("SELECT f FROM Feed f WHERE f.tags LIKE %:tagName%")
     List<Feed> findByTagName(@Param("tagName") String tagName);
 
+    // 좋아요 많은 5개 피드 검색
+    @Query("SELECT f FROM Feed f LEFT JOIN Likes l ON f.seq = l.reviewId GROUP BY f.seq, f ORDER BY COUNT(l.id) DESC")
+    List<Feed> findTop5FeedsByLikes();
 }
