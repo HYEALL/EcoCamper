@@ -58,39 +58,43 @@ function resizeTextarea(textarea) {
     textarea.style.height = (textarea.scrollHeight) + 'px';
 }
 
+//기존 태그 불러오기
 function loadExistingTags() {
-    const existingTags = document.getElementById('existing-tags').value.split(',').filter(tag => tag.trim() !== '');
-    const hashtagContainer = document.getElementById('hashtag-container');
+ const existingTags = document.getElementById('existing-tags').value.split(',').filter(tag => tag.trim() !== '');
+ const hashtagContainer = document.getElementById('hashtag-container');
+ const tagInput = document.getElementById('tag-input');
 
-    existingTags.forEach(tag => {
-        const tagElement = document.createElement('div');
-        tagElement.className = 'tag';
-        tagElement.dataset.tag = tag.trim();
-        tagElement.innerHTML = `${tag.trim()} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
-        hashtagContainer.appendChild(tagElement);
-    });
+ if (existingTags.length > 0) {
+     tagInput.disabled = true; // 태그 입력란 비활성화
+ }
+
+ existingTags.forEach(tag => {
+     const tagElement = document.createElement('div');
+     tagElement.className = 'tag';
+     tagElement.dataset.tag = tag.trim();
+     tagElement.innerHTML = `${tag.trim()} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+     hashtagContainer.appendChild(tagElement);
+ });
 }
 
+//해시태그 추가
 function addHashtag() {
     const tagInput = document.getElementById('tag-input');
     const hashtagContainer = document.getElementById('hashtag-container');
-    const tagsInput = document.getElementById('tags-input');
     let hashtag = tagInput.value.trim();
 
-    if (!tagsInput) {
-        console.error('tags-input 요소가 존재하지 않습니다.');
-        return;
-    }
+    // 콤마 제거
+    hashtag = hashtag.replace(/,/g, '');
 
     if (hashtag && !hashtag.startsWith('#')) {
         hashtag = `#${hashtag}`;
     }
 
-    const existingTags = tagsInput.value.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag !== '');
+    // 기존 태그와 동일한 태그가 있는지 확인
+    const existingTag = Array.from(hashtagContainer.querySelectorAll('.tag'))
+        .find(tagElement => tagElement.dataset.tag === hashtag);
 
-    if (existingTags.includes(hashtag.toLowerCase())) {
-        alert('이미 존재하는 해시태그입니다.');
-    } else {
+    if (!existingTag) {
         const tagElement = document.createElement('div');
         tagElement.className = 'tag';
         tagElement.dataset.tag = hashtag;
@@ -98,19 +102,43 @@ function addHashtag() {
         hashtagContainer.appendChild(tagElement);
         tagInput.value = '';
 
-        tagsInput.value = existingTags.concat(hashtag.toLowerCase()).join(',');
+        // 해시태그 값을 숨겨진 입력 필드에 추가
+        const tagsInput = document.getElementById('tags-input');
+        const currentTags = tagsInput.value.split(',').filter(tag => tag.trim() !== '');
+        currentTags.push(hashtag);
+        tagsInput.value = currentTags.join(',');
+
+        // 태그가 추가되면 입력란을 비활성화
+        tagInput.disabled = true;
+    } else {
+        alert('이미 존재하는 해시태그입니다.');
     }
 }
 
+// 해시태그 제거
 function removeHashtag(button) {
     const tagElement = button.parentElement;
-    const hashtag = tagElement.dataset.tag;
+    const hashtag = tagElement.dataset.tag.trim();
+
+    // DOM에서 해시태그 요소를 제거합니다.
     tagElement.remove();
 
+    // 숨겨진 입력 필드에서 해시태그 값을 제거합니다.
     const tagsInput = document.getElementById('tags-input');
-    const existingTags = tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
-    const updatedTags = existingTags.filter(tag => tag !== hashtag.toLowerCase());
+    const existingTags = tagsInput.value.split(',').filter(tag => tag.trim() !== '');
+
+    // 삭제할 해시태그를 필터링하여 새로운 목록을 만듭니다.
+    const updatedTags = existingTags.filter(tag => tag !== hashtag);
+
+    // 업데이트된 해시태그 목록을 숨겨진 입력 필드에 저장합니다.
     tagsInput.value = updatedTags.join(',');
+
+    // 해시태그가 모두 제거되면 입력란을 활성화합니다.
+    if (updatedTags.length === 0) {
+        document.getElementById('tag-input').disabled = false;
+    }
+
+    console.log(`Updated tags: ${tagsInput.value}`);  // 디버그용 출력
 }
     </script>
 
@@ -399,11 +427,10 @@ hr {
 </style>
 <body>
 <form action="feedModifyVoD" name="form1" method="post" enctype="multipart/form-data">
-<input type="hidden" id="existing-tags" th:value="${tagsString}">
+<input type="hidden" id="existing-tags" th:value="${feed.tags}">
 <input type="hidden" id="tags-input" name="tags">
 <div class="form-container">
 <h2>동영상 편집</h2>
-<div style="color: red">※ 기존 동영상도 재등록 해야합니다</div>
 	<input type="hidden" name="seq" th:value="${seq}">
     <div class="section content">
 		 <div id="video-list">

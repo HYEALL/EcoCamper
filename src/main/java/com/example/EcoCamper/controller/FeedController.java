@@ -20,12 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.EcoCamper.dto.FeedDTO;
 import com.example.EcoCamper.entity.Feed;
 import com.example.EcoCamper.entity.Likes;
-import com.example.EcoCamper.entity.Tag;
 import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.FeedService;
 import com.example.EcoCamper.service.LikesService;
-import com.example.EcoCamper.service.TagService;
 
 import io.jsonwebtoken.lang.Arrays;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,8 +34,6 @@ public class FeedController {
 	FeedService service;
 	@Autowired
 	LikesService LikesService;
-	@Autowired
-	TagService tagService;
 
 	@Value("${project.upload.path}")
 	private String uploadpath;
@@ -112,18 +108,6 @@ public class FeedController {
 	    dto.setFeed_type("img");
 
 
-
-	    // 태그 문자열을 List<String>으로 변환
-	    List<String> tagList = new ArrayList<>();
-	    if (tags != null && !tags.trim().isEmpty()) {
-	        String[] tagArray = tags.split(",");
-	        for (String tag : tagArray) {
-	            tagList.add(tag.trim()); // 각 태그에 대한 공백 제거 후 추가
-	        }
-	    }
-	    dto.setTags(tagList); // DTO에 태그 리스트 설정
-
-
 	    boolean result = service.feedWritePhoto(dto);
 	    model.addAttribute("result", result);
 	    model.addAttribute("req", "/feed/feedWritePh");
@@ -167,16 +151,6 @@ public class FeedController {
 		String userId = tokenProvider.validateAndGetUserId(token);
 		dto.setId(userId);
 		
-		
-		 // 태그 문자열을 List<String>으로 변환
-	    List<String> tagList = new ArrayList<>();
-	    if (tags != null && !tags.trim().isEmpty()) {
-	        String[] tagArray = tags.split(",");
-	        for (String tag : tagArray) {
-	            tagList.add(tag.trim()); // 각 태그에 대한 공백 제거 후 추가
-	        }
-	    }
-	    dto.setTags(tagList); // DTO에 태그 리스트 설정
 
 		// DB 저장
 		boolean result = service.feedWriteVideo(dto);
@@ -262,13 +236,8 @@ public class FeedController {
 	public String boardModifyFormPh(Model model, @RequestParam("seq") int seq) {
 	    Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
 
-	    // 태그 리스트에서 tag_name만 추출하여 문자열로 변환
-	    String tagsString = feed.getTags().stream()
-	        .map(Tag::getTag_name) // Tag 객체에서 tag_name 추출
-	        .collect(Collectors.joining(",")); // 콤마로 구분된 문자열로 변환
-
+	   
 	    model.addAttribute("feed", feed);
-	    model.addAttribute("tagsString", tagsString); // 변환된 문자열을 모델에 추가
 	    model.addAttribute("seq", seq);
 	    model.addAttribute("req", "/feed/feedModifyFormPh");
 	    return "/index"; // JSP 파일의 경로
@@ -279,14 +248,8 @@ public class FeedController {
 
 		// 한줄 데이터 불러오기
 		Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
-	    
-	    // 태그 리스트에서 tag_name만 추출하여 문자열로 변환
-	    String tagsString = feed.getTags().stream()
-	        .map(Tag::getTag_name) // Tag 객체에서 tag_name 추출
-	        .collect(Collectors.joining(",")); // 콤마로 구분된 문자열로 변환
-
+	   
 	    model.addAttribute("feed", feed);
-	    model.addAttribute("tagsString", tagsString); // 변환된 문자열을 모델에 추가
 	    model.addAttribute("seq", seq);
 		model.addAttribute("req", "/feed/feedModifyFormVoD");
 
@@ -337,16 +300,7 @@ public class FeedController {
 		dto.setFeed_file(String.join(",", fileNames)); // 파일 이름들을 콤마로 구분하여 설정
 		dto.setLogtime(new Date());
 		dto.setFeed_type("img");
-		// 태그 문자열을 List<String>으로 변환
-		List<String> tagList = new ArrayList<>();
-		if (tags != null && !tags.trim().isEmpty()) {
-		    String[] tagArray = tags.split(",");
-		    for (String tag : tagArray) {
-		        tagList.add(tag.trim()); // 각 태그에 대한 공백 제거 후 추가
-		    }
-		}
-		dto.setTags(tagList); // DTO에 태그 리스트 설정
-
+		
 		boolean result = service.feedUpdate(dto, seq);
 		model.addAttribute("result", result);
 		model.addAttribute("seq", seq);
@@ -391,17 +345,7 @@ public class FeedController {
 		String userId = tokenProvider.validateAndGetUserId(token);
 		int seq = Integer.parseInt(request.getParameter("seq"));
 		dto.setId(userId);
-	    // 태그 문자열을 List<String>으로 변환
-	    List<String> tagList = new ArrayList<>();
-	    if (tags != null && !tags.trim().isEmpty()) {
-	        String[] tagArray = tags.split(",");
-	        for (String tag : tagArray) {
-	            tagList.add(tag.trim()); // 각 태그에 대한 공백 제거 후 추가
-	        }
-	    }
-	    dto.setTags(tagList); // DTO에 태그 리스트 설정
-
-
+	    
 		// DB 저장
 		boolean result = service.feedUpdate(dto, seq);
 
