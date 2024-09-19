@@ -79,9 +79,10 @@ public class UserController {
 			response.setHeader("Set-Cookie", cookie.toString());
 
 			System.out.println("kakao login: " + token);
-			return "/index";
+			return "redirect:/index";
 			// 카카오 email로 정보가 없으면 회원가입
 		} else {
+			System.out.println("실행");
 			model.addAttribute("req", "/user/joinForm");
 			model.addAttribute("email", email);
 			model.addAttribute("name", nickname);
@@ -189,16 +190,6 @@ public class UserController {
 
 	@GetMapping("/index")
 	public String index(HttpServletRequest request, Model model) {
-		String token = tokenProvider.resolveTokenFromCookie(request); // 쿠키에서 token 가져오기
-		String userId = null;
-		if (token != null) {
-			userId = tokenProvider.validateAndGetUserId(token); // token이 유효한지 확인하고 userId 가져오기
-			if (userId != null) {
-				User user = service.getUser(userId);
-				model.addAttribute("userId", userId);
-			}
-		}
-
 		List<Shop> list_shop = shopService.shopTop();
 
 		System.out.println(list_shop);
