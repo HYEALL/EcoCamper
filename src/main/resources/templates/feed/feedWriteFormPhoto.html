@@ -66,13 +66,9 @@ function resizeTextarea(textarea) {
 function addHashtag() {
     const tagInput = document.getElementById('tag-input');
     const hashtagContainer = document.getElementById('hashtag-container');
-    let hashtag = tagInput.value.trim();
+    const addTagButton = document.getElementById('add-tag-button'); // 추가 버튼
 
-    // 빈 입력 처리
-    if (!hashtag) {
-        alert('해시태그를 입력해주세요.');
-        return;
-    }
+    let hashtag = tagInput.value.trim();
 
     // 쉼표 제거
     hashtag = hashtag.replace(/,/g, '');
@@ -97,12 +93,12 @@ function addHashtag() {
         const allTags = Array.from(hashtagContainer.children).map(tag => tag.dataset.tag).join(' ');
         tagsInput.value = allTags;
 
-        // 태그 입력란 비활성화
+        // 해시태그 입력란 비활성화
         tagInput.disabled = true;
-    } else {
-        alert('이미 태그가 추가되었습니다. 먼저 기존 태그를 삭제하세요.');
-    }
+        addTagButton.disabled = true; // 추가 버튼 비활성화
+    } 
 }
+
 function removeHashtag(button) {
     const tagElement = button.parentElement;
     tagElement.remove();
@@ -110,6 +106,10 @@ function removeHashtag(button) {
     // 태그 입력란 활성화
     const tagInput = document.getElementById('tag-input');
     tagInput.disabled = false;
+
+    // 추가 버튼 활성화
+    const addTagButton = document.getElementById('add-tag-button');
+    addTagButton.disabled = false; // 추가 버튼 활성화
 
     // 숨겨진 태그 값 업데이트
     const tagsInput = document.getElementById('tags-input');

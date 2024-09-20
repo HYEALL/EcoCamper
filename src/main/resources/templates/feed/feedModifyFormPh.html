@@ -74,9 +74,11 @@ function loadExistingTags() {
 function addHashtag() {
     const tagInput = document.getElementById('tag-input');
     const hashtagContainer = document.getElementById('hashtag-container');
+    const addTagButton = document.getElementById('add-tag-button'); // 추가 버튼 요소 가져오기
     let hashtag = tagInput.value.trim();
 
-    if (hashtag && !hashtag.startsWith('#')) {
+    // 모든 값에 # 붙이기
+    if (hashtag) {
         hashtag = `#${hashtag}`;
     }
 
@@ -91,28 +93,28 @@ function addHashtag() {
 
         // 해시태그 값을 숨겨진 입력 필드에 추가
         const tagsInput = document.getElementById('tags-input');
-        tagsInput.value = hashtag;
+        tagsInput.value += `${hashtag},`; // 해시태그를 쉼표로 구분하여 추가
 
-        // 태그 입력란 비활성화
+        // 해시태그 입력란 비활성화 및 추가 버튼 비활성화
         tagInput.disabled = true;
-    } else {
-        alert('이미 태그가 추가되었습니다. 먼저 기존 태그를 삭제하세요.');
-    }
+        addTagButton.disabled = true; // 추가 버튼 비활성화
+    } 
 }
 
 function removeHashtag(button) {
     const tagElement = button.parentElement;
     tagElement.remove();
 
-    // 태그 입력란 활성화
+    // 태그 입력란 및 추가 버튼 활성화
     const tagInput = document.getElementById('tag-input');
+    const addTagButton = document.getElementById('add-tag-button'); // 추가 버튼 요소 가져오기
     tagInput.disabled = false;
+    addTagButton.disabled = false; // 추가 버튼 활성화
 
     // 숨겨진 태그 값도 제거
     const tagsInput = document.getElementById('tags-input');
     tagsInput.value = '';
 }
-
 // 이모지 클릭 시 텍스트 입력란에 추가
 document.addEventListener('DOMContentLoaded', () => {
     const emojis = document.querySelectorAll('.emoji');
@@ -499,7 +501,7 @@ hr {
                    </div>
                    <div>
                           <input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
-                       <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
+                       <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()" disabled> <!-- 추가 버튼 -->
                    </div>
         </div>
 

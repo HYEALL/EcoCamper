@@ -60,27 +60,29 @@ function resizeTextarea(textarea) {
 
 //기존 태그 불러오기
 function loadExistingTags() {
- const existingTags = document.getElementById('existing-tags').value.split(',').filter(tag => tag.trim() !== '');
- const hashtagContainer = document.getElementById('hashtag-container');
- const tagInput = document.getElementById('tag-input');
+    const existingTags = document.getElementById('existing-tags').value.split(',').filter(tag => tag.trim() !== '');
+    const hashtagContainer = document.getElementById('hashtag-container');
+    const tagInput = document.getElementById('tag-input');
+    const addTagButton = document.getElementById('add-tag-button');
 
- if (existingTags.length > 0) {
-     tagInput.disabled = true; // 태그 입력란 비활성화
- }
+    if (existingTags.length > 0) {
+        tagInput.disabled = true; // 태그 입력란 비활성화
+        addTagButton.disabled = true; // 추가 버튼 비활성화
+    }
 
- existingTags.forEach(tag => {
-     const tagElement = document.createElement('div');
-     tagElement.className = 'tag';
-     tagElement.dataset.tag = tag.trim();
-     tagElement.innerHTML = `${tag.trim()} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
-     hashtagContainer.appendChild(tagElement);
- });
+    existingTags.forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.dataset.tag = tag.trim();
+        tagElement.innerHTML = `${tag.trim()} <button class="remove-tag-button" onclick="removeHashtag(this)">✖</button>`;
+        hashtagContainer.appendChild(tagElement);
+    });
 }
 
-//해시태그 추가
 function addHashtag() {
     const tagInput = document.getElementById('tag-input');
     const hashtagContainer = document.getElementById('hashtag-container');
+    const addTagButton = document.getElementById('add-tag-button');
     let hashtag = tagInput.value.trim();
 
     // 콤마 제거
@@ -108,11 +110,10 @@ function addHashtag() {
         currentTags.push(hashtag);
         tagsInput.value = currentTags.join(',');
 
-        // 태그가 추가되면 입력란을 비활성화
+        // 태그가 추가되면 입력란을 비활성화하고 버튼 비활성화
         tagInput.disabled = true;
-    } else {
-        alert('이미 존재하는 해시태그입니다.');
-    }
+        addTagButton.disabled = true; // 버튼 비활성화
+    } 
 }
 
 // 해시태그 제거
@@ -133,9 +134,10 @@ function removeHashtag(button) {
     // 업데이트된 해시태그 목록을 숨겨진 입력 필드에 저장합니다.
     tagsInput.value = updatedTags.join(',');
 
-    // 해시태그가 모두 제거되면 입력란을 활성화합니다.
+    // 해시태그가 모두 제거되면 입력란을 활성화하고 버튼 활성화
     if (updatedTags.length === 0) {
         document.getElementById('tag-input').disabled = false;
+        document.getElementById('add-tag-button').disabled = false; // 버튼 활성화
     }
 
     console.log(`Updated tags: ${tagsInput.value}`);  // 디버그용 출력
@@ -517,7 +519,7 @@ hr {
    					 </div>
     				<div>
        					<input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
-    					<input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
+    					<input type="button" id="add-tag-button" value="추가" onclick="addHashtag()" disabled> <!-- 추가 버튼 -->
     				</div>
         </div>
 
