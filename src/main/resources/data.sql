@@ -12,7 +12,7 @@ create table usertable(
     role varchar2(20) not null
 );
 select * from usertable;
-delete usertable where id='gilgil';
+delete usertable where id='seongeun';
 --update usertable set role='ADMIN' where id='admin';
 alter table usertable add unique(email);
 -- 주소 바꾸기
@@ -561,7 +561,7 @@ create table feed (
     good_num number default 0,
     good number default 0,
    logtime date default sysdate -- 작성일
-  
+
 );
 ALTER TABLE feed DROP COLUMN tags;
 alter table feed rename column feed_tag to tags; --- 도로명 주소 
