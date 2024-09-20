@@ -122,11 +122,11 @@ public class FeedDAO {
 	 }
  	
 	// 태그로 피드 검색
-	    public List<Feed> findFeedsByTagName(String tagName) {
+	 public List<Feed> findFeedsByTagName(String tagName) {
 	        return repository.findByTagName(tagName);
 	    }
 
-	    public List<Feed> feedBytopfeeds() {
+	 public List<Feed> feedBytopfeeds() {
 	    	return repository.findTop5FeedsByLikes();
 			
 		}

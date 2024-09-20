@@ -11,14 +11,18 @@ import com.example.EcoCamper.dto.FeedDTO;
 import com.example.EcoCamper.entity.Feed;
 
 public interface FeedRepository extends JpaRepository<Feed, Integer> {
-
+	
+	// 작성순서
 	List<Feed> findAllByOrderByLogtimeDesc();
 
+	// 아이디별 작성순서
 	List<Feed> findByIdOrderByLogtimeDesc(String id);
 
+	// 좋아요한 피드찾지
 	@Query("SELECT f FROM Feed f JOIN Likes l ON f.seq = l.reviewId WHERE l.userId = :userId")
 	List<Feed> findFeedsByUserIdAndReviewId(@Param("userId") String id);
-
+	
+	// 저장한 피드 찾기
 	@Query("SELECT f FROM Feed f JOIN Save l ON f.seq = l.save_seq WHERE l.save_id = :save_id")
 	List<Feed> findFeedsBySeqIdAndSaveSeq(@Param("save_id") String id);
 	

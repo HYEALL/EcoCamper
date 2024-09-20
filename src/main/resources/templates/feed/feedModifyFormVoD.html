@@ -156,13 +156,13 @@ body {
 }
 
 h2 {
-    text-align: center;
-    color: #fff; /* 텍스트 색상 변경 */
-    padding: 20px 0;
-    background-color: #2A4E3F; /* 배경색 변경 */
-    margin: 0;
-    border-radius: 15px; /* 테두리 동그랗게 설정 */
-    font-weight: bold; /* 글씨체를 굵게 설정 */
+	text-align: center;
+	color: #fff; /* 텍스트 색상 변경 */
+	padding: 20px 0;
+	background-color: #2A4E3F; /* 배경색 변경 */
+	margin: 0;
+	border-radius: 15px; /* 테두리 동그랗게 설정 */
+	font-weight: bold; /* 글씨체를 굵게 설정 */
 }
 
 .form-container {
@@ -341,65 +341,63 @@ hr {
 	border-radius: 4px;
 }
 
- #emoji-container {
-            margin-bottom: 10px;
-        }
-
-
-        #emoji-container {
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        #emoji-container summary {
-            cursor: pointer;
-            font-size: 25px;
-            border: none;
-            border-radius: 4px;
-            padding: 5px 10px;
-            background-color: #fafafa;
-            margin-bottom: 5px;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-
-        #emoji-container summary:hover {
-            background-color: #f0f0f0;
-        }
-
-        #emoji-container details[open] .emoji-popup {
-            display: flex;
-        }
-
-        .emoji-popup {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .emoji {
-            font-size: 24px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        
-        #video-icon {
-    max-width: 100px;
-    max-height: 100px;
-    object-fit: cover;
+#emoji-container {
+	margin-bottom: 10px;
 }
 
-        
-               .remove-tag-button {
+#emoji-container {
+	position: relative;
+	margin-bottom: 10px;
+}
+
+#emoji-container summary {
+	cursor: pointer;
+	font-size: 25px;
+	border: none;
+	border-radius: 4px;
+	padding: 5px 10px;
+	background-color: #fafafa;
+	margin-bottom: 5px;
+	display: inline-block;
+	transition: background-color 0.3s;
+}
+
+#emoji-container summary:hover {
+	background-color: #f0f0f0;
+}
+
+#emoji-container details[open] .emoji-popup {
+	display: flex;
+}
+
+.emoji-popup {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.emoji {
+	font-size: 24px;
+	cursor: pointer;
+	margin: 5px;
+}
+
+#video-icon {
+	max-width: 100px;
+	max-height: 100px;
+	object-fit: cover;
+}
+
+.remove-tag-button {
 	background: transparent;
 	border: none;
 	color: #f44336;
@@ -412,46 +410,44 @@ hr {
 	color: #d32f2f;
 }
 
-
 .tag {
-    background: #e0f7fa; /* 배경색 유지 */
-    border-radius: 4px;
-    padding: 5px;
-    margin: 5px;
-    display: inline-flex;
-    align-items: center;
-    color: #FF6F61; /* 주황색 */
-    font-weight: bold; /* 글씨를 두껍게 */
-    font-size: 16px; /* 글씨 크기 조정 */
+	background: #e0f7fa; /* 배경색 유지 */
+	border-radius: 4px;
+	padding: 5px;
+	margin: 5px;
+	display: inline-flex;
+	align-items: center;
+	color: #FF6F61; /* 주황색 */
+	font-weight: bold; /* 글씨를 두껍게 */
+	font-size: 16px; /* 글씨 크기 조정 */
 }
 </style>
 <body>
 <form action="feedModifyVoD" name="form1" method="post" enctype="multipart/form-data">
-<input type="hidden" id="existing-tags" th:value="${feed.tags}">
-<input type="hidden" id="tags-input" name="tags">
-<div class="form-container">
-<h2>동영상 편집</h2>
-	<input type="hidden" name="seq" th:value="${seq}">
-    <div class="section content">
-		 <div id="video-list">
-            <div class="video-button">
-                <input id="video-icon" type="file" accept="video/*" onchange="addVideo(event)" name="feed_file1">
-                <img src="../images/video.jpg" alt="비디오 아이콘" />
-                <div>
-                    <span id="video-count">0</span>/1
-                </div>
-            </div>
+	<input type="hidden" id="existing-tags" th:value="${feed.tags}">
+	<input type="hidden" id="tags-input" name="tags">
+		<div class="form-container">
+		<h2>동영상 편집</h2>
+			<input type="hidden" name="seq" th:value="${seq}">
+   				<div class="section content">
+		 			<div id="video-list">
+            			<div class="video-button">
+                			<input id="video-icon" type="file" accept="video/*" onchange="addVideo(event)" name="feed_file1">
+                			<img src="../images/video.jpg" alt="비디오 아이콘" />
+                				<div>
+                    				<span id="video-count">0</span>/1
+                				</div>
+            			</div>
             <!-- 기존 비디오 파일 표시 -->
-<video class="uploaded-video" controls>
-    <source th:src="@{/storage/{feed_file}(feed_file=${feed.feed_file})}" type="video/mp4"> <!-- 서버에서 전달된 비디오 URL 사용 -->
-</video>
-        </div>
+						<video class="uploaded-video" controls>
+    						<source th:src="@{/storage/{feed_file}(feed_file=${feed.feed_file})}" type="video/mp4"> <!-- 서버에서 전달된 비디오 URL 사용 -->
+						</video>
+        			</div>
 				<br>
-        <div>
-            <textarea id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
-                autocomplete="off" onkeydown="resizeTextarea(this);" onkeyup="resizeTextarea(this);" rows="13">[[${feed.feed_content}]]
-            </textarea>
-        </div>
+        		<div>
+            		<textarea id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
+                		autocomplete="off" onkeydown="resizeTextarea(this);" onkeyup="resizeTextarea(this);" rows="13">[[${feed.feed_content}]]</textarea>
+        		</div>
         
         <div id="emoji-container">
             <details>
@@ -480,35 +476,35 @@ hr {
 
     <div class="section category" align="center">
         <div class="title">카테고리</div>
-        <div class="d-flex">
-    <div class="name">아웃도어</div>
-    <div>
-        <input type="radio" id="camper" name="outdoor" th:value="캠퍼" th:checked="${feed.outdoor == '캠퍼'}">
-        <label for="camper">캠퍼</label>
+        	<div class="d-flex">
+    			<div class="name">아웃도어</div>
+    				<div>
+        				<input type="radio" id="camper" name="outdoor" th:value="캠퍼" th:checked="${feed.outdoor == '캠퍼'}">
+        				<label for="camper">캠퍼</label>
         
-        <input type="radio" id="backpacker" name="outdoor" th:value="백팩커" th:checked="${feed.outdoor == '백팩커'}">
-        <label for="backpacker">백팩커</label>
+        				<input type="radio" id="backpacker" name="outdoor" th:value="백팩커" th:checked="${feed.outdoor == '백팩커'}">
+        				<label for="backpacker">백팩커</label>
         
-        <input type="radio" id="traveler" name="outdoor" th:value="트래블러" th:checked="${feed.outdoor == '트래블러'}">
-        <label for="traveler">트래블러</label>
+        				<input type="radio" id="traveler" name="outdoor" th:value="트래블러" th:checked="${feed.outdoor == '트래블러'}">
+       					<label for="traveler">트래블러</label>
         
-        <input type="radio" id="hiker" name="outdoor" th:value="하이커" th:checked="${feed.outdoor == '하이커'}">
-        <label for="hiker">하이커</label>
-    </div>
-</div>
-<div class="d-flex">
-    <div class="name">글 종류</div>
-    <div>
-        <input type="radio" id="gear" name="feed_subject" th:value="기어" th:checked="${feed.feed_subject == '기어'}">
-        <label for="gear">기어</label>
+        				<input type="radio" id="hiker" name="outdoor" th:value="하이커" th:checked="${feed.outdoor == '하이커'}">
+        				<label for="hiker">하이커</label>
+   					</div>
+			</div>
+			<div class="d-flex">
+    			<div class="name">글 종류</div>
+    				<div>
+        				<input type="radio" id="gear" name="feed_subject" th:value="기어" th:checked="${feed.feed_subject == '기어'}">
+        				<label for="gear">기어</label>
         
-        <input type="radio" id="place" name="feed_subject" th:value="장소" th:checked="${feed.feed_subject == '장소'}">
-        <label for="place">장소</label>
+        				<input type="radio" id="place" name="feed_subject" th:value="장소" th:checked="${feed.feed_subject == '장소'}">
+        				<label for="place">장소</label>
 
-        <input type="radio" id="news" name="feed_subject" th:value="뉴스" th:checked="${feed.feed_subject == '뉴스'}">
-        <label for="news">뉴스</label>
-    </div>
-</div>
+        				<input type="radio" id="news" name="feed_subject" th:value="뉴스" th:checked="${feed.feed_subject == '뉴스'}">
+        				<label for="news">뉴스</label>
+    				</div>
+			</div>
     </div>
 
     <hr>
@@ -516,27 +512,27 @@ hr {
     <div align="center">
         <div class="part">
             <div id="label">해시태그</div>
-					<div id="hashtag-container">
+				<div id="hashtag-container">
         			<!-- 해시태그가 동적으로 추가될 부분 -->
    					 </div>
-    					<div>
-       						 <input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
-    						 <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
-    					</div>
+    				<div>
+       					<input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
+    					<input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
+    				</div>
         </div>
 
         <div class="part">
             <div id="label">장소</div>
-            <div>
-                <input type="text" name="place" th:value="${feed.place}">
-            </div>
+            	<div>
+                	<input type="text" name="place" th:value="${feed.place}">
+            	</div>
         </div>
 
         <div class="part">
             <div id="label">상품</div>
-            <div>
-                <input type="text" name="goods" th:value="${feed.goods}">
-            </div>
+            	<div>
+                	<input type="text" name="goods" th:value="${feed.goods}">
+            	</div>
         </div>
         
         <hr>

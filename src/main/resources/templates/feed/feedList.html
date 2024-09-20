@@ -1,199 +1,197 @@
 
+
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">  
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
-   document.addEventListener('DOMContentLoaded', function() {
-	   var saveButtons = document.querySelectorAll('.save-button');
-	    var likeButtons = document.querySelectorAll('.like-button');
+document.addEventListener('DOMContentLoaded', function() {
+    const userId = document.body.dataset.userId;
 
-	    // 서버에서 좋아요 상태를 가져와서 버튼 상태를 업데이트
-	    likeButtons.forEach(function(button) {
-	    	var userId = document.body.dataset.userId;
-    var reviewId = button.getAttribute('data-review-id');
-    
-    fetch(`/isLiked/${reviewId}?userId=${userId}`)
-        .then(response => response.json())
-        .then(isLiked => {
-            var likeIcon = button.querySelector('.like-icon');
-            // 서버에서 받은 값이 없을 경우 false 처리
-            if (isLiked === null || isLiked === undefined) {
-                isLiked = false;
-            }
-            if (isLiked) {
-                likeIcon.src = '../images/fire.png';
-                button.dataset.liked = "true";
-            } else {
-                likeIcon.src = '../images/non-fire.png';
-                button.dataset.liked = "false";
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // 오류 발생 시 기본적으로 false 처리
-            var likeIcon = button.querySelector('.like-icon');
-            likeIcon.src = '../images/non-fire.png';
-            button.dataset.liked = "false";
+    // 좋아요 상태를 서버에서 가져와 버튼 상태를 업데이트
+    function updateLikeButtons() {
+        document.querySelectorAll('.like-button').forEach(button => {
+            const reviewId = button.getAttribute('data-review-id');
+
+            fetch(`/isLiked/${reviewId}?userId=${userId}`)
+                .then(response => response.json())
+                .then(isLiked => {
+                    const likeIcon = button.querySelector('.like-icon');
+                    if (isLiked) {
+                        likeIcon.src = '../images/fire.png';
+                        button.dataset.liked = "true";
+                    } else {
+                        likeIcon.src = '../images/non-fire.png';
+                        button.dataset.liked = "false";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    button.querySelector('.like-icon').src = '../images/non-fire.png';
+                    button.dataset.liked = "false";
+                });
         });
+    }
+
+    // 저장 상태를 서버에서 가져와 버튼 상태를 업데이트
+    function updateSaveButtons() {
+        document.querySelectorAll('.save-button').forEach(button => {
+            const saveSeq = button.getAttribute('data-save-seq');
+
+            fetch(`/isSave/${saveSeq}?save_id=${userId}`)
+                .then(response => response.json())
+                .then(isSaved => {
+                    const saveIcon = button.querySelector('.save-icon');
+                    if (isSaved) {
+                        saveIcon.src = '../images/tent.png';
+                        button.dataset.saved = "true";
+                    } else {
+                        saveIcon.src = '../images/non-tent.png';
+                        button.dataset.saved = "false";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    button.querySelector('.save-icon').src = '../images/non-tent.png';
+                    button.dataset.saved = "false";
+                });
+        });
+    }
+
+    // 스와이퍼 초기화
+    function initializeSwipers() {
+        document.querySelectorAll('.swiper-container').forEach(container => {
+            const slides = container.querySelectorAll('.swiper-slide');
+            if (slides.length > 1) {
+                new Swiper(container, {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                        renderBullet: (index, className) => `<span class="${className}"></span>`,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+            }
+        });
+    }
+
+    function applyFilters() {
+        console.log('applyFilters 호출됨'); // 디버깅을 위한 로그 추가
+        const keyword = document.querySelector('#keyword').value.trim().toLowerCase();
+        const outdoorFilter = document.querySelector('input[name="outdoor"]:checked')?.value || '전체';
+        const subjectFilter = document.querySelector('input[name="feed_subject"]:checked')?.value || '전체';
+        const feedCards = document.querySelectorAll('.feed-card');
+
+        feedCards.forEach(card => {
+            const tags = card.getAttribute('data-tags')?.toLowerCase().split(',').map(tag => tag.trim()) || [];
+            const cardOutdoor = card.getAttribute('data-outdoor') || '';
+            const cardSubject = card.getAttribute('data-subject') || '';
+
+            // 디버깅을 위한 로그
+            console.log(`tags: ${tags}`);
+            console.log(`keyword: ${keyword}`);
+
+            const matchesKeyword = !keyword || tags.some(tag => tag.includes(keyword));
+            const matchesOutdoor = outdoorFilter === '전체' || cardOutdoor === outdoorFilter;
+            const matchesSubject = subjectFilter === '전체' || cardSubject === subjectFilter;
+
+            console.log(`필터 확인: keyword=${keyword}, outdoor=${outdoorFilter}, subject=${subjectFilter}`); // 디버깅을 위한 로그 추가
+            console.log(`카드 확인: matchesKeyword=${matchesKeyword}, matchesOutdoor=${matchesOutdoor}, matchesSubject=${matchesSubject}`); // 디버깅을 위한 로그 추가
+
+            // 조건에 맞는 카드만 표시
+            card.style.display = (matchesKeyword && matchesOutdoor && matchesSubject) ? 'block' : 'none';
+        });
+    }
+    // 검색 버튼 클릭 시 필터 적용
+    document.querySelector('#search-button').addEventListener('click', function() {
+        applyFilters(); // 버튼 클릭 시 필터 적용
+    });
+
+    // 좋아요 버튼 클릭 이벤트 핸들러
+    function handleLikeButtonClick() {
+        document.querySelectorAll('.like-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const likeIcon = button.querySelector('.like-icon');
+                const isLiked = button.dataset.liked === "true";
+                const reviewId = button.getAttribute('data-review-id');
+
+                if (!userId) {
+                    console.error('사용자 ID가 설정되지 않았습니다.');
+                    return;
+                }
+
+                const url = isLiked ? `/remove?reviewId=${reviewId}&userId=${userId}` : '/add';
+                const method = isLiked ? 'DELETE' : 'POST';
+
+                fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ review_id: parseInt(reviewId), user_id: userId })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if (isLiked) {
+                        likeIcon.src = '../images/non-fire.png';
+                        button.dataset.liked = "false";
+                        delete button.dataset.likes_num;
+                    } else {
+                        likeIcon.src = '../images/fire.png';
+                        button.dataset.liked = "true";
+                        button.dataset.likes_num = data;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    }
+
+    // 저장 버튼 클릭 이벤트 핸들러
+    function handleSaveButtonClick() {
+        document.querySelectorAll('.save-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const saveIcon = button.querySelector('.save-icon');
+                const isSaved = button.dataset.saved === "true";
+                const saveSeq = button.getAttribute('data-save-seq');
+
+                if (!userId) {
+                    console.error('사용자 ID가 설정되지 않았습니다.');
+                    return;
+                }
+
+                const url = isSaved ? `/mius?save_seq=${saveSeq}&save_id=${userId}` : '/pulse';
+                const method = isSaved ? 'DELETE' : 'POST';
+
+                fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ save_seq: parseInt(saveSeq), save_id: userId })
+                })
+                .then(() => {
+                    saveIcon.src = isSaved ? '../images/non-tent.png' : '../images/tent.png';
+                    button.dataset.saved = isSaved ? "false" : "true";
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    }
+
+    // 이벤트 핸들러와 초기화 함수 호출
+    updateLikeButtons();
+    updateSaveButtons();
+    initializeSwipers();
+    handleLikeButtonClick();
+    handleSaveButtonClick();
+
+    // 필터 변경 시 필터 적용
+    document.querySelectorAll('input[name="outdoor"], input[name="feed_subject"]').forEach(input => {
+        input.addEventListener('change', () => {
+            document.querySelector('#search-button').click(); // 필터 변경 시 검색 버튼 클릭
+        });
+    });
 });
-	    saveButtons.forEach(function(button) {
-	        var save_seq = button.getAttribute('data-save-seq');
-			var save_id = document.body.dataset.userId;
-	        // 페이지 로드 시 저장 상태 가져오기
-	        fetch(`/isSave/${save_seq}?save_id=${save_id}`)
-	            .then(response => response.json())
-	            .then(isSaved => {
-	                var saveIcon = button.querySelector('.save-icon');
-	                if (isSaved === null || isSaved === undefined) {
-	                    isSaved = false;
-	                }
-	                if (isSaved) {
-	                    saveIcon.src = '../images/tent.png';
-	                    button.dataset.saved = "true";
-	                } else {
-	                    saveIcon.src = '../images/non-tent.png';
-	                    button.dataset.saved = "false";
-	                }
-	            })
-	            .catch(error => {
-	                console.error('Error:', error);
-	                var saveIcon = button.querySelector('.save-icon');
-	                saveIcon.src = '../images/non-tent.png';
-	                button.dataset.saved = "false";
-	            });
-	    });
-
-
-	    // 스와이퍼 초기화
-	    var swiperContainers = document.querySelectorAll('.swiper-container');
-	    swiperContainers.forEach(function(container) {
-	        var slides = container.querySelectorAll('.swiper-slide');
-	        if (slides.length > 1) {
-	            new Swiper(container, {
-	                slidesPerView: 1,
-	                spaceBetween: 10,
-	                pagination: {
-	                    el: '.swiper-pagination',
-	                    clickable: true,
-	                    renderBullet: function (index, className) {
-	                        return '<span class="' + className + '"></span>';
-	                    }
-	                },
-	                navigation: {
-	                    nextEl: '.swiper-button-next',
-	                    prevEl: '.swiper-button-prev',
-	                },
-	            });
-	        }
-	    });
-
-	    // 필터 적용
-	    function applyFilters() {
-	        var outdoorFilter = document.querySelector('input[name="outdoor"]:checked')?.value || '전체';
-	        var subjectFilter = document.querySelector('input[name="feed_subject"]:checked')?.value || '전체';
-
-	        var feedCards = document.querySelectorAll('.feed-card');
-
-	        feedCards.forEach(function(card) {
-	            var cardOutdoor = card.getAttribute('data-outdoor');
-	            var cardSubject = card.getAttribute('data-subject');
-
-	            var showOutdoor = (outdoorFilter === '전체' || cardOutdoor === outdoorFilter);
-	            var showSubject = (subjectFilter === '전체' || cardSubject === subjectFilter);
-
-	            if (showOutdoor && showSubject) {
-	                card.style.display = 'block';
-	            } else {
-	                card.style.display = 'none';
-	            }
-	        });
-	    }
-
-	    // 필터 변경 시 필터 적용 함수 호출
-	    document.querySelectorAll('input[name="outdoor"], input[name="feed_subject"]').forEach(function(input) {
-	        input.addEventListener('change', applyFilters);
-	    });
-
-	 // 좋아요 버튼 클릭 이벤트 핸들러
-	    document.querySelectorAll('.like-button').forEach(function(button) {
-	        button.addEventListener('click', function() {
-	            var likeIcon = button.querySelector('.like-icon');
-	            var isLiked = button.dataset.liked === "true";
-	            var reviewId = button.getAttribute('data-review-id');
-	            var userId = document.body.dataset.userId; // 사용자 ID를 바디에서 가져옵니다.
-	            var likesNum = button.dataset.likes_num;
-	            console.log("likesNum: ", likesNum); // 확인용 로그 추가
-
-	            if (!userId) {
-	                console.error('사용자 ID가 설정되지 않았습니다.');
-	                return; // 사용자 ID가 없으면 좋아요 기능을 동작시키지 않음
-	            }
-
-	            var url = isLiked ? `/remove?reviewId=${reviewId}&userId=${userId}` : '/add';
-	            var method = isLiked ? 'DELETE' : 'POST';
-
-	            fetch(url, {
-	                method: method,
-	                headers: {
-	                    'Content-Type': 'application/json'
-	                },
-	                body: JSON.stringify({ review_id: parseInt(reviewId), user_id: userId })
-	            })
-	            .then(response => response.text())
-	            .then(data => {
-	                console.log(data); // 서버 응답 확인
-	                if (isLiked) {
-	                    likeIcon.src = '../images/non-fire.png';
-	                    button.dataset.liked = "false";
-	                    delete button.dataset.likes_num;
-	                } else {
-	                    likeIcon.src = '../images/fire.png';
-	                    button.dataset.liked = "true";
-	                    button.dataset.likes_num = data;
-	                }
-	            })
-	            .catch(error => console.error('Error:', error));
-	        });
-	    });
-	    document.querySelectorAll('.save-button').forEach(function(button) {
-	        button.addEventListener('click', function() {
-	            var SaveIcon = button.querySelector('.save-icon');
-	            var isSave = button.dataset.saved === "true";
-	            var save_seq = button.getAttribute('data-save-seq');
-	            var save_id = document.body.dataset.userId;
-
-	            if (!save_id) {
-	                console.error('사용자 ID가 설정되지 않았습니다.');
-	                return;
-	            }
-
-	            var url = isSave ? `/mius?save_seq=${save_seq}&save_id=${save_id}` : '/pulse';
-	            var method = isSave ? 'DELETE' : 'POST';
-
-	            fetch(url, {
-	                method: method,
-	                headers: {
-	                    'Content-Type': 'application/json'
-	                },
-	                body: JSON.stringify({ save_seq: parseInt(save_seq), save_id: save_id })
-	            })
-	            .then(response => response.text())
-	            .then(() => {
-	                if (isSave) {
-	                    SaveIcon.src = '../images/non-tent.png';
-	                    button.dataset.saved = "false";
-	                } else {
-	                	SaveIcon.src = '../images/tent.png';
-	                    button.dataset.saved = "true";
-	                }
-	            })
-	            .catch(error => console.error('Error:', error));
-	        });
-	    });
-
-	    // 필터 초기화
-	    applyFilters();
-	});
-   
     </script>
 <style>
 h2 {
@@ -513,6 +511,43 @@ a {
     color: #a0522d; /* 화사한 갈색으로 설정 */
     margin-top: 20px; /* '장소'와 해시태그 사이의 간격 추가 */
 }
+#search-container {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center;
+    gap: 10px; /* 검색창과 버튼 간격 */
+    margin: 20px 0; /* 상하 여백 */
+}
+
+#keyword {
+    width: 350px; /* 검색창 너비 늘림 */
+    padding: 12px; /* 안쪽 여백 */
+    border: 2px solid #ddd; /* 테두리 */
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px; /* 글씨 크기 */
+    outline: none; /* 클릭 시 외곽선 제거 */
+    transition: border-color 0.3s ease; /* 테두리 색 전환 효과 */
+}
+
+#keyword:focus {
+    border-color: #007bff; /* 포커스 시 테두리 색 */
+}
+
+input[type="submit"] {
+    padding: 12px 25px; /* 안쪽 여백 */
+    background-color: #ff7f50; /* 버튼 배경색: 주황색 계열 */
+    color: white; /* 버튼 글자색 */
+    border: none; /* 테두리 제거 */
+    border-radius: 25px; /* 둥근 모서리 */
+    cursor: pointer; /* 커서 모양 변경 */
+    font-size: 16px; /* 글씨 크기 */
+    transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+}
+
+input[type="submit"]:hover {
+    background-color: #e67300; /* 호버 시 배경색: 좀 더 진한 주황색 */
+}
+
 </style>
 <body th:data-user-id="${userId}">
 	
@@ -522,6 +557,13 @@ a {
     	<button th:if="${userId != null}" onclick="location.href='feedWriteFormPhoto'">사진 올리기</button>
     	<button th:if="${userId != null}" onclick="location.href='feedWriteFormVideo'">동영상 올리기</button>
 	</div>
+	
+			<div id="search-container">
+    <!-- 검색어 입력 섹션 -->
+    <input name="search" type="search" id="keyword" placeholder="Search by tag">
+    <input type="submit" id="search-button" value="Search">
+		</div>
+		
         <div class="filter-div" align="center">
             <!-- 필터링 폼 -->
             <form id="filterForm">
@@ -560,7 +602,8 @@ a {
       	
             <div th:each="feed : ${list}" class="feed-card"
                  th:data-outdoor="${feed.outdoor}" 
-                 th:data-subject="${feed.feed_subject}">
+                 th:data-subject="${feed.feed_subject}"
+                 th:data-tags ="${feed.tags}">
                  
                  
                 

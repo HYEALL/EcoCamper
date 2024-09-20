@@ -1,5 +1,4 @@
-
-    <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         var userId = document.body.dataset.userId;
 
@@ -123,176 +122,176 @@
             });
         });
     });
-    </script>
+</script>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        color: #333;
-        margin: 0;
-        padding: 0;
-    }
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f9f9f9;
+	color: #333;
+	margin: 0;
+	padding: 0;
+}
 
-    .replies {
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin: 20px auto;
-        max-width: 800px;
-    }
+.replies {
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin: 20px auto;
+	max-width: 800px;
+}
 
-    .reply {
-        margin-top: 15px;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        background-color: #fafafa;
-        border-radius: 5px;
-        transition: background-color 0.2s;
-    }
+.reply {
+	margin-top: 15px;
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+	background-color: #fafafa;
+	border-radius: 5px;
+	transition: background-color 0.2s;
+}
 
-    .reply:hover {
-        background-color: #f0f0f0;
-    }
+.reply:hover {
+	background-color: #f0f0f0;
+}
 
-    .reply-date {
-        font-size: 12px;
-        color: #888;
-        margin-top: 5px;
-    }
+.reply-date {
+	font-size: 12px;
+	color: #888;
+	margin-top: 5px;
+}
 
-    .reply-content-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
+.reply-content-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
 
-    .reply-content {
-        flex: 1; /* 댓글 내용이 가능한 공간을 모두 차지하도록 설정 */
-        margin-right: 10px;
-    }
+.reply-content {
+	flex: 1; /* 댓글 내용이 가능한 공간을 모두 차지하도록 설정 */
+	margin-right: 10px;
+}
 
-    .reply-actions {
-        display: flex;
-        align-items: center;
-    }
+.reply-actions {
+	display: flex;
+	align-items: center;
+}
 
-    .delete-reply {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 5px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.2s, transform 0.2s;
-        width: 35px; /* 버튼 너비를 조정 */
-        height: 35px; /* 버튼 높이를 조정 */
-    }
+.delete-reply {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 5px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s, transform 0.2s;
+	width: 35px; /* 버튼 너비를 조정 */
+	height: 35px; /* 버튼 높이를 조정 */
+}
 
-    .delete-reply:hover {
-        background-color: rgba(255, 0, 0, 0.1); /* 호버 시 배경색 */
-    }
+.delete-reply:hover {
+	background-color: rgba(255, 0, 0, 0.1); /* 호버 시 배경색 */
+}
 
-    .delete-reply:active {
-        transform: scale(0.9); /* 클릭 시 버튼 크기 축소 */
-    }
+.delete-reply:active {
+	transform: scale(0.9); /* 클릭 시 버튼 크기 축소 */
+}
 
-    .delete-reply-icon {
-        width: 60%; /* 이미지 크기를 조정 */
-        height: 60%; /* 이미지 크기를 조정 */
-        object-fit: contain;
-    }
+.delete-reply-icon {
+	width: 60%; /* 이미지 크기를 조정 */
+	height: 60%; /* 이미지 크기를 조정 */
+	object-fit: contain;
+}
 
-    .comment-count, .like-count {
-        font-size: 16px; /* 댓글 수 글자 크기 조정 */
-        color: #555;
-    }
+.comment-count, .like-count {
+	font-size: 16px; /* 댓글 수 글자 크기 조정 */
+	color: #555;
+}
 
-    .reply-section {
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin: 20px auto;
-        max-width: 800px;
-    }
+.reply-section {
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin: 20px auto;
+	max-width: 800px;
+}
 
-    #reply-content {
-        width: calc(100% - 22px); /* 텍스트 영역 너비 조정 */
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-sizing: border-box;
-        font-size: 14px;
-    }
+#reply-content {
+	width: calc(100% - 22px); /* 텍스트 영역 너비 조정 */
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	box-sizing: border-box;
+	font-size: 14px;
+}
 
-    #submit-reply {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 15px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
+#submit-reply {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 10px 15px;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
 
-    #submit-reply:hover {
-        background-color: #0056b3;
-    }
-    #emoji-container {
-            margin-bottom: 10px;
-        }
+#submit-reply:hover {
+	background-color: #0056b3;
+}
 
+#emoji-container {
+	margin-bottom: 10px;
+}
 
-        #emoji-container {
-            position: relative;
-            margin-bottom: 10px;
-        }
+#emoji-container {
+	position: relative;
+	margin-bottom: 10px;
+}
 
-        #emoji-container summary {
-            cursor: pointer;
-            font-size: 25px;
-            border: none;
-            border-radius: 4px;
-            padding: 5px 10px;
-            background-color: #fafafa;
-            margin-bottom: 5px;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
+#emoji-container summary {
+	cursor: pointer;
+	font-size: 25px;
+	border: none;
+	border-radius: 4px;
+	padding: 5px 10px;
+	background-color: #fafafa;
+	margin-bottom: 5px;
+	display: inline-block;
+	transition: background-color 0.3s;
+}
 
-        #emoji-container summary:hover {
-            background-color: #f0f0f0;
-        }
+#emoji-container summary:hover {
+	background-color: #f0f0f0;
+}
 
-        #emoji-container details[open] .emoji-popup {
-            display: flex;
-        }
+#emoji-container details[open] .emoji-popup {
+	display: flex;
+}
 
-        .emoji-popup {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+.emoji-popup {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	flex-wrap: wrap;
+	gap: 10px;
+}
 
-        .emoji {
-            font-size: 24px;
-            cursor: pointer;
-            margin: 5px;
-        }
+.emoji {
+	font-size: 24px;
+	cursor: pointer;
+	margin: 5px;
+}
 </style>
 </head>
 <body th:data-user-id="${userId}">
@@ -303,7 +302,7 @@
 
     <div class="reply-section">
         <textarea id="reply-content" placeholder="댓글을 작성하세요"></textarea>
-       <button id="submit-reply" th:data-feed-id="${feed.seq}">댓글 작성</button>
+       	<button id="submit-reply" th:data-feed-id="${feed.seq}">댓글 작성</button>
             <div id="emoji-container">
             <details>
                 <summary role="button">😀</summary>

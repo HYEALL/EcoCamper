@@ -9,7 +9,16 @@
 	Kakao.init('72e9905822817ffd02d844d2e0802d86');
 	console.log(Kakao.isInitialized());
 	Kakao.isInitialized();
+	
+	function loginWithKakao() {
+	    Kakao.Auth.authorize({
+	      redirectUri: 'http://localhost:8080/login/oauth2/code/kakao',
+	    });
+	  }
+
 </script>
+
+
 <div align="center">
 	<h3>로그인</h3>
 	<form name="form1" style="width: 400px">
@@ -30,12 +39,3 @@
 	</a>
 	<p id="token-result"></p>
 </div>
-
-<script>
-  function loginWithKakao() {
-    Kakao.Auth.authorize({
-      redirectUri: 'http://localhost:8080/login/oauth2/code/kakao',
-    });
-  }
-
-</script>

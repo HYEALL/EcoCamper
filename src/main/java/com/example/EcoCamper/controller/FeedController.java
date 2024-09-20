@@ -36,7 +36,7 @@ public class FeedController {
 	LikesService LikesService;
 
 	@Value("${project.upload.path}")
-	private String uploadpath;
+	private String uploadpath; // 저장 경로
 
 	@Autowired
 	private TokenProvider tokenProvider;
@@ -62,12 +62,12 @@ public class FeedController {
 		return "/index";
 	}
 
-	@PostMapping("/feed/feedWritePh")
+	@PostMapping("/feed/feedWritePh") // 이미지 작성
 	public String feedWritePh(FeedDTO dto, Model model, HttpServletRequest request,
 	        @RequestParam("feed_file1") List<MultipartFile> uploadFiles, 
 	        @RequestParam("tags") String tags) {
 
-	    File uploadDir = new File(uploadpath);
+	    File uploadDir = new File(uploadpath); // 폴더 없을시 생성
 	    if (!uploadDir.exists()) {
 	        uploadDir.mkdirs();
 	    }
@@ -114,7 +114,7 @@ public class FeedController {
 	    return "/index";
 	}
 
-	@PostMapping("/feed/feedWriteVoD")
+	@PostMapping("/feed/feedWriteVoD") // 비디오 저장
 	public String feedWriteVoD(FeedDTO dto, Model model, HttpServletRequest request,
 			@RequestParam("feed_file1") MultipartFile uploadFile,@RequestParam("tags") String tags) {
 		// 데이터 처리
@@ -171,14 +171,14 @@ public class FeedController {
 
 		} 
 		List<FeedDTO> list = service.getAllFeeds();
-		
+		System.out.println("list = " + list);
 		model.addAttribute("list", list);
 		model.addAttribute("userId", userId);
 		model.addAttribute("req", "/feed/feedList");
 		return "/index";
 	}
 
-	@GetMapping("/feed/feedReply")
+	@GetMapping("/feed/feedReply") // 댓글창
 	public String messageWriteForm(Model model, HttpServletRequest request) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		String userId = "";
@@ -207,7 +207,7 @@ public class FeedController {
 			userId = tokenProvider.validateAndGetUserId(token);
 			int seq = Integer.parseInt(request.getParameter("seq"));
 			Feed feed = service.feedView(seq);
-
+			System.out.println("feed =" + feed);
 			model.addAttribute("userId", userId);
 			model.addAttribute("feed", feed);
 			model.addAttribute("seq", seq);
@@ -363,11 +363,11 @@ public class FeedController {
 		String id = tokenProvider.validateAndGetUserId(token);
 
 		List<Feed> myFeeds = service.getFeedsById(id);
-		int count = myFeeds.size();
+		int count = myFeeds.size(); // 내 게시물
 		List<Feed> likes = service.getFeedsByUserId(id);
-		int count2 = likes.size();
+		int count2 = likes.size(); // 좋아요한 게시물
 		List<Feed> saves = service.findFeedsBySaveSeq(id);
-		int count3 = saves.size();
+		int count3 = saves.size(); // 저장한 게시물
 		model.addAttribute("list", myFeeds);
 		model.addAttribute("id", id);
 		model.addAttribute("count", count);

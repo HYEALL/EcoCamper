@@ -29,40 +29,48 @@ public class FeedService {
 		 
 	    return dao.findAll();
 	    
-	    }
+	}
 	 
 	 public Feed feedView(int seq) {
 			
 		 return dao.feedView(seq);
 		
-		}
+	}
 	 
 	 public boolean feedDelete(int seq) {
+		 
 		 return dao.feedDelete(seq);
-	 }
+	}
 	
 	 public boolean feedUpdate(FeedDTO dto, int seq) {
+		 
 		 return dao.feedUpdate(dto, seq);
-	 }
+	}
 	
 	 public List<Feed> getFeedsById(String id) {
-		    return dao.getFeedsById(id);
-		}
+		 
+		 return dao.getFeedsById(id);
+	}
 	 
 	 public List<Feed> getFeedsByUserId(String id) {
-	        return dao.getFeedsByUserId(id);
-	    }
+		 
+	     return dao.getFeedsByUserId(id);
+	}
+	 
 	 public List<Feed> findFeedsBySaveSeq(String id) {
-	        return dao.findFeedsBySaveSeq(id);
-	    }
+		 
+	     return dao.findFeedsBySaveSeq(id);
+	}
 
-	// 태그로 피드 검색
-	    public List<Feed> findFeedsByTagName(String tagName) {
-	        return dao.findFeedsByTagName(tagName);
-	    }
+	 // 태그로 피드 검색
+	 public List<Feed> findFeedsByTagName(String tagName) {
+		 
+	     return dao.findFeedsByTagName(tagName);
+	}
 	    
-	    public List<Feed> feedTop(){
-	    	return dao.feedBytopfeeds();
-	    }
+	 public List<Feed> feedTop() {
+		 
+		 return dao.feedBytopfeeds();
+	}
 	 
 }

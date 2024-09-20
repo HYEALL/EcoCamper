@@ -105,7 +105,7 @@
     	    const tagsInput = document.getElementById('tags-input');
     	    tagsInput.value = '';
     	}
-    </script>
+</script>
 <style>
 h2 {
 	text-align: center;
@@ -128,13 +128,13 @@ body {
 }
 
 h2 {
-    text-align: center;
-    color: #fff; /* 텍스트 색상 변경 */
-    padding: 20px 0;
-    background-color: #2A4E3F; /* 배경색 변경 */
-    margin: 0;
-    border-radius: 15px; /* 테두리 동그랗게 설정 */
-    font-weight: bold; /* 글씨체를 굵게 설정 */
+	text-align: center;
+	color: #fff; /* 텍스트 색상 변경 */
+	padding: 20px 0;
+	background-color: #2A4E3F; /* 배경색 변경 */
+	margin: 0;
+	border-radius: 15px; /* 테두리 동그랗게 설정 */
+	font-weight: bold; /* 글씨체를 굵게 설정 */
 }
 
 .form-container {
@@ -313,64 +313,63 @@ hr {
 	border-radius: 4px;
 }
 
- #emoji-container {
-            margin-bottom: 10px;
-        }
-
-
-        #emoji-container {
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        #emoji-container summary {
-            cursor: pointer;
-            font-size: 25px;
-            border: none;
-            border-radius: 4px;
-            padding: 5px 10px;
-            background-color: #fafafa;
-            margin-bottom: 5px;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-
-        #emoji-container summary:hover {
-            background-color: #f0f0f0;
-        }
-
-        #emoji-container details[open] .emoji-popup {
-            display: flex;
-        }
-
-        .emoji-popup {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .emoji {
-            font-size: 24px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        
-        #video-icon {
-    max-width: 100px;
-    max-height: 100px;
-    object-fit: cover;
+#emoji-container {
+	margin-bottom: 10px;
 }
 
-        .remove-tag-button {
+#emoji-container {
+	position: relative;
+	margin-bottom: 10px;
+}
+
+#emoji-container summary {
+	cursor: pointer;
+	font-size: 25px;
+	border: none;
+	border-radius: 4px;
+	padding: 5px 10px;
+	background-color: #fafafa;
+	margin-bottom: 5px;
+	display: inline-block;
+	transition: background-color 0.3s;
+}
+
+#emoji-container summary:hover {
+	background-color: #f0f0f0;
+}
+
+#emoji-container details[open] .emoji-popup {
+	display: flex;
+}
+
+.emoji-popup {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.emoji {
+	font-size: 24px;
+	cursor: pointer;
+	margin: 5px;
+}
+
+#video-icon {
+	max-width: 100px;
+	max-height: 100px;
+	object-fit: cover;
+}
+
+.remove-tag-button {
 	background: transparent;
 	border: none;
 	color: #f44336;
@@ -383,36 +382,32 @@ hr {
 	color: #d32f2f;
 }
 
-
 .tag {
-    background: #e0f7fa; /* 배경색 유지 */
-    border-radius: 4px;
-    padding: 5px;
-    margin: 5px;
-    display: inline-flex;
-    align-items: center;
-    color: #FF6F61; /* 주황색 */
-    font-weight: bold; /* 글씨를 두껍게 */
-    font-size: 16px; /* 글씨 크기 조정 */
+	background: #e0f7fa; /* 배경색 유지 */
+	border-radius: 4px;
+	padding: 5px;
+	margin: 5px;
+	display: inline-flex;
+	align-items: center;
+	color: #FF6F61; /* 주황색 */
+	font-weight: bold; /* 글씨를 두껍게 */
+	font-size: 16px; /* 글씨 크기 조정 */
 }
 </style>
 </head>
 <body>
-	
-	<form action="feedWriteVoD" name="form1" method="post"
-		enctype="multipart/form-data">
+	<form action="feedWriteVoD" name="form1" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="tags" id="tags-input">
 		<div class="form-container">
-		<h2>동영상 올리기</h2>
+			<h2>동영상 올리기</h2>
 			<div class="section content">
 				<div id="video-list">
 					<div class="video-button">
 						<input id="video-icon" type="file" accept="video/*" onchange="addVideo(event)" name="feed_file1"> 
-						<img src="../images/video.jpg"
-							alt="비디오 아이콘" />
-						<div>
-							<span id="video-count">0</span>/1
-						</div>
+						<img src="../images/video.jpg" alt="비디오 아이콘" />
+							<div>
+								<span id="video-count">0</span>/1
+							</div>
 					</div>
 				</div>
 				<br>
@@ -424,7 +419,7 @@ hr {
 				 <div id="emoji-container">
 				 <details>
 				  <summary role="button">😀</summary>
-        		<div class="emoji-popup">
+        			<div class="emoji-popup">
 						<span class="emoji">😀</span>
     					<span class="emoji">😂</span>
     					<span class="emoji">😍</span>
@@ -440,8 +435,8 @@ hr {
     					<span class="emoji">😜</span>
     					<span class="emoji">💡</span> 
                             <!-- 추가 이모지를 여기 넣을 수 있습니다 -->
-                        </div>
-                         </details>
+                      </div>
+                    </details>
     			</div>
 			</div>
 			<hr>
@@ -464,6 +459,7 @@ hr {
 						<label for="hiker">하이커</label>
 					</div>
 				</div>
+				
 				<div class="d-flex">
 					<div class="name">글 종류</div>
 					<div>
@@ -494,23 +490,21 @@ hr {
 
 				<div class="part">
 					<div id="label">장소</div>
-					<div>
-						<input type="text" name="place">
-					</div>
+						<div>
+							<input type="text" name="place">
+						</div>
 				</div>
-				<div>
-					<div class="part">
-						<div id="label">상품</div>
+				<div class="part">
+					<div id="label">상품</div>
 						<div>
 							<input type="text" name="goods">
 						</div>
-					</div>
 				</div>
 				<hr>
-
+				
 				<div align="center" id="left">
-					<input type="button" value="글쓰기" onclick="checkWrite()"> <input
-						type="reset" value="다시작성">
+					<input type="button" value="글쓰기" onclick="checkWrite()"> 
+					<input type="reset" value="다시작성">
 				</div>
 			</div>
 		</div>
