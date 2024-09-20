@@ -80,7 +80,7 @@ function addHashtag() {
         hashtag = `#${hashtag}`;
     }
 
-    const existingTag = document.querySelector(`#hashtag-container .tag`);
+    const existingTag = document.querySelector(`#hashtag-container .tag[data-tag="${hashtag}"]`);
     if (!existingTag) {
         const tagElement = document.createElement('div');
         tagElement.className = 'tag';
@@ -112,331 +112,343 @@ function removeHashtag(button) {
     const tagsInput = document.getElementById('tags-input');
     tagsInput.value = '';
 }
+
+// 이모지 클릭 시 텍스트 입력란에 추가
+document.addEventListener('DOMContentLoaded', () => {
+    const emojis = document.querySelectorAll('.emoji');
+    emojis.forEach(emoji => {
+        emoji.addEventListener('click', () => {
+            const textInput = document.getElementById('text-input');
+            textInput.value += emoji.textContent; // 클릭한 이모지를 텍스트 입력란에 추가
+            textInput.focus(); // 입력란에 포커스
+        });
+    });
+});
 </script>
 
 <style>
 body {
-	font-family: Arial, sans-serif;
-	margin: 0;
-	overflow-x: hidden;
-	background-color: #f4f4f4;
+   font-family: Arial, sans-serif;
+   margin: 0;
+   overflow-x: hidden;
+   background-color: #f4f4f4;
 }
 
 [type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled),
-	button:not(:disabled) {
-	cursor: pointer;
+   button:not(:disabled) {
+   cursor: pointer;
 }
 
 h2 {
-	text-align: center;
-	color: #fff; /* 텍스트 색상 변경 */
-	padding: 20px 0;
-	background-color: #2A4E3F; /* 배경색 변경 */
-	margin: 0;
-	border-radius: 15px; /* 테두리 동그랗게 설정 */
-	font-weight: bold; /* 글씨체를 굵게 설정 */
+   text-align: center;
+   color: #fff; /* 텍스트 색상 변경 */
+   padding: 20px 0;
+   background-color: #2A4E3F; /* 배경색 변경 */
+   margin: 0;
+   border-radius: 15px; /* 테두리 동그랗게 설정 */
+   font-weight: bold; /* 글씨체를 굵게 설정 */
 }
 
 .form-container {
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
-	background-color: #fff;
-	border-radius: 8px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   max-width: 800px;
+   margin: 0 auto;
+   padding: 20px;
+   background-color: #fff;
+   border-radius: 8px;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .section.content textarea {
-	width: calc(100%);
-	display: block;
-	height: 250px;
-	font-size: 16px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	padding: 10px;
-	box-sizing: border-box;
-	resize: vertical;
+   width: calc(100%);
+   display: block;
+   height: 250px;
+   font-size: 16px;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   padding: 10px;
+   box-sizing: border-box;
+   resize: vertical;
 }
 
 .section.category {
-	margin: 20px 0;
+   margin: 20px 0;
 }
 
 .section.category .title {
-	font-size: 22px;
-	font-weight: bold;
-	margin-bottom: 10px;
-	color: #333;
+   font-size: 22px;
+   font-weight: bold;
+   margin-bottom: 10px;
+   color: #333;
 }
 
 .section.category .d-flex {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 
 .section.category .name {
-	font-size: 18px;
-	font-weight: bold;
-	color: #555;
+   font-size: 18px;
+   font-weight: bold;
+   color: #555;
 }
 
 .section.category .d-flex div {
-	margin-right: 10px;
+   margin-right: 10px;
 }
 
 .section.category input[type="radio"] {
-	display: none;
+   display: none;
 }
 
 .section.category label {
-	display: inline-block;
-	padding: 10px 20px;
-	margin: 5px;
-	border: 2px solid #ddd;
-	border-radius: 4px;
-	background-color: #f4f4f4;
-	cursor: pointer;
-	transition: background-color 0.3s, color 0.3s;
+   display: inline-block;
+   padding: 10px 20px;
+   margin: 5px;
+   border: 2px solid #ddd;
+   border-radius: 4px;
+   background-color: #f4f4f4;
+   cursor: pointer;
+   transition: background-color 0.3s, color 0.3s;
 }
 
 .section.category input[type="radio"]:checked+label {
-	background-color: #2A4E3F;
-	color: #FFA500;
-	border-color: #2A4E3F;
+   background-color: #2A4E3F;
+   color: #FFA500;
+   border-color: #2A4E3F;
 }
 
 #photo-list {
-	margin-top: 20px;
-	padding: 10px;
-	background-color: #fafafa;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
+   margin-top: 20px;
+   padding: 10px;
+   background-color: #fafafa;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   display: flex;
+   flex-wrap: wrap;
+   gap: 10px;
 }
 
 #photo-list img {
-	max-width: 100px;
-	max-height: 100px;
-	object-fit: cover;
+   max-width: 100px;
+   max-height: 100px;
+   object-fit: cover;
 }
 
 .part {
-	background: #e0f7fa;
-	border-radius: 4px;
-	margin: 10px 0;
-	padding: 10px;
+   background: #e0f7fa;
+   border-radius: 4px;
+   margin: 10px 0;
+   padding: 10px;
 }
 
 #label {
-	background: #2A4E3F;
-	color: #fff;
-	padding: 10px;
-	text-align: center;
-	border-radius: 4px;
-	font-weight: bold;
-	margin-bottom: 5px;
+   background: #2A4E3F;
+   color: #fff;
+   padding: 10px;
+   text-align: center;
+   border-radius: 4px;
+   font-weight: bold;
+   margin-bottom: 5px;
 }
 
 input[type="text"] {
-	width: calc(100% - 20px);
-	padding: 10px;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	box-sizing: border-box;
+   width: calc(100% - 20px);
+   padding: 10px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   box-sizing: border-box;
 }
 
 input[type="button"], input[type="reset"], button {
-	background-color: #2A4E3F;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 4px;
-	font-size: 16px;
-	cursor: pointer;
-	margin: 5px;
-	transition: background-color 0.3s;
+   background-color: #2A4E3F;
+   color: white;
+   border: none;
+   padding: 10px 20px;
+   border-radius: 4px;
+   font-size: 16px;
+   cursor: pointer;
+   margin: 5px;
+   transition: background-color 0.3s;
 }
 
 input[type="button"]:hover, input[type="reset"]:hover, button:hover {
-	background-color: #FFA500;
+   background-color: #FFA500;
 }
 
 hr {
-	border: 0;
-	border-top: 1px solid #ddd;
-	margin: 20px 0;
+   border: 0;
+   border-top: 1px solid #ddd;
+   margin: 20px 0;
 }
 
 .photo-button {
-	background: #f4f4f4;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	padding: 10px;
-	text-align: center;
-	cursor: pointer;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	position: relative;
+   background: #f4f4f4;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   padding: 10px;
+   text-align: center;
+   cursor: pointer;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   position: relative;
 }
 
 .photo-button img {
-	max-width: 100px;
-	max-height: 100px;
+   max-width: 100px;
+   max-height: 100px;
 }
 
 .photo-button div {
-	margin-top: 5px;
-	font-size: 14px;
-	color: #555;
+   margin-top: 5px;
+   font-size: 14px;
+   color: #555;
 }
 
 .photo-button input[type="file"] {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	opacity: 0;
-	cursor: pointer;
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   opacity: 0;
+   cursor: pointer;
 }
 
 .uploaded-img {
-	max-width: auto;
-	max-height: auto;
-	object-fit: cover;
-	border: 1px solid #ddd;
-	border-radius: 4px;
+   max-width: auto;
+   max-height: auto;
+   object-fit: cover;
+   border: 1px solid #ddd;
+   border-radius: 4px;
 }
 
 #emoji-container {
-	margin-bottom: 10px;
+   margin-bottom: 10px;
 }
 
 #emoji-container {
-	position: relative;
-	margin-bottom: 10px;
+   position: relative;
+   margin-bottom: 10px;
 }
 
 #emoji-container summary {
-	cursor: pointer;
-	font-size: 25px;
-	border: none;
-	border-radius: 4px;
-	padding: 5px 10px;
-	background-color: #fafafa;
-	margin-bottom: 5px;
-	display: inline-block;
-	transition: background-color 0.3s;
+   cursor: pointer;
+   font-size: 25px;
+   border: none;
+   border-radius: 4px;
+   padding: 5px 10px;
+   background-color: #fafafa;
+   margin-bottom: 5px;
+   display: inline-block;
+   transition: background-color 0.3s;
 }
 
 #emoji-container summary:hover {
-	background-color: #f0f0f0;
+   background-color: #f0f0f0;
 }
 
 #emoji-container details[open] .emoji-popup {
-	display: flex;
+   display: flex;
 }
 
 .emoji-popup {
-	display: none;
-	position: absolute;
-	top: 100%;
-	left: 0;
-	background: #fff;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	padding: 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	z-index: 1000;
-	flex-wrap: wrap;
-	gap: 10px;
+   display: none;
+   position: absolute;
+   top: 100%;
+   left: 0;
+   background: #fff;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   padding: 10px;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   z-index: 1000;
+   flex-wrap: wrap;
+   gap: 10px;
 }
 
 .emoji {
-	font-size: 24px;
-	cursor: pointer;
-	margin: 5px;
+   font-size: 24px;
+   cursor: pointer;
+   margin: 5px;
 }
 
 .remove-tag-button {
-	background: transparent;
-	border: none;
-	color: #f44336;
-	font-size: 16px;
-	cursor: pointer;
-	margin-left: 10px;
+   background: transparent;
+   border: none;
+   color: #f44336;
+   font-size: 16px;
+   cursor: pointer;
+   margin-left: 10px;
 }
 
 .remove-tag-button:hover {
-	color: #d32f2f;
+   color: #d32f2f;
 }
 
 .tag {
-	background: #e0f7fa; /* 배경색 유지 */
-	border-radius: 4px;
-	padding: 5px;
-	margin: 5px;
-	display: inline-flex;
-	align-items: center;
-	color: #FF6F61; /* 주황색 */
-	font-weight: bold; /* 글씨를 두껍게 */
-	font-size: 16px; /* 글씨 크기 조정 */
+   background: #e0f7fa; /* 배경색 유지 */
+   border-radius: 4px;
+   padding: 5px;
+   margin: 5px;
+   display: inline-flex;
+   align-items: center;
+   color: #FF6F61; /* 주황색 */
+   font-weight: bold; /* 글씨를 두껍게 */
+   font-size: 16px; /* 글씨 크기 조정 */
 }
 </style>
 <body>
 <form action="feedModifyPh" name="form1" method="post" enctype="multipart/form-data">
-	<input type="hidden" id="existing-tags" th:value="${feed.tags}">
-	<input type="hidden" id="tags-input" name="tags">
-	<div class="form-container">
-		<h2>사진 편집</h2>
-		<div style="color: red">※ 기존 이미지에 추가하시려면 재등록 해야합니다</div>
-			<input type="hidden" name="seq" th:value="${seq}">
-    		<div class="section content">
-				<div id="photo-list">
-					<div class="photo-button">
-        				<input type="file" accept="image/*" multiple onchange="addPhoto(event)" name="feed_file1" value="${feed.feed_file}">
-        				<img src="../images/camera.jpg" alt="카메라 아이콘" />
-    						<div>
-            					<span id="image-count">0</span>/10
-        					</div>
-    				</div>
+   <input type="hidden" id="existing-tags" th:value="${feed.tags}">
+   <input type="hidden" id="tags-input" name="tags">
+   <div class="form-container">
+      <h2>사진 편집</h2>
+      <div style="color: red">※ 기존 이미지에 추가하시려면 재등록 해야합니다</div>
+         <input type="hidden" name="seq" th:value="${seq}">
+          <div class="section content">
+            <div id="photo-list">
+               <div class="photo-button">
+                    <input type="file" accept="image/*" multiple onchange="addPhoto(event)" name="feed_file1" value="${feed.feed_file}">
+                    <img src="../images/camera.jpg" alt="카메라 아이콘" />
+                      <div>
+                           <span id="image-count">0</span>/10
+                       </div>
+                </div>
 
-    				<!-- 기존 이미지 미리보기 -->
-    				<div id="existing-images">
-   						<th:block th:each="image : ${feed.imageFileNames}">
-        					<img th:src="@{'/storage/' + ${image}}" alt="이미지 미리보기" class="uploaded-img">
-    					</th:block>
-					</div>
-				</div>
-        	<br>
-        	<div>
-            	<textarea id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
-                	autocomplete="off" onkeydown="resizeTextarea(this);" onkeyup="resizeTextarea(this);" rows="13">[[${feed.feed_content}]]</textarea>
-        	</div>
+                <!-- 기존 이미지 미리보기 -->
+                <div id="existing-images">
+                     <th:block th:each="image : ${feed.imageFileNames}">
+                       <img th:src="@{'/storage/' + ${image}}" alt="이미지 미리보기" class="uploaded-img">
+                   </th:block>
+               </div>
+            </div>
+           <br>
+           <div>
+               <textarea id="text-input" name="feed_content" placeholder="내용을 입력해주세요 (10자 이상)"
+                   autocomplete="off" onkeydown="resizeTextarea(this);" onkeyup="resizeTextarea(this);" rows="13">[[${feed.feed_content}]]</textarea>
+           </div>
         
         <div id="emoji-container">
             <details>
                 <summary role="button">😀</summary>
                 <div class="emoji-popup">
                         <span class="emoji">😀</span>
-    					<span class="emoji">😂</span>
-    					<span class="emoji">😍</span>
-    					<span class="emoji">😠</span>
-    					<span class="emoji">👍</span>
-    					<span class="emoji">❤️</span>
-    					<span class="emoji">💔</span>
-    					<span class="emoji">😭</span>
-    					<span class="emoji">🎉</span>
-    					<span class="emoji">🔥</span>
-    					<span class="emoji">🌟</span>
-    					<span class="emoji">💯</span>
-    					<span class="emoji">😜</span>
-    					<span class="emoji">💡</span>   						
+                   <span class="emoji">😂</span>
+                   <span class="emoji">😍</span>
+                   <span class="emoji">😠</span>
+                   <span class="emoji">👍</span>
+                   <span class="emoji">❤️</span>
+                   <span class="emoji">💔</span>
+                   <span class="emoji">😭</span>
+                   <span class="emoji">🎉</span>
+                   <span class="emoji">🔥</span>
+                   <span class="emoji">🌟</span>
+                   <span class="emoji">💯</span>
+                   <span class="emoji">😜</span>
+                   <span class="emoji">💡</span>                     
                 </div>
             </details>
         </div>
@@ -447,48 +459,48 @@ hr {
     <div class="section category" align="center">
         <div class="title">카테고리</div>
         <div class="d-flex">
-    		<div class="name">아웃도어</div>
-    			<div>
-        			<input type="radio" id="camper" name="outdoor" th:value="캠퍼" th:checked="${feed.outdoor == '캠퍼'}">
-        			<label for="camper">캠퍼</label>
+          <div class="name">아웃도어</div>
+             <div>
+                 <input type="radio" id="camper" name="outdoor" th:value="캠퍼" th:checked="${feed.outdoor == '캠퍼'}">
+                 <label for="camper">캠퍼</label>
         
-        			<input type="radio" id="backpacker" name="outdoor" th:value="백팩커" th:checked="${feed.outdoor == '백팩커'}">
-        			<label for="backpacker">백팩커</label>
+                 <input type="radio" id="backpacker" name="outdoor" th:value="백팩커" th:checked="${feed.outdoor == '백팩커'}">
+                 <label for="backpacker">백팩커</label>
         
-        			<input type="radio" id="traveler" name="outdoor" th:value="트래블러" th:checked="${feed.outdoor == '트래블러'}">
-        			<label for="traveler">트래블러</label>
+                 <input type="radio" id="traveler" name="outdoor" th:value="트래블러" th:checked="${feed.outdoor == '트래블러'}">
+                 <label for="traveler">트래블러</label>
         
-        			<input type="radio" id="hiker" name="outdoor" th:value="하이커" th:checked="${feed.outdoor == '하이커'}">
-        			<label for="hiker">하이커</label>
-    			</div>
-		</div>
-		<div class="d-flex">
-    		<div class="name">글 종류</div>
-    			<div>
-        			<input type="radio" id="gear" name="feed_subject" th:value="기어" th:checked="${feed.feed_subject == '기어'}">
-        			<label for="gear">기어</label>
+                 <input type="radio" id="hiker" name="outdoor" th:value="하이커" th:checked="${feed.outdoor == '하이커'}">
+                 <label for="hiker">하이커</label>
+             </div>
+      </div>
+      <div class="d-flex">
+          <div class="name">글 종류</div>
+             <div>
+                 <input type="radio" id="gear" name="feed_subject" th:value="기어" th:checked="${feed.feed_subject == '기어'}">
+                 <label for="gear">기어</label>
         
-        			<input type="radio" id="place" name="feed_subject" th:value="장소" th:checked="${feed.feed_subject == '장소'}">
-        			<label for="place">장소</label>
+                 <input type="radio" id="place" name="feed_subject" th:value="장소" th:checked="${feed.feed_subject == '장소'}">
+                 <label for="place">장소</label>
 
-        			<input type="radio" id="news" name="feed_subject" th:value="뉴스" th:checked="${feed.feed_subject == '뉴스'}">
-        			<label for="news">뉴스</label>
-    			</div>
-			</div>
-    	</div>
+                 <input type="radio" id="news" name="feed_subject" th:value="뉴스" th:checked="${feed.feed_subject == '뉴스'}">
+                 <label for="news">뉴스</label>
+             </div>
+         </div>
+       </div>
 
-    	<hr>
+       <hr>
 
     <div align="center">
         <div class="part">
            <div id="label">해시태그</div>
-					<div id="hashtag-container">
-        			<!-- 해시태그가 동적으로 추가될 부분 -->
-   					 </div>
-    					<div>
-       						 <input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
-    						 <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
-    					</div>
+               <div id="hashtag-container">
+                 <!-- 해시태그가 동적으로 추가될 부분 -->
+                   </div>
+                   <div>
+                          <input type="text" id="tag-input" name="tags" placeholder="해시태그 입력">
+                       <input type="button" id="add-tag-button" value="추가" onclick="addHashtag()"> <!-- 추가 버튼 -->
+                   </div>
         </div>
 
         <div class="part">
