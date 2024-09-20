@@ -13,6 +13,9 @@ create table usertable(
 );
 select * from usertable;
 delete usertable where id='seongeun';
+--UPDATE usertable
+--SET email = 'gilgil@naver.com'
+--WHERE name = '홍길동';
 --update usertable set role='ADMIN' where id='admin';
 alter table usertable add unique(email);
 -- 주소 바꾸기
@@ -89,7 +92,7 @@ select*from Buylist order by buyseq desc;
 
 --delete Buylist where buyseq='16';
 --DELETE FROM Buylist
---WHERE buyseq BETWEEN 30 AND 97;
+--WHERE buyseq BETWEEN 9 AND 9;
 create SEQUENCE seq_Buylist NOCACHE NOCYCLE;
 --drop SEQUENCE seq_Buylist;
 select *from user_sequences;
@@ -563,7 +566,7 @@ create table feed (
    logtime date default sysdate -- 작성일
 
 );
-ALTER TABLE feed DROP COLUMN tags;
+--ALTER TABLE feed DROP COLUMN tags;
 alter table feed rename column feed_tag to tags; --- 도로명 주소 
 select * from feed;
 -- 시퀀스 객체 생성
@@ -573,6 +576,7 @@ create sequence seq nocycle nocache;
 commit;
 select * from tab;
 --drop table tag purge;
+select * from feed left join likes on feed.seq = likes.reviewId group by feed.seq, feed order by count(
 ---------------------
 create table save (
 

@@ -52,8 +52,7 @@ public class FeedController {
 	}
 
 	@GetMapping("/feed/feedWriteFormVideo")
-	public String feedWriteFormVideo(HttpServletRequest request, FeedDTO dto, Model model
-			) {
+	public String feedWriteFormVideo(HttpServletRequest request, FeedDTO dto, Model model) {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		String userId = tokenProvider.validateAndGetUserId(token);
 		dto.setId(userId);
@@ -64,59 +63,57 @@ public class FeedController {
 
 	@PostMapping("/feed/feedWritePh") // 이미지 작성
 	public String feedWritePh(FeedDTO dto, Model model, HttpServletRequest request,
-	        @RequestParam("feed_file1") List<MultipartFile> uploadFiles, 
-	        @RequestParam("tags") String tags) {
+			@RequestParam("feed_file1") List<MultipartFile> uploadFiles, @RequestParam("tags") String tags) {
 
-	    File uploadDir = new File(uploadpath); // 폴더 없을시 생성
-	    if (!uploadDir.exists()) {
-	        uploadDir.mkdirs();
-	    }
+		File uploadDir = new File(uploadpath); // 폴더 없을시 생성
+		if (!uploadDir.exists()) {
+			uploadDir.mkdirs();
+		}
 
-	    // 파일 이름 저장을 위한 리스트 초기화
-	    List<String> fileNames = new ArrayList<>();
+		// 파일 이름 저장을 위한 리스트 초기화
+		List<String> fileNames = new ArrayList<>();
 
-	    // 이미지 파일 처리
-	    for (MultipartFile uploadFile : uploadFiles) {
-	        if (!uploadFile.isEmpty()) {
-	            String fileName = uploadFile.getOriginalFilename();
-	            File file = new File(uploadpath, fileName);
+		// 이미지 파일 처리
+		for (MultipartFile uploadFile : uploadFiles) {
+			if (!uploadFile.isEmpty()) {
+				String fileName = uploadFile.getOriginalFilename();
+				File file = new File(uploadpath, fileName);
 
-	            // 중복된 파일 확인
-	            boolean check = file.exists() && file.length() == uploadFile.getSize();
+				// 중복된 파일 확인
+				boolean check = file.exists() && file.length() == uploadFile.getSize();
 
-	            if (!check) {
-	                try {
-	                    uploadFile.transferTo(file); // 파일을 지정된 경로로 저장
-	                } catch (IOException e) {
-	                    e.printStackTrace();
-	                    model.addAttribute("result", false); // 실패 시 결과를 모델에 추가
-	                    return "feed/feedWritePh";
-	                }
-	            } else {
-	                System.out.println("already: " + fileName);
-	            }
+				if (!check) {
+					try {
+						uploadFile.transferTo(file); // 파일을 지정된 경로로 저장
+					} catch (IOException e) {
+						e.printStackTrace();
+						model.addAttribute("result", false); // 실패 시 결과를 모델에 추가
+						return "feed/feedWritePh";
+					}
+				} else {
+					System.out.println("already: " + fileName);
+				}
 
-	            fileNames.add(fileName); // 저장된 파일 이름을 리스트에 추가
-	        }
-	    }
+				fileNames.add(fileName); // 저장된 파일 이름을 리스트에 추가
+			}
+		}
 
-	    String token = tokenProvider.resolveTokenFromCookie(request);
-	    String userId = tokenProvider.validateAndGetUserId(token);
-	    dto.setId(userId);
-	    dto.setFeed_file(String.join(",", fileNames)); // 파일 이름들을 콤마로 구분하여 설정
-	    dto.setLogtime(new Date());
-	    dto.setFeed_type("img");
+		String token = tokenProvider.resolveTokenFromCookie(request);
+		String userId = tokenProvider.validateAndGetUserId(token);
+		dto.setId(userId);
+		dto.setFeed_file(String.join(",", fileNames)); // 파일 이름들을 콤마로 구분하여 설정
+		dto.setLogtime(new Date());
+		dto.setFeed_type("img");
 
-
-	    boolean result = service.feedWritePhoto(dto);
-	    model.addAttribute("result", result);
-	    model.addAttribute("req", "/feed/feedWritePh");
-	    return "/index";
+		boolean result = service.feedWritePhoto(dto);
+		model.addAttribute("result", result);
+		model.addAttribute("req", "/feed/feedWritePh");
+		return "/index";
 	}
 
 	@PostMapping("/feed/feedWriteVoD") // 비디오 저장
 	public String feedWriteVoD(FeedDTO dto, Model model, HttpServletRequest request,
-			@RequestParam("feed_file1") MultipartFile uploadFile,@RequestParam("tags") String tags) {
+			@RequestParam("feed_file1") MultipartFile uploadFile, @RequestParam("tags") String tags) {
 		// 데이터 처리
 		System.out.println("dto = " + dto);
 
@@ -150,7 +147,6 @@ public class FeedController {
 		String token = tokenProvider.resolveTokenFromCookie(request);
 		String userId = tokenProvider.validateAndGetUserId(token);
 		dto.setId(userId);
-		
 
 		// DB 저장
 		boolean result = service.feedWriteVideo(dto);
@@ -169,9 +165,9 @@ public class FeedController {
 		if (token != null) {
 			userId = tokenProvider.validateAndGetUserId(token);
 
-		} 
+		}
 		List<FeedDTO> list = service.getAllFeeds();
-		System.out.println("list = " + list);
+
 		model.addAttribute("list", list);
 		model.addAttribute("userId", userId);
 		model.addAttribute("req", "/feed/feedList");
@@ -185,7 +181,7 @@ public class FeedController {
 		if (token != null) {
 			userId = tokenProvider.validateAndGetUserId(token);
 
-		} 
+		}
 
 		int seq = Integer.parseInt(request.getParameter("seq"));
 
@@ -207,7 +203,6 @@ public class FeedController {
 			userId = tokenProvider.validateAndGetUserId(token);
 			int seq = Integer.parseInt(request.getParameter("seq"));
 			Feed feed = service.feedView(seq);
-			System.out.println("feed =" + feed);
 			model.addAttribute("userId", userId);
 			model.addAttribute("feed", feed);
 			model.addAttribute("seq", seq);
@@ -215,7 +210,7 @@ public class FeedController {
 		} else {
 			model.addAttribute("req", "/user/loginForm");
 		}
-		
+
 		return "/index";
 	}
 
@@ -234,13 +229,12 @@ public class FeedController {
 
 	@GetMapping("feed/feedModifyFormPh")
 	public String boardModifyFormPh(Model model, @RequestParam("seq") int seq) {
-	    Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
+		Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
 
-	   
-	    model.addAttribute("feed", feed);
-	    model.addAttribute("seq", seq);
-	    model.addAttribute("req", "/feed/feedModifyFormPh");
-	    return "/index"; // JSP 파일의 경로
+		model.addAttribute("feed", feed);
+		model.addAttribute("seq", seq);
+		model.addAttribute("req", "/feed/feedModifyFormPh");
+		return "/index"; // JSP 파일의 경로
 	}
 
 	@GetMapping("/feed/feedModifyFormVoD")
@@ -248,9 +242,9 @@ public class FeedController {
 
 		// 한줄 데이터 불러오기
 		Feed feed = service.feedView(seq); // 피드 데이터를 조회합니다
-	   
-	    model.addAttribute("feed", feed);
-	    model.addAttribute("seq", seq);
+
+		model.addAttribute("feed", feed);
+		model.addAttribute("seq", seq);
 		model.addAttribute("req", "/feed/feedModifyFormVoD");
 
 		return "/index";
@@ -300,7 +294,7 @@ public class FeedController {
 		dto.setFeed_file(String.join(",", fileNames)); // 파일 이름들을 콤마로 구분하여 설정
 		dto.setLogtime(new Date());
 		dto.setFeed_type("img");
-		
+
 		boolean result = service.feedUpdate(dto, seq);
 		model.addAttribute("result", result);
 		model.addAttribute("seq", seq);
@@ -310,7 +304,7 @@ public class FeedController {
 
 	@PostMapping("/feed/feedModifyVoD")
 	public String feedModifyVoD(FeedDTO dto, Model model, HttpServletRequest request,
-			@RequestParam("feed_file1") MultipartFile uploadFile,@RequestParam("tags") String tags) {
+			@RequestParam("feed_file1") MultipartFile uploadFile, @RequestParam("tags") String tags) {
 		// 데이터 처리
 		System.out.println("dto = " + dto);
 
@@ -345,7 +339,7 @@ public class FeedController {
 		String userId = tokenProvider.validateAndGetUserId(token);
 		int seq = Integer.parseInt(request.getParameter("seq"));
 		dto.setId(userId);
-	    
+
 		// DB 저장
 		boolean result = service.feedUpdate(dto, seq);
 
