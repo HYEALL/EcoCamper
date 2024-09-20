@@ -1,3 +1,4 @@
+select * from tab;
 create table usertable(
     name varchar2(30) not null,
     id varchar2(30) primary key,
@@ -10,8 +11,8 @@ create table usertable(
     logtime date not null,
     role varchar2(20) not null
 );
---select * from usertable;
---delete usertable where id='hyeall';
+select * from usertable;
+delete usertable where id='gilgil';
 --update usertable set role='ADMIN' where id='admin';
 alter table usertable add unique(email);
 -- 주소 바꾸기
@@ -37,7 +38,7 @@ create table Shop_Review(
 create SEQUENCE seq_Shop_Review NOCACHE NOCYCLE;
 --drop SEQUENCE seq_Shop_Review;
 --select *from user_sequences;
-
+--delete shop_review where shopreviewid='member3';
 --drop table Shop_Review purge;
 --select*from Shop_Review;
 insert into Shop_Review values (seq_Shop_Review.nextval,'0001','euneun','친환경휴지',0,sysdate);
@@ -73,7 +74,7 @@ create table Buylist(
 alter table buylist add bzipcode varchar2(7); -- 우편번호
 alter table buylist rename column baddress to baddr1; --- 도로명 주소 
 alter table buylist add baddr2 varchar2(200); -- 상세 주소
-
+--delete buylist where buyid='member3';
 
 --drop table Buylist purge;
 
@@ -534,9 +535,11 @@ create table likes (
     foreign key (review_id) references feed(seq),
     foreign key (user_id) references  usertable(id)
 );
+drop table likes purge;
 insert into likes values(2, 4, 'eun');
 select count review_id from likes where review_id = 1;
 select * from likes;
+--delete likes where user_id='member3';
    -- 시퀀스 객체 생성
 create sequence likes_num nocycle nocache;
 -- 시퀀스 삭제
@@ -557,35 +560,19 @@ create table feed (
     place varchar2(100),
     good_num number default 0,
     good number default 0,
-    hit number default 0, -- 조회수
    logtime date default sysdate -- 작성일
   
 );
-ALTER TABLE feed DROP COLUMN hit;
-
+ALTER TABLE feed DROP COLUMN tags;
+alter table feed rename column feed_tag to tags; --- 도로명 주소 
 select * from feed;
 -- 시퀀스 객체 생성
 create sequence seq nocycle nocache;
 -- 시퀀스 삭제
 --drop sequence seq;
 commit;
---drop table feed purge;
-------------
-
-CREATE TABLE tag (
-    tag_seq NUMBER PRIMARY KEY, -- 태그의 고유 ID
-    tag_name VARCHAR2(100) NOT NULL -- 태그 이름
-);
-
-select * from tag;
-CREATE TABLE feed_tag (
-    feed_id NUMBER, -- Feed 테이블의 기본 키
-    tag_id NUMBER, -- Tag 테이블의 기본 키
-    PRIMARY KEY (feed_id, tag_id),
-    FOREIGN KEY (feed_id) REFERENCES feed(seq) ON DELETE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES tag(tag_seq) ON DELETE CASCADE
-);
-select * from feed_tag;
+select * from tab;
+--drop table tag purge;
 ---------------------
 create table save (
 
@@ -595,7 +582,7 @@ create table save (
     foreign key (save_seq) references feed(seq) ON DELETE CASCADE,
     foreign key (save_id) references  usertable(id)
 );
-
+--delete save where save_id='member3';
 create sequence save_num nocycle nocache;
 -- 시퀀스 삭제
 --drop sequence save_num;
@@ -604,3 +591,14 @@ create sequence save_num nocycle nocache;
 
 select * from save; 
 commit;
+--------------
+create table reply(
+    num number primary key, -- 댓글 번호
+    seq number  not null, -- 피드 번호
+    writer varchar2(30)not null, -- 작성자 
+    content varchar2(4000) not null, -- 댓글 내용
+    logtime date default sysdate, -- 작성일
+    foreign key (seq) references feed(seq) ON DELETE CASCADE,
+    foreign key (writer) references  usertable(id)
+  
+);
