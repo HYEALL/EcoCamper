@@ -22,7 +22,11 @@ import com.example.EcoCamper.service.MapService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MapController {
@@ -86,7 +90,7 @@ public class MapController {
 	public String showMapForm(Model model) {
 		model.addAttribute("map", new Map());
 		model.addAttribute("req", "place/writePlace"); // map 데이터를 입력하는 폼
-		return "/index"; 
+		return "/index";
 	}
 
 	@PostMapping("/savePlace")
@@ -96,18 +100,50 @@ public class MapController {
 	}
 
 	@GetMapping("/placeForm")
-	public String placeForm(Model model, HttpServletRequest request) {
+	public String placeForm(@RequestParam("place_seq") int place_seq, Model model) {
 
-		// 데이터 공유
+		// seq를 이용해 데이터를 가져온 후, model에 담아 뷰로 전달
+		Optional<Map> mapOptional = mapService.getPlaceBySeq(place_seq);
 
-		return "place/placeForm";
+		// Optional에서 데이터를 추출하고 모델에 담는다.
+		if (mapOptional.isPresent()) {
+			model.addAttribute("map", mapOptional.get());
+		} else {
+			// 데이터가 없을 경우 처리
+			model.addAttribute("map", new Map()); // 또는 에러 처리
+		}
+
+		System.out.println("map optional 읽어온 정보: " + mapOptional.get());
+
+		String placeFacilityStr = mapOptional.get().getPlace_facility();
+		String placeEnvironmentStr = mapOptional.get().getPlace_environment();
+		String placeSeasonStr = mapOptional.get().getPlace_season();
+
+		List<String> place_facility = new ArrayList<>();
+		List<String> place_environment = new ArrayList<>();
+		List<String> place_season = new ArrayList<>();
+
+		if (placeFacilityStr != null && !placeFacilityStr.isEmpty()) {
+			place_facility = Arrays.asList(placeFacilityStr.split(","));
+		}
+
+		if (placeEnvironmentStr != null && !placeEnvironmentStr.isEmpty()) {
+			place_environment = Arrays.asList(placeEnvironmentStr.split(","));
+		}
+
+		if (placeSeasonStr != null && !placeSeasonStr.isEmpty()) {
+			place_season = Arrays.asList(placeSeasonStr.split(","));
+		}
+
+		System.out.println("place_facility 리스트: " + place_facility);
+		System.out.println("place_environment 리스트: " + place_environment);
+		System.out.println("place_season 리스트: " + place_season);
+
+		model.addAttribute("place_facility", place_facility);
+		model.addAttribute("place_environment", place_environment);
+		model.addAttribute("place_season", place_season);
+		model.addAttribute("req", "/place/placeForm"); 
+		return "/index";
 	}
 
-	@PostMapping("/place")
-	public String place(Model model, HttpServletRequest request) {
-		// 데이터 공유
-		// 로그인한 아이디도 넘겨받기 (장소 스크래핑 기능)
-		// seq 넘겨받아서 한줄 데이터 읽어오기 -> json으로 저장
-		return "place/place";
-	}
 }

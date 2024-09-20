@@ -1,8 +1,8 @@
 package com.example.EcoCamper.service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -50,6 +50,10 @@ public class MapService {
 		// 저장 전 현재 날짜와 시간을 설정
         map.setUpload_date(new Date());  // 현재 날짜 및 시간 추가
 		mapRepository.save(map);
+	}
+
+	public Optional<Map> getPlaceBySeq(int place_seq) {
+		return mapRepository.findById(place_seq);
 	}
 	
 	

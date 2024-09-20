@@ -262,8 +262,10 @@ function getListItem(place) {
 		itemStr += '<span class="jibun">지번: ' + place.place_oldaddr + '  (우) ' + place.place_postcode + '</span>';
 	} else if(place.place_oldaddr) {
 		itemStr += '<span class="jibun">지번: ' + place.place_oldaddr + '</span>';
-	} else {
+	} else if(place.place_postcode) {
 		itemStr += '<span class="jibun">(우) ' + place.place_postcode + '</span>';
+	} else {
+		
 	}
 		
 	if(place.place_tel) {
@@ -271,8 +273,8 @@ function getListItem(place) {
 	}
     
     // 상세보기 바로가기 추가
-    itemStr += '<span><a href="">상세보기</a></span>'
-				'</article>';
+	itemStr += `<span><a href="/placeForm?place_seq=${place.place_seq}">상세보기</a></span>`;
+	itemStr += '</article>';
 				
     el.innerHTML = itemStr;
     el.className = 'item';
