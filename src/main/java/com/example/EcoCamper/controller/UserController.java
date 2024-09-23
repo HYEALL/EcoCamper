@@ -35,6 +35,7 @@ import com.example.EcoCamper.entity.User;
 import com.example.EcoCamper.jwt.KakaoApi;
 import com.example.EcoCamper.jwt.TokenProvider;
 import com.example.EcoCamper.service.FeedService;
+import com.example.EcoCamper.service.MapService;
 import com.example.EcoCamper.service.ShopService;
 import com.example.EcoCamper.service.UserService;
 
@@ -58,6 +59,9 @@ public class UserController {
 	
 	@Autowired
 	FeedService feedService;
+	
+	@Autowired
+	MapService mapService;
 
 	// 카카오 로그인
 	@GetMapping(value = "/login/oauth2/code/kakao")
@@ -206,11 +210,14 @@ public class UserController {
 
 		List<Shop> list_shop = shopService.shopTop();
 		List<Feed> list_feed = feedService.feedTop();
+		List<com.example.EcoCamper.entity.Map> list_map = mapService.getLatestFivePlaces();
 		
 		System.out.println(list_shop);
 		System.out.println(list_feed);
+		System.out.println(list_map);
 		model.addAttribute("list_shop", list_shop);
 		model.addAttribute("list_feed", list_feed);
+		model.addAttribute("list_map", list_map);
 
 		return "/index";
 	}

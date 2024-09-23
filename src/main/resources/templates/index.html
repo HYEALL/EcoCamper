@@ -93,7 +93,27 @@
 			<div class="swiper-button-next next"></div>
 		</div>
 
-
+		<!-- MAP LATEST 5-->
+		<br> <br> <br>
+		<div align="center">
+			<h4>최근 등록된 장소 TOP5</h4>
+			<h5 style="font-size: 18px;"></h5>
+		</div>
+	    <div class="slider swiper-container-2">
+	        <div class="swiper-wrapper slides">
+	            <!-- 장소 리스트 출력 -->
+	            <div class="swiper-slide option" th:each="place : ${list_map}">
+	                <a th:href="@{/placeForm(place_seq=${place.place_seq})}">
+	                    <img th:src="${place.place_pic}" width="100" height="100" alt="Place Image">
+	                </a>
+	            </div>
+	        </div>
+        
+        <!-- 추가적인 장소들 -->
+        <div class="swiper-button-prev prev"></div>
+        <div class="swiper-button-next next"></div>
+    </div>
+<br> <br> <br>
 
 		<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 		<script>

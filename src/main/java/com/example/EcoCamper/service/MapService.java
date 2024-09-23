@@ -42,6 +42,7 @@ public class MapService {
         return mapRepository.findAll(spec);
     }
 
+    // 전체 리스트 불러오기
 	public List<Map> findAll(Specification<Map> spec) {
 		return mapRepository.findAll(spec);
 	}
@@ -52,9 +53,23 @@ public class MapService {
 		mapRepository.save(map);
 	}
 
+	// 상세보기
 	public Optional<Map> getPlaceBySeq(int place_seq) {
 		return mapRepository.findById(place_seq);
 	}
 	
-	
+	// 최근 latest top5 장소들 불러오는 로직
+    public List<Map> getLatestFivePlaces() {
+        return mapRepository.findTop5ByOrderByUploadDateDesc();
+    }
+    
+    // 수정 로직
+    public void updatePlace(Map placeData) {
+        mapRepository.save(placeData); // JPA를 이용해 업데이트
+    }
+
+    // 삭제 로직
+    public void deletePlace(int place_seq) {
+        mapRepository.deleteById(place_seq); // JPA를 이용해 삭제
+    }
 }

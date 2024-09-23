@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>장소 수정</title>
+
+<!-- 외부 CSS 로드 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+
+<style>
+  .star-clean, .star-scene, .star-independence, .star-facility, .star-editor {
+    width: 24px;  /* 원하는 너비 */
+    height: 24px; /* 원하는 높이 */
+  }
+  
+  #emoji-container2, #emoji-container3 {
+      display: flex;
+      flex-wrap: wrap;  /* 줄바꿈 허용 */
+      justify-content: center;  /* 중앙 정렬 */
+      gap: 10px;  /* 이모지 사이 간격 */
+      max-width: 1400px;  /* 한 줄에 들어갈 최대 너비 설정 (필요에 따라 조절 가능) */
+  }
+  
+  .emoji {
+      font-size: 24px;
+      cursor: pointer;
+  }
+  
+  #place_keypoint, #place_precaution {
+  	height: 200px;
+  }
+
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const updateSuccess = new URLSearchParams(window.location.search).get('updateSuccess');
+    if (updateSuccess === 'true') {
+      alert('수정이 완료되었습니다.');
+    } else if (updateSuccess === 'false') {
+      alert('수정에 실패했습니다. 다시 시도해주세요.');
+    }
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 별점 관련 변수들
+    const cleanStars = document.querySelectorAll('.star-clean');
+    const sceneStars = document.querySelectorAll('.star-scene');
+    const independenceStars = document.querySelectorAll('.star-independence');
+    const facilityStars = document.querySelectorAll('.star-facility');
+    const editorStars = document.querySelectorAll('.star-editor');
+
+    // 점수 입력 필드
+    const cleanScoreInput = document.getElementById('place_cleanscore');
+    const sceneScoreInput = document.getElementById('place_scenescore');
+    const independenceScoreInput = document.getElementById('place_independencescore');
+    const facilityScoreInput = document.getElementById('place_facilityscore');
+    const editorScoreInput = document.getElementById('place_editorscore');
+
+    // 별점 초기화 함수
+    function initializeStars(starElements, score) {
+        const scoreValue = parseInt(score) || 0; // 점수 값이 없을 경우 0으로 설정
+        starElements.forEach(star => {
+            const starValue = parseInt(star.getAttribute('data-value'));
+            if (starValue <= scoreValue) {
+                star.src = 'https://cdn-icons-png.flaticon.com/128/1055/1055473.png'; // 채워진 별
+            } else {
+                star.src = 'https://cdn-icons-png.flaticon.com/128/2377/2377878.png'; // 빈 별
+            }
+        });
+    }
+
+    // 클릭 이벤트 설정 함수
+    function setStarClickListener(starElements, scoreInput) {
+        starElements.forEach(star => {
+            star.addEventListener('click', function () {
+                const rating = parseInt(this.getAttribute('data-value'));
+                scoreInput.value = rating; // 선택한 별의 점수 설정
+                initializeStars(starElements, rating); // 별점 업데이트
+                updateEditorScore(); // 에디터 점수 업데이트
+            });
+        });
+    }
+
+    // 에디터 점수 계산 및 업데이트
+    function updateEditorScore() {
+        const totalScore = (
+            parseFloat(cleanScoreInput.value) +
+            parseFloat(sceneScoreInput.value) +
+            parseFloat(independenceScoreInput.value) +
+            parseFloat(facilityScoreInput.value)
+        ) / 4;
+
+        editorScoreInput.value = totalScore.toFixed(1); // 에디터 평점 계산
+        initializeStars(editorStars, editorScoreInput.value); // 에디터 별점도 업데이트
+    }
+
+    // 페이지 로드 시 저장된 점수로 초기 별점 설정
+    initializeStars(cleanStars, cleanScoreInput.value || 0);
+    initializeStars(sceneStars, sceneScoreInput.value || 0);
+    initializeStars(independenceStars, independenceScoreInput.value || 0);
+    initializeStars(facilityStars, facilityScoreInput.value || 0);
+    initializeStars(editorStars, editorScoreInput.value || 0);
+
+    // 각 점수에 대한 클릭 이벤트 설정
+    setStarClickListener(cleanStars, cleanScoreInput);
+    setStarClickListener(sceneStars, sceneScoreInput);
+    setStarClickListener(independenceStars, independenceScoreInput);
+    setStarClickListener(facilityStars, facilityScoreInput);
+});
+</script>
+
+</head>
+<body>
+    <form id="mapForm">
+        <!-- Hidden inputs for scores -->
+        <input type="hidden" id="place_cleanscore" name="place_cleanscore" th:value="${map.place_cleanscore}">
+        <input type="hidden" id="place_scenescore" name="place_scenescore" th:value="${map.place_scenescore}">
+        <input type="hidden" id="place_independencescore" name="place_independencescore" th:value="${map.place_independencescore}">
+        <input type="hidden" id="place_facilityscore" name="place_facilityscore" th:value="${map.place_facilityscore}">
+        <input type="hidden" id="place_editorscore" name="place_editorscore" th:value="${map.place_editorscore}">
+    </form>
+	<main class="container">
+    <h1>장소 수정</h1>
+    <form id="modifyPlaceForm" action="/updatePlace" method="post">
+		<input type="hidden" id="place_seq" name="place_seq" th:value="${map.place_seq}">
+		
+            <!-- 장소 카테고리 -->
+            <label for="place_category">장소 카테고리</label>
+            <select id="place_category" name="place_category" required aria-invalid="false">
+			    <option value="" th:if="${map.place_category == null}">장소 카테고리를 선택하세요</option>
+			    <option value="place_c01" th:selected="${map.place_category == 'place_c01'}">캠핑장</option>
+			    <option value="place_c02" th:selected="${map.place_category == 'place_c02'}">차박, 노지</option>
+			    <option value="place_c03" th:selected="${map.place_category == 'place_c03'}">글램핑, 카라반</option>
+			    <option value="place_c04" th:selected="${map.place_category == 'place_c04'}">백패킹, 하이킹</option>
+			    <option value="place_c05" th:selected="${map.place_category == 'place_c05'}">낚시스팟</option>
+			    <option value="place_c06" th:selected="${map.place_category == 'place_c06'}">여행</option>
+			    <option value="place_c07" th:selected="${map.place_category == 'place_c07'}">액티비티</option>
+			    <option value="place_c08" th:selected="${map.place_category == 'place_c08'}">워터스포츠</option>
+			    <option value="place_c09" th:selected="${map.place_category == 'place_c09'}">스토어</option>
+            </select>
+
+            <!-- 장소명 -->
+            <label for="place_name">장소명</label>
+            <input type="text" id="place_name" name="place_name" th:value="${map.place_name}" aria-invalid="false"><br>
+
+            <!-- 주소 -->
+            <label for="place_address">주소</label>
+            <input type="text" id="place_address" name="place_address" th:value="${map.place_address}" aria-invalid="false"><br>
+            
+            <!-- 우편번호 -->
+            <label for="place_postcode">우편번호</label>
+            <input type="text" id="place_postcode" name="place_postcode" th:value="${map.place_postcode}"><br>
+
+            <!-- 지번 -->
+            <label for="place_oldaddr">지번</label>
+            <input type="text" id="place_oldaddr" name="place_oldaddr" th:value="${map.place_oldaddr}"><br>
+
+            <!-- 사진 -->
+            <label for="place_pic">대표 사진 (url)</label>
+            <img th:src="${map.place_pic}" alt="기존 대표사진">
+            <input type="text" id="place_pic" name="place_pic" th:value="${map.place_pic}"><br>
+
+            <!-- 설명 -->
+			<label for="place_description">장소 설명</label>
+			<textarea id="place_description" name="place_description" th:utext="${#strings.replace(map.place_description, '\n', '&#10;')}" aria-invalid="false"></textarea><br>
+
+
+            <!-- 주요사항 -->
+            <label for="place_keypoint">주요사항</label>
+            <textarea id="place_keypoint" name="place_keypoint" th:utext="${#strings.replace(map.place_keypoint, '\n', '&#10;')}"></textarea>
+            <!-- 이모지 선택 영역 -->
+			<div id="emoji-container2"></div><br>
+            <br>
+
+            <!-- 주의사항 -->
+            <label for="place_precaution"> 이용객 주의사항</label>
+            <textarea id="place_precaution" name="place_precaution" th:utext="${#strings.replace(map.place_precaution, '\n', '&#10;')}"></textarea>
+            <!-- 이모지 선택 영역 -->
+			<div id="emoji-container3"></div><br>
+            <br>
+
+            <!-- 예약 링크 -->
+            <label for="place_bookinglink">예약 링크 (홈페이지 링크)</label>
+            <input type="text" id="place_bookinglink" name="place_bookinglink" th:value="${map.place_bookinglink}"><br>
+
+            <!-- 전화번호 -->
+            <label for="place_tel">전화번호</label>
+            <input type="text" id="place_tel" name="place_tel" th:value="${map.place_tel}"><br>
+			
+			<!-- 청결도 -->
+			<label for="place_cleanscore">청결도</label>
+			<div id="cleanscore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-clean" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-clean" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-clean" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-clean" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-clean" data-value="5">
+			</div>
+			<input type="hidden" id="place_cleanscore" name="place_cleanscore" th:value="${map.place_cleanscore}"><br>
+			
+			<!-- 경치 -->
+			<label for="place_scenescore">경치</label>
+			<div id="scenescore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-scene" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-scene" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-scene" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-scene" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-scene" data-value="5">
+			</div>
+			<input type="hidden" id="place_scenescore" name="place_scenescore" th:value="${map.place_scenescore}"><br>
+			
+			<!-- 독립성 -->
+			<label for="place_independencescore">독립성</label>
+			<div id="independencescore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-independence" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-independence" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-independence" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-independence" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-independence" data-value="5">
+			</div>
+			<input type="hidden" id="place_independencescore" name="place_independencescore" th:value="${map.place_independencescore}"><br>
+			
+			<!-- 시설 점수 -->
+			<label for="place_facilityscore">시설 점수</label>
+			<div id="facilityscore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-facility" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-facility" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-facility" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-facility" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-facility" data-value="5">
+			</div>
+			<input type="hidden" id="place_facilityscore" name="place_facilityscore" th:value="${map.place_facilityscore}"><br>
+
+			<!-- 에디터 평점 (자동 계산) -->
+			<label for="place_editorscore">에디터 평점</label>
+			<div id="editorscore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-editor" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-editor" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-editor" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-editor" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-editor" data-value="5">
+			</div>
+			<input type="hidden" id="place_editorscore" name="place_editorscore" th:value="${map.place_editorscore}"><br>
+
+            <!-- 편의시설 -->
+            <fieldset>
+                <legend>편의시설</legend>
+                <label><input type="checkbox" name="place_facility" value="place_f01" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f01')}"> 화장실</label>
+                <label><input type="checkbox" name="place_facility" value="place_f02" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f02')}"> 샤워실</label>
+                <label><input type="checkbox" name="place_facility" value="place_f03" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f03')}"> 매점</label>
+                <label><input type="checkbox" name="place_facility" value="place_f04" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f04')}"> 낚시</label>
+                <label><input type="checkbox" name="place_facility" value="place_f05" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f05')}"> 개수대</label>
+                <label><input type="checkbox" name="place_facility" value="place_f06" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f06')}"> 전기사용</label>
+                <label><input type="checkbox" name="place_facility" value="place_f07" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f07')}"> 장비대여</label>
+                <label><input type="checkbox" name="place_facility" value="place_f08" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f08')}"> 수영장</label>
+                <label><input type="checkbox" name="place_facility" value="place_f09" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f09')}"> 뷰맛집</label>
+                <label><input type="checkbox" name="place_facility" value="place_f10" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f10')}"> 체험 프로그램</label>
+                <label><input type="checkbox" name="place_facility" value="place_f11" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f11')}"> 놀이시설</label>
+                <label><input type="checkbox" name="place_facility" value="place_f12" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f12')}"> 액티비티</label>
+                <label><input type="checkbox" name="place_facility" value="place_f13" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f13')}"> 노키즈</label>
+                <label><input type="checkbox" name="place_facility" value="place_f14" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f14')}"> 반려견 동반</label>
+                <label><input type="checkbox" name="place_facility" value="place_f15" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f15')}"> 방송출연</label>
+                <label><input type="checkbox" name="place_facility" value="place_f16" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f16')}"> 에어컨</label>
+                <label><input type="checkbox" name="place_facility" value="place_f17" th:checked="${map.place_facility != null and #lists.contains(map.place_facility, 'place_f17')}"> 주차</label>
+            </fieldset>
+
+            <!-- 주변 환경 -->
+            <fieldset>
+                <legend>주변 환경</legend>
+                <label><input type="checkbox" name="place_environment" value="place_e01" th:checked="${map.place_environment != null and #lists.contains(map.place_environment, 'place_e01')}"> 바다</label>
+                <label><input type="checkbox" name="place_environment" value="place_e02" th:checked="${map.place_environment != null and #lists.contains(map.place_environment, 'place_e02')}"> 호수, 강</label>
+                <label><input type="checkbox" name="place_environment" value="place_e03" th:checked="${map.place_environment != null and #lists.contains(map.place_environment, 'place_e03')}"> 계곡</label>
+                <label><input type="checkbox" name="place_environment" value="place_e04" th:checked="${map.place_environment != null and #lists.contains(map.place_environment, 'place_e04')}"> 산, 숲</label>
+                <label><input type="checkbox" name="place_environment" value="place_e05" th:checked="${map.place_environment != null and #lists.contains(map.place_environment, 'place_e05')}"> 섬</label>
+                <label><input type="checkbox" name="place_environment" value="place_e06" th:checked="${map.place_environment != null and #lists.contains(map.place_environment, 'place_e06')}"> 공원, 유원지</label>
+                <label><input type="checkbox" name="place_environment" value="place_e07" th:checked="${map.place_environment != null and #lists.contains(map.place_environment, 'place_e07')}"> 도심</label>
+                <label><input type="checkbox" name="place_environment" value="place_e08" th:checked="${map.place_environment != null and #lists.contains(map.place_environment, 'place_e08')}"> 농촌</label>
+            </fieldset>
+
+            <!-- 계절 -->
+            <fieldset>
+                <legend>방문하기 좋은 계절 (추천)</legend>
+                <label><input type="checkbox" name="place_season" value="place_s01" th:checked="${map.place_season != null and #lists.contains(map.place_season, 'place_s01')}"> 봄</label>
+                <label><input type="checkbox" name="place_season" value="place_s02" th:checked="${map.place_season != null and #lists.contains(map.place_season, 'place_s02')}"> 여름</label>
+                <label><input type="checkbox" name="place_season" value="place_s03" th:checked="${map.place_season != null and #lists.contains(map.place_season, 'place_s03')}"> 가을</label>
+                <label><input type="checkbox" name="place_season" value="place_s04" th:checked="${map.place_season != null and #lists.contains(map.place_season, 'place_s04')}"> 겨울</label>
+            </fieldset>
+
+            <!-- 유튜브 링크 -->
+            <label for="place_youtubeLink">유튜브 링크</label>
+            <input type="text" id="place_youtubeLink" name="place_youtubeLink"><br>
+
+            <!-- 유튜브 제목 -->
+            <label for="place_youtubeTitle">유튜브 제목</label>
+            <input type="text" id="place_youtubeTitle" name="place_youtubeTitle"><br>
+
+            <!-- 유튜브 썸네일 -->
+            <label for="place_youtubeVideo">유튜브 썸네일</label>
+            <input type="text" id="place_youtubeVideo" name="place_youtubeVideo"><br>
+
+        <!-- 수정 버튼 -->
+        <button type="submit">수정하기</button>
+        <br><br><br>
+        
+    </form>
+    
+            <script>
+            const form = document.getElementById('mapForm');
+            const categorySelect = document.getElementById('place_category');
+            const placeNameInput = document.getElementById('place_name');
+            const placeAddressInput = document.getElementById('place_address');
+            const placeDescriptionInput = document.getElementById('place_description');
+            
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+        
+                // Check if the category select is valid
+                if (!categorySelect.value) {
+                    categorySelect.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    categorySelect.setAttribute('aria-invalid', 'false');
+                }
+        
+                // Check if the place name is valid
+                if (!placeNameInput.value.trim()) {
+                    placeNameInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    placeNameInput.setAttribute('aria-invalid', 'false');
+                }
+        
+                // Check if the address is valid
+                if (!placeAddressInput.value.trim()) {
+                    placeAddressInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    placeAddressInput.setAttribute('aria-invalid', 'false');
+                }
+        
+                // Check if the description is valid
+                if (!placeDescriptionInput.value.trim()) {
+                    placeDescriptionInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    placeDescriptionInput.setAttribute('aria-invalid', 'false');
+                }
+        
+                if (!isValid) {
+                    event.preventDefault();  // Prevent form submission if invalid
+                }
+            });
+        
+            // Listen for changes in the category select field
+            categorySelect.addEventListener('change', function() {
+                if (categorySelect.value) {
+                    categorySelect.setAttribute('aria-invalid', 'false');
+                } else {
+                    categorySelect.setAttribute('aria-invalid', 'true');
+                }
+            });
+            
+            // Real-time validation for place name
+            placeNameInput.addEventListener('input', function() {
+                if (placeNameInput.value.trim()) {
+                    placeNameInput.setAttribute('aria-invalid', 'false');
+                } else {
+                    placeNameInput.setAttribute('aria-invalid', 'true');
+                }
+            });
+        
+            // Real-time validation for place address
+            placeAddressInput.addEventListener('input', function() {
+                if (placeAddressInput.value.trim()) {
+                    placeAddressInput.setAttribute('aria-invalid', 'false');
+                } else {
+                    placeAddressInput.setAttribute('aria-invalid', 'true');
+                }
+            });
+        
+            // Real-time validation for place description
+            placeDescriptionInput.addEventListener('input', function() {
+                if (placeDescriptionInput.value.trim()) {
+                    placeDescriptionInput.setAttribute('aria-invalid', 'false');
+                } else {
+                    placeDescriptionInput.setAttribute('aria-invalid', 'true');
+                }
+            });
+
+			//////////////////////////////////
+            // 이모지 선택 기능을 함수로 만듭니다.
+			function addEmojiSelector(targetTextareaId, emojiContainerId) {
+			    const emojiContainer = document.getElementById(emojiContainerId);
+			    const targetTextarea = document.getElementById(targetTextareaId);
+			
+			    // 이모지 목록을 동적으로 추가
+			    const emojis = ['😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '😭', 
+			    	'🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐍', '⚽', '🏀', '⚾', '🎾', '🏐', '🎱', 
+			    	'🏓', '🏸', '🏊‍♂️', '📱', '📸', '📽️', '🎞️', '📞', '☎️', '📺',  '🎙️', '⏰', '🔑', '💡',
+			    	'📅', '💰', '🍀'];
+			    emojiContainer.innerHTML = '';  // 기존 내용을 초기화
+			    emojis.forEach(emoji => {
+			        const span = document.createElement('span');
+			        span.textContent = emoji;
+			        span.classList.add('emoji');
+			        emojiContainer.appendChild(span);
+			    });
+			
+			    // 이모지를 클릭하면 textarea에 입력되도록 하는 이벤트 추가
+			    emojiContainer.addEventListener('click', function(event) {
+			        if (event.target.classList.contains('emoji')) {
+			            const emoji = event.target.textContent;
+			            targetTextarea.value += emoji;  // 이모지를 텍스트에 추가
+			        }
+			    });
+			}
+			
+			// 주요사항 textarea에도 이모지 선택 기능을 재사용 가능
+			addEmojiSelector('place_keypoint', 'emoji-container2');
+			
+			// 주의사항 textarea에도 이모지 선택 기능을 재사용 가능
+			addEmojiSelector('place_precaution', 'emoji-container3');
+			
+        </script>
+    
+    </main>
+</body>
+</html>

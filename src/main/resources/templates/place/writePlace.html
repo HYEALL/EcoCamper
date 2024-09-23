@@ -6,6 +6,43 @@
 <!-- 외부 CSS 로드 -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+
+<style>
+  .star-clean, .star-scene, .star-independence, .star-facility, .star-editor {
+    width: 24px;  /* 원하는 너비 */
+    height: 24px; /* 원하는 높이 */
+  }
+  
+  #emoji-container2, #emoji-container3 {
+      display: flex;
+      flex-wrap: wrap;  /* 줄바꿈 허용 */
+      justify-content: center;  /* 중앙 정렬 */
+      gap: 10px;  /* 이모지 사이 간격 */
+      max-width: 1400px;  /* 한 줄에 들어갈 최대 너비 설정 (필요에 따라 조절 가능) */
+  }
+  
+  .emoji {
+      font-size: 24px;
+      cursor: pointer;
+  }
+  
+  #place_keypoint, #place_precaution {
+  	height: 200px;
+  }
+
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const saveSuccess = new URLSearchParams(window.location.search).get('saveSuccess');
+    if (saveSuccess === 'true') {
+      alert('저장이 완료되었습니다.');
+    } else if (saveSuccess === 'false') {
+      alert('저장에 실패했습니다. 다시 시도해주세요.');
+    }
+  });
+</script>
+
 </head>
 <body>
     <main class="container">
@@ -25,7 +62,6 @@
                 <option value="place_c08">워터스포츠</option>
                 <option value="place_c09">스토어</option>
             </select>
-            <small id="categoryError">장소 카테고리를 선택해주세요.</small>
 
             <!-- 장소명 -->
             <label for="place_name">장소명</label>
@@ -53,11 +89,17 @@
 
             <!-- 주요사항 -->
             <label for="place_keypoint">주요사항</label>
-            <textarea id="place_keypoint" name="place_keypoint"></textarea><br>
+            <textarea id="place_keypoint" name="place_keypoint"></textarea>
+            <!-- 이모지 선택 영역 -->
+			<div id="emoji-container2"></div><br>
+            <br>
 
             <!-- 주의사항 -->
             <label for="place_precaution"> 이용객 주의사항</label>
-            <textarea id="place_precaution" name="place_precaution"></textarea><br>
+            <textarea id="place_precaution" name="place_precaution"></textarea>
+            <!-- 이모지 선택 영역 -->
+			<div id="emoji-container3"></div><br>
+            <br>
 
             <!-- 예약 링크 -->
             <label for="place_bookingLink">예약 링크 (홈페이지 링크)</label>
@@ -66,26 +108,61 @@
             <!-- 전화번호 -->
             <label for="place_tel">전화번호</label>
             <input type="text" id="place_tel" name="place_tel"><br>
+			
+			<!-- 청결도 -->
+			<label for="place_cleanscore">청결도</label>
+			<div id="cleanscore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-clean" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-clean" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-clean" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-clean" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-clean" data-value="5">
+			</div>
+			<input type="hidden" id="place_cleanscore" name="place_cleanscore" value="0"><br>
+			
+			<!-- 경치 -->
+			<label for="place_scenescore">경치</label>
+			<div id="scenescore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-scene" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-scene" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-scene" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-scene" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-scene" data-value="5">
+			</div>
+			<input type="hidden" id="place_scenescore" name="place_scenescore" value="0"><br>
+			
+			<!-- 독립성 -->
+			<label for="place_independencescore">독립성</label>
+			<div id="independencescore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-independence" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-independence" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-independence" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-independence" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-independence" data-value="5">
+			</div>
+			<input type="hidden" id="place_independencescore" name="place_independencescore" value="0"><br>
+			
+			<!-- 시설 점수 -->
+			<label for="place_facilityscore">시설 점수</label>
+			<div id="facilityscore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-facility" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-facility" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-facility" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-facility" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-facility" data-value="5">
+			</div>
+			<input type="hidden" id="place_facilityscore" name="place_facilityscore" value="0"><br>
 
-            <!-- 에디터 평점 -->
-            <label for="place_editorScore">에디터 평점</label>
-            <input type="number" step="0.5" id="place_editorScore" name="place_editorScore"><br>
-
-            <!-- 청결도 -->
-            <label for="place_cleanScore">청결도</label>
-            <input type="number" step="0.5" id="place_cleanScore" name="place_cleanScore"><br>
-
-            <!-- 경치 -->
-            <label for="place_sceneScore">경치</label>
-            <input type="number" step="0.5" id="place_sceneScore" name="place_sceneScore"><br>
-
-            <!-- 독립성 -->
-            <label for="place_independenceScore">독립성</label>
-            <input type="number" step="0.5" id="place_independenceScore" name="place_independenceScore"><br>
-
-            <!-- 시설 점수 -->
-            <label for="place_facilityScore">시설 점수</label>
-            <input type="number" step="0.5" id="place_facilityScore" name="place_facilityScore"><br>
+			<!-- 에디터 평점 (자동 계산) -->
+			<label for="place_editorscore">에디터 평점</label>
+			<div id="editorscore">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별1" class="star-editor" data-value="1">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별2" class="star-editor" data-value="2">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별3" class="star-editor" data-value="3">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별4" class="star-editor" data-value="4">
+			    <img src="https://cdn-icons-png.flaticon.com/128/2377/2377878.png" alt="별5" class="star-editor" data-value="5">
+			</div>
+			<input type="hidden" id="place_editorscore" name="place_editorscore" value="0"><br>
 
             <!-- 편의시설 -->
             <fieldset>
@@ -228,6 +305,98 @@
                     placeDescriptionInput.setAttribute('aria-invalid', 'true');
                 }
             });
+            
+            //////////////////////////////////
+         	// 별점 관련 변수들
+            const cleanStars = document.querySelectorAll('.star-clean');
+            const sceneStars = document.querySelectorAll('.star-scene');
+            const independenceStars = document.querySelectorAll('.star-independence');
+            const facilityStars = document.querySelectorAll('.star-facility');
+            const editorStars = document.querySelectorAll('.star-editor');
+
+            // 점수 입력 필드
+            const cleanScoreInput = document.getElementById('place_cleanscore');
+            const sceneScoreInput = document.getElementById('place_scenescore');
+            const independenceScoreInput = document.getElementById('place_independencescore');
+            const facilityScoreInput = document.getElementById('place_facilityscore');
+            const editorScoreInput = document.getElementById('place_editorscore');
+
+            // 평균값 계산 및 업데이트 함수
+            function updateEditorScore() {
+                const totalScore = (
+                    parseFloat(cleanScoreInput.value) +
+                    parseFloat(sceneScoreInput.value) +
+                    parseFloat(independenceScoreInput.value) +
+                    parseFloat(facilityScoreInput.value)
+                ) / 4;
+
+                editorScoreInput.value = totalScore.toFixed(1); // 평균값을 에디터 평점으로 설정
+                updateStars(editorStars, totalScore); // 에디터 별점도 업데이트
+            }
+
+            // 각 별 클릭 시 별점 업데이트 함수
+            function updateStars(starElements, score) {
+                starElements.forEach(star => {
+                    if (star.getAttribute('data-value') <= score) {
+                        star.src = 'https://cdn-icons-png.flaticon.com/128/1055/1055473.png'; // 채워진 별
+                    } else {
+                        star.src = 'https://cdn-icons-png.flaticon.com/128/2377/2377878.png'; // 빈 별
+                    }
+                });
+            }
+
+            // 클릭 이벤트 설정 함수
+            function setStarClickListener(starElements, scoreInput) {
+                starElements.forEach(star => {
+                    star.addEventListener('click', function () {
+                        const rating = this.getAttribute('data-value');
+                        scoreInput.value = rating; // 선택한 별의 점수 설정
+                        updateStars(starElements, rating); // 해당 별점 업데이트
+                        updateEditorScore(); // 에디터 점수 업데이트
+                    });
+                });
+            }
+
+            // 각 점수에 대한 클릭 이벤트 설정
+            setStarClickListener(cleanStars, cleanScoreInput);
+            setStarClickListener(sceneStars, sceneScoreInput);
+            setStarClickListener(independenceStars, independenceScoreInput);
+            setStarClickListener(facilityStars, facilityScoreInput);
+
+			//////////////////////////////////
+            // 이모지 선택 기능을 함수로 만듭니다.
+			function addEmojiSelector(targetTextareaId, emojiContainerId) {
+			    const emojiContainer = document.getElementById(emojiContainerId);
+			    const targetTextarea = document.getElementById(targetTextareaId);
+			
+			    // 이모지 목록을 동적으로 추가
+			    const emojis = ['😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '😭', 
+			    	'🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐍', '⚽', '🏀', '⚾', '🎾', '🏐', '🎱', 
+			    	'🏓', '🏸', '🏊‍♂️', '📱', '📸', '📽️', '🎞️', '📞', '☎️', '📺',  '🎙️', '⏰', '🔑', '💡',
+			    	'📅', '💰', '🍀'];
+			    emojiContainer.innerHTML = '';  // 기존 내용을 초기화
+			    emojis.forEach(emoji => {
+			        const span = document.createElement('span');
+			        span.textContent = emoji;
+			        span.classList.add('emoji');
+			        emojiContainer.appendChild(span);
+			    });
+			
+			    // 이모지를 클릭하면 textarea에 입력되도록 하는 이벤트 추가
+			    emojiContainer.addEventListener('click', function(event) {
+			        if (event.target.classList.contains('emoji')) {
+			            const emoji = event.target.textContent;
+			            targetTextarea.value += emoji;  // 이모지를 텍스트에 추가
+			        }
+			    });
+			}
+			
+			// 주요사항 textarea에도 이모지 선택 기능을 재사용 가능
+			addEmojiSelector('place_keypoint', 'emoji-container2');
+			
+			// 주의사항 textarea에도 이모지 선택 기능을 재사용 가능
+			addEmojiSelector('place_precaution', 'emoji-container3');
+			
         </script>
 
     </main>

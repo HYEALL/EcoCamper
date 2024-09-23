@@ -238,7 +238,6 @@ function getListItem(place) {
         for (let i = 0; i < roundedScore; i++) {
             itemStr += '<img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star">';
         }
-		itemStr += '   ' + place.place_editorscore;
     }
     
     itemStr += '</div>';  // editor-score 닫기
@@ -255,21 +254,11 @@ function getListItem(place) {
     }
     
 	if(place.place_address) {
-		itemStr += '<span>' + place.place_address + '</span>';
-	}
-	
-	if(place.place_oldaddr && place.place_postcode) {
-		itemStr += '<span class="jibun">지번: ' + place.place_oldaddr + '  (우) ' + place.place_postcode + '</span>';
-	} else if(place.place_oldaddr) {
-		itemStr += '<span class="jibun">지번: ' + place.place_oldaddr + '</span>';
-	} else if(place.place_postcode) {
-		itemStr += '<span class="jibun">(우) ' + place.place_postcode + '</span>';
-	} else {
-		
+		itemStr += '<span>🚩 ' + place.place_address + '</span>';
 	}
 		
 	if(place.place_tel) {
-		itemStr += '<span>전화번호: ' + place.place_tel + '</span>';
+		itemStr += '<span>📞 ' + place.place_tel + '</span>';
 	}
     
     // 상세보기 바로가기 추가
