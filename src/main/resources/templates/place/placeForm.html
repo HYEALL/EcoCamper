@@ -5,97 +5,97 @@
 <title>Insert title here</title>
 <!-- 외부 CSS 로드 -->
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
+   href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.jade.min.css">
 
 <style>
 /* 전체 컨테이너 스타일 */
 .place-info-container {
-	max-width: 900px;
-	margin: 0 auto;
-	padding: 20px;
-	background-color: #fff;
-	border-radius: 10px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+   max-width: 900px;
+   margin: 0 auto;
+   padding: 20px;
+   background-color: #fff;
+   border-radius: 10px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* 대표 이미지 스타일 */
 .info-section > img {
-	width: 100%; /* 부모 요소의 너비에 맞게 조정 */
-	height: 400px; /* 고정 높이 50px */
-	object-fit: cover; /* 이미지를 영역에 맞게 조정 */
-	border-radius: 10px; /* 둥근 모서리 */
-	margin-bottom: 20px; /* 아래쪽 여백 */
+   width: 100%; /* 부모 요소의 너비에 맞게 조정 */
+   height: 400px; /* 고정 높이 50px */
+   object-fit: cover; /* 이미지를 영역에 맞게 조정 */
+   border-radius: 10px; /* 둥근 모서리 */
+   margin-bottom: 20px; /* 아래쪽 여백 */
 }
 
 /* 정보 섹션 공통 스타일 */
 .info-section {
-	margin-bottom: 30px;
+   margin-bottom: 30px;
 }
 
 .info-section h2 {
-	font-size: 1.8em;
-	margin-bottom: 10px;
-	color: #333;
+   font-size: 1.8em;
+   margin-bottom: 10px;
+   color: #333;
 }
 
 .info-section p {
-	font-size: 1.2em;
-	line-height: 1.6;
-	color: #555;
+   font-size: 1.2em;
+   line-height: 1.6;
+   color: #555;
 }
 
 /* 주요 섹션들에 강조 표시 */
 .highlight {
-	color: #007bff;
-	font-weight: bold;
+   color: #007bff;
+   font-weight: bold;
 }
 
 /* 지도 섹션 스타일 */
 .map-section {
-	margin-top: 30px;
+   margin-top: 30px;
 }
 
 /* 지도 크기 */
 #map {
-	width: 100%;
-	height: 400px;
-	border-radius: 10px;
-	margin-bottom: 30px;
+   width: 100%;
+   height: 400px;
+   border-radius: 10px;
+   margin-bottom: 30px;
 }
 
 /* 예약 링크 버튼 스타일 */
 .reservation-link {
-	display: inline-block;
-	background-color: #007bff;
-	color: white;
-	padding: 10px 20px;
-	border-radius: 5px;
-	text-decoration: none;
-	font-size: 1.2em;
+   display: inline-block;
+   background-color: #007bff;
+   color: white;
+   padding: 10px 20px;
+   border-radius: 5px;
+   text-decoration: none;
+   font-size: 1.2em;
 }
 
 /* 별점 및 평점 스타일 */
 .rating-section {
-	display: flex;
-	align-items: center;
+   display: flex;
+   align-items: center;
 }
 
 .rating-section p {
-	margin-left: 10px;
+   margin-left: 10px;
 }
 
 /* 편의시설, 주변 환경 등 아이콘 스타일 */
 .facilities, .environment, .season {
-	display: flex;
-	flex-wrap: wrap;
+   display: flex;
+   flex-wrap: wrap;
 }
 
 .highlight span, .facilities span, .environment span, .season span {
-	background-color: #f0f0f0;
-	padding: 5px 10px;
-	border-radius: 5px;
-	margin: 5px;
-	font-size: 1em;
+   background-color: #f0f0f0;
+   padding: 5px 10px;
+   border-radius: 5px;
+   margin: 5px;
+   font-size: 1em;
 }
 
 .btn {
@@ -117,323 +117,326 @@
 </style>
 </head>
 <body>
-	<form>
-		<input type="hidden" value="[[${map}]]">
-	</form>
-	<main class="container">
+   <form>
+      <input type="hidden" value="[[${map}]]">
+   </form>
+   <main class="container">
 
-		<!-- 공간 유형 -->
-		<div class="highlight">
-			<p th:switch="${map.place_category}">
-				<span th:case="'place_c01'">캠핑장</span> 
-				<span th:case="'place_c02'">차박, 노지</span> 
-				<span th:case="'place_c03'">글램핑, 카라반</span> 
-				<span th:case="'place_c04'">백패킹, 하이킹</span> 
-				<span th:case="'place_c05'">낚시스팟</span>
-				<span th:case="'place_c06'">여행</span> 
-				<span th:case="'place_c07'">액티비티</span>
-				<span th:case="'place_c08'">워터스포츠</span> 
-				<span th:case="'place_c09'">스토어</span>
-				<span th:case="*">카테고리 정보 없음</span>
-			</p>
-		</div>
+      <!-- 공간 유형 -->
+      <div class="highlight">
+         <p th:switch="${map.place_category}">
+            <span th:case="'place_c01'">캠핑장</span> 
+            <span th:case="'place_c02'">차박, 노지</span> 
+            <span th:case="'place_c03'">글램핑, 카라반</span> 
+            <span th:case="'place_c04'">백패킹, 하이킹</span> 
+            <span th:case="'place_c05'">낚시스팟</span>
+            <span th:case="'place_c06'">여행</span> 
+            <span th:case="'place_c07'">액티비티</span>
+            <span th:case="'place_c08'">워터스포츠</span> 
+            <span th:case="'place_c09'">스토어</span>
+            <span th:case="*">카테고리 정보 없음</span>
+         </p>
+      </div>
 
-		<!-- 장소 이름 -->
-		<div class="info-section">
-			<h1 th:text="${map.place_name}">Place Name</h1>
-		</div>
+      <!-- 장소 이름 -->
+      <div class="info-section">
+         <h1 th:text="${map.place_name}">Place Name</h1>
+      </div>
 
-		<!-- 대표 사진 -->
-		<div class="info-section">
-		    <img th:src="${map.place_pic != null && !#strings.isEmpty(map.place_pic) ? map.place_pic : 'https://cdn-icons-png.flaticon.com/128/8863/8863763.png'}" 
-		         th:style="${map.place_pic == null || #strings.isEmpty(map.place_pic) ? 'object-fit: contain; display: block; margin: 0 auto;' : ''}" 
-		         alt="대표사진">
-		</div>
+      <!-- 대표 사진 -->
+      <div class="info-section">
+          <img th:src="${map.place_pic != null && !#strings.isEmpty(map.place_pic) ? map.place_pic : 'https://cdn-icons-png.flaticon.com/128/8863/8863763.png'}" 
+               th:style="${map.place_pic == null || #strings.isEmpty(map.place_pic) ? 'object-fit: contain; display: block; margin: 0 auto;' : ''}" 
+               alt="대표사진">
+      </div>
 
-		<!-- 주소 -->
-		<div class="info-section">
-		    <p>
-		        <span th:if="${map.place_address != null and !#strings.isEmpty(map.place_address)}">📍 </span>
-		        <span th:text="${map.place_address}">지역 정보 없음</span>
-		    </p>
-		</div>
-		
-		<!-- 전화번호 -->
-		<div class="info-section">
-		    <p>
-		        <span th:if="${map.place_tel != null and !#strings.isEmpty(map.place_tel)}">📞 </span>
-		        <span th:text="${map.place_tel}">전화번호 정보 없음</span>
-		    </p>
-		</div>
+      <!-- 주소 -->
+      <div class="info-section">
+          <p>
+              <span th:if="${map.place_address != null and !#strings.isEmpty(map.place_address)}">📍 </span>
+              <span th:text="${map.place_address}">지역 정보 없음</span>
+          </p>
+      </div>
+      
+      <!-- 전화번호 -->
+      <div class="info-section">
+          <p>
+              <span th:if="${map.place_tel != null and !#strings.isEmpty(map.place_tel)}">📞 </span>
+              <span th:text="${map.place_tel}">전화번호 정보 없음</span>
+          </p>
+      </div>
 
-		<!-- 장소 설명 -->
-		<div class="info-section">
-		    <p th:text="${map.place_description}" style="white-space: pre-line;">
-		        장소 설명 정보 없음
-		    </p>
-		</div>
-		<br>
+      <!-- 장소 설명 -->
+      <div class="info-section">
+          <p th:text="${map.place_description}" style="white-space: pre-line;">
+              장소 설명 정보 없음
+          </p>
+      </div>
+      <br>
 
-		<!-- 주요사항 -->
-		<div class="info-section">
-		    <p th:text="${map.place_keypoint}" style="white-space: pre-line;">
-		        주요사항 정보 없음
-		    </p>
-		</div>
-		<br>
+      <!-- 주요사항 -->
+      <div class="info-section">
+          <p th:text="${map.place_keypoint}" style="white-space: pre-line;">
+              주요사항 정보 없음
+          </p>
+      </div>
+      <br>
 
-		<!-- 이용객 안내사항 -->
-		<div class="info-section">
-		    <p th:text="${map.place_precaution}" style="white-space: pre-line;">
-		        이용객 안내사항 정보 없음
-		    </p>
-		</div>
-		<br>
+      <!-- 이용객 안내사항 -->
+      <div class="info-section">
+          <p th:text="${map.place_precaution}" style="white-space: pre-line;">
+              이용객 안내사항 정보 없음
+          </p>
+      </div>
+      <br>
 
-		<!-- 업체 홈페이지 -->
-		<div class="info-section">
-		    <a th:if="${map.place_bookinglink != null and !#strings.isEmpty(map.place_bookinglink)}"
-		       th:href="${map.place_bookinglink.startsWith('http') ? map.place_bookinglink : 'http://' + map.place_bookinglink}"
-		       class="btn" target="_blank">예약 링크</a>
-		    <p th:if="${map.place_bookinglink == null or #strings.isEmpty(map.place_bookinglink)}"></p>
-		</div>
-		<br>
+      <!-- 업체 홈페이지 -->
+      <div class="info-section">
+          <a th:if="${map.place_bookinglink != null and !#strings.isEmpty(map.place_bookinglink)}"
+             th:href="${map.place_bookinglink.startsWith('http') ? map.place_bookinglink : 'http://' + map.place_bookinglink}"
+             class="btn" target="_blank">예약 링크</a>
+          <p th:if="${map.place_bookinglink == null or #strings.isEmpty(map.place_bookinglink)}"></p>
+      </div>
+      <br>
 
-		<!-- 점수 표시 섹션 -->
-		<div class="info-section" style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; background-color: #f9f9f9; padding: 20px; border-radius: 10px;">
-		    
-		    <!-- 에디터 평점 (왼쪽) -->
-		    <div class="editor-score" style="flex: 1; text-align: center; border-right: 1px solid #ddd; padding-right: 20px;">
-		        <h3>에디터 평점</h3>
-		        <div>
-		            <span th:if="${map.place_editorscore != null}">
-		                <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_editorscore))}">
-		                    <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
-		                </span>
-		            </span>
-		            <span th:if="${map.place_editorscore == null}">
-		                에디터 평점 정보 없음
-		            </span>
-		        </div>
-		    </div>
-		    
-		    <!-- 나머지 4가지 점수 (오른쪽) -->
-		    <div class="other-scores" style="flex: 1; padding-left: 20px;">
-		        <ul style="list-style: none; padding: 0; margin: 0;">
-		            
-		            <!-- 청결도 점수 -->
-		            <li style="margin-bottom: 10px;">
-		                <strong>청결도:</strong>
-		                <span th:if="${map.place_cleanscore != null}">
-		                    <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_cleanscore))}">
-		                        <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
-		                    </span>
-		                </span>
-		                <span th:if="${map.place_cleanscore == null}">
-		                    청결도 점수 정보 없음
-		                </span>
-		            </li>
-		
-		            <!-- 멋진뷰 점수 -->
-		            <li style="margin-bottom: 10px;">
-		                <strong>멋진뷰:</strong>
-		                <span th:if="${map.place_scenescore != null}">
-		                    <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_scenescore))}">
-		                        <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
-		                    </span>
-		                </span>
-		                <span th:if="${map.place_scenescore == null}">
-		                    멋진뷰 점수 정보 없음
-		                </span>
-		            </li>
-		
-		            <!-- 사이트 독립성 점수 -->
-		            <li style="margin-bottom: 10px;">
-		                <strong>사이트 독립성:</strong>
-		                <span th:if="${map.place_independencescore != null}">
-		                    <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_independencescore))}">
-		                        <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
-		                    </span>
-		                </span>
-		                <span th:if="${map.place_independencescore == null}">
-		                    사이트 독립성 점수 정보 없음
-		                </span>
-		            </li>
-		
-		            <!-- 시설구비 점수 -->
-		            <li style="margin-bottom: 10px;">
-		                <strong>시설구비:</strong>
-		                <span th:if="${map.place_facilityscore != null}">
-		                    <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_facilityscore))}">
-		                        <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
-		                    </span>
-		                </span>
-		                <span th:if="${map.place_facilityscore == null}">
-		                    시설구비 점수 정보 없음
-		                </span>
-		            </li>
-		        </ul>
-		    </div>
-		</div>
-		<br>
+      <!-- 점수 표시 섹션 -->
+      <div class="info-section" style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; background-color: #f9f9f9; padding: 20px; border-radius: 10px;">
+          
+         <!-- 에디터 평점 (왼쪽) -->
+         <div class="editor-score" style="flex: 1; text-align: center; border-right: 1px solid #ddd; padding-right: 20px;">
+             <h3>에디터 평점</h3>
+             <div>
+                 <!-- 에디터 점수가 1 이상일 때 별 표시 -->
+                 <span th:if="${map.place_editorscore != null && map.place_editorscore > 0}">
+                     <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_editorscore))}">
+                         <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
+                     </span>
+                 </span>
+                 <!-- 에디터 점수가 0이거나 null일 때 "평점 정보 없음" 표시 -->
+                 <span th:if="${map.place_editorscore == null || map.place_editorscore == 0}">
+                     에디터 평점 정보 없음
+                 </span>
+             </div>
+         </div>
 
-		<!-- 편의시설 -->
-		<div class="info-section facilities" th:if="${place_facility != null and !place_facility.isEmpty()}">
-		    <h4 style="margin-right:40em;">편의시설</h4>
-		    <div>
-		        <span th:each="facility : ${place_facility}">
-		            <span th:switch="${facility}">
-		                <span th:case="'place_f01'">화장실</span>
-		                <span th:case="'place_f02'">샤워실</span>
-		                <span th:case="'place_f03'">매점</span>
-		                <span th:case="'place_f04'">낚시</span>
-		                <span th:case="'place_f05'">개수대</span>
-		                <span th:case="'place_f06'">전기사용</span>
-		                <span th:case="'place_f07'">장비대여</span>
-		                <span th:case="'place_f08'">수영장</span>
-		                <span th:case="'place_f09'">뷰맛집</span>
-		                <span th:case="'place_f10'">체험 프로그램</span>
-		                <span th:case="'place_f11'">놀이시설</span>
-		                <span th:case="'place_f12'">액티비티</span>
-		                <span th:case="'place_f13'">노키즈</span>
-		                <span th:case="'place_f14'">반려견 동반</span>
-		                <span th:case="'place_f15'">방송출연</span>
-		                <span th:case="'place_f16'">에어컨</span>
-		                <span th:case="'place_f17'">주차</span>
-		                <span th:case="*">편의시설 정보 없음</span>
-		            </span>
-		        </span>
-		    </div>
-		</div>
-		
-		<!-- 주변 환경 -->
-		<div class="info-section environment" th:if="${place_environment != null and !place_environment.isEmpty()}">
-		    <h4 style="margin-right:40em;">주변 환경</h4>
-		    <div>
-		        <span th:each="environment : ${place_environment}">
-		            <span th:switch="${environment}">
-		                <span th:case="'place_e01'">바다</span>
-		                <span th:case="'place_e02'">호수, 강</span>
-		                <span th:case="'place_e03'">계곡</span>
-		                <span th:case="'place_e04'">산, 숲</span>
-		                <span th:case="'place_e05'">섬</span>
-		                <span th:case="'place_e06'">공원, 유원지</span>
-		                <span th:case="'place_e07'">도심</span>
-		                <span th:case="'place_e08'">농촌</span>
-		                <span th:case="*">주변 환경 정보 없음</span>
-		            </span>
-		        </span>
-		    </div>
-		</div>
-		
-		<!-- 추천 계절 -->
-		<div class="info-section season" th:if="${place_season != null and !place_season.isEmpty()}">
-		    <h4 style="margin-right:35em;">방문하기 좋은 계절</h4>
-		    <div>
-		        <span th:each="season : ${place_season}">
-		            <span th:switch="${season}">
-		                <span th:case="'place_s01'">봄</span>
-		                <span th:case="'place_s02'">여름</span>
-		                <span th:case="'place_s03'">가을</span>
-		                <span th:case="'place_s04'">겨울</span>
-		                <span th:case="*">계절 정보 없음</span>
-		            </span>
-		        </span>
-		    </div>
-		</div>
+          <!-- 나머지 4가지 점수 (오른쪽) -->
+          <div class="other-scores" style="flex: 1; padding-left: 20px;">
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                  
+         <!-- 청결도 점수 -->
+         <li style="margin-bottom: 10px;">
+             <strong>청결도:</strong>
+             <span th:if="${map.place_cleanscore != null && map.place_cleanscore > 0}">
+                 <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_cleanscore))}">
+                     <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
+                 </span>
+             </span>
+             <span th:if="${map.place_cleanscore == null || map.place_cleanscore == 0}">
+                 점수 없음
+             </span>
+         </li>
+         
+         <!-- 멋진뷰 점수 -->
+         <li style="margin-bottom: 10px;">
+             <strong>멋진뷰:</strong>
+             <span th:if="${map.place_scenescore != null && map.place_scenescore > 0}">
+                 <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_scenescore))}">
+                     <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
+                 </span>
+             </span>
+             <span th:if="${map.place_scenescore == null || map.place_scenescore == 0}">
+                 점수 없음
+             </span>
+         </li>
+         
+         <!-- 사이트 독립성 점수 -->
+         <li style="margin-bottom: 10px;">
+             <strong>사이트 독립성:</strong>
+             <span th:if="${map.place_independencescore != null && map.place_independencescore > 0}">
+                 <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_independencescore))}">
+                     <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
+                 </span>
+             </span>
+             <span th:if="${map.place_independencescore == null || map.place_independencescore == 0}">
+                 점수 없음
+             </span>
+         </li>
+         
+         <!-- 시설구비 점수 -->
+         <li style="margin-bottom: 10px;">
+             <strong>시설구비:</strong>
+             <span th:if="${map.place_facilityscore != null && map.place_facilityscore > 0}">
+                 <span th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(map.place_facilityscore))}">
+                     <img src="https://cdn-icons-png.flaticon.com/128/1055/1055473.png" alt="별" class="star" style="width: 30px; height: 30px;">
+                 </span>
+             </span>
+             <span th:if="${map.place_facilityscore == null || map.place_facilityscore == 0}">
+                 점수 없음
+             </span>
+         </li>
 
+              </ul>
+          </div>
+      </div>
+      <br>
 
-		<!-- 주소 -->
-		<div class="info-section">
-		    <p>
-		        <span th:if="${map.place_address != null and !#strings.isEmpty(map.place_address)}">📍 </span>
-		        <span th:text="${map.place_address}">지역 정보 없음</span>
-		    </p>
-		</div>
-
-		<!-- 지번 -->
-		<div class="info-section">
-		    <p>
-		        <span th:if="${map.place_oldaddr != null and !#strings.isEmpty(map.place_oldaddr)}">🏡 </span>
-		        <span th:text="${map.place_oldaddr}">지번 정보 없음</span>
-		    </p>
-		</div>
-		
-		<!-- 우편번호 -->
-		<div class="info-section">
-		    <p>
-		        <span th:if="${map.place_postcode != null and !#strings.isEmpty(map.place_postcode)}">📮 </span>
-		        <span th:text="${map.place_postcode}">우편번호 정보 없음</span>
-		    </p>
-		</div>
+      <!-- 편의시설 -->
+      <div class="info-section facilities" th:if="${place_facility != null and !place_facility.isEmpty()}">
+          <h4 style="margin-right:40em;">편의시설</h4>
+          <div>
+              <span th:each="facility : ${place_facility}">
+                  <span th:switch="${facility}">
+                      <span th:case="'place_f01'">화장실</span>
+                      <span th:case="'place_f02'">샤워실</span>
+                      <span th:case="'place_f03'">매점</span>
+                      <span th:case="'place_f04'">낚시</span>
+                      <span th:case="'place_f05'">개수대</span>
+                      <span th:case="'place_f06'">전기사용</span>
+                      <span th:case="'place_f07'">장비대여</span>
+                      <span th:case="'place_f08'">수영장</span>
+                      <span th:case="'place_f09'">뷰맛집</span>
+                      <span th:case="'place_f10'">체험 프로그램</span>
+                      <span th:case="'place_f11'">놀이시설</span>
+                      <span th:case="'place_f12'">액티비티</span>
+                      <span th:case="'place_f13'">노키즈</span>
+                      <span th:case="'place_f14'">반려견 동반</span>
+                      <span th:case="'place_f15'">방송출연</span>
+                      <span th:case="'place_f16'">에어컨</span>
+                      <span th:case="'place_f17'">주차</span>
+                      <span th:case="*">편의시설 정보 없음</span>
+                  </span>
+              </span>
+          </div>
+      </div>
+      
+      <!-- 주변 환경 -->
+      <div class="info-section environment" th:if="${place_environment != null and !place_environment.isEmpty()}">
+          <h4 style="margin-right:40em;">주변 환경</h4>
+          <div>
+              <span th:each="environment : ${place_environment}">
+                  <span th:switch="${environment}">
+                      <span th:case="'place_e01'">바다</span>
+                      <span th:case="'place_e02'">호수, 강</span>
+                      <span th:case="'place_e03'">계곡</span>
+                      <span th:case="'place_e04'">산, 숲</span>
+                      <span th:case="'place_e05'">섬</span>
+                      <span th:case="'place_e06'">공원, 유원지</span>
+                      <span th:case="'place_e07'">도심</span>
+                      <span th:case="'place_e08'">농촌</span>
+                      <span th:case="*">주변 환경 정보 없음</span>
+                  </span>
+              </span>
+          </div>
+      </div>
+      
+      <!-- 추천 계절 -->
+      <div class="info-section season" th:if="${place_season != null and !place_season.isEmpty()}">
+          <h4 style="margin-right:35em;">방문하기 좋은 계절</h4>
+          <div>
+              <span th:each="season : ${place_season}">
+                  <span th:switch="${season}">
+                      <span th:case="'place_s01'">봄</span>
+                      <span th:case="'place_s02'">여름</span>
+                      <span th:case="'place_s03'">가을</span>
+                      <span th:case="'place_s04'">겨울</span>
+                      <span th:case="*">계절 정보 없음</span>
+                  </span>
+              </span>
+          </div>
+      </div>
 
 
-		<!-- 지도 섹션 -->
-		<div class="map-section">
-			<h5>지도</h5>
-			<div id="map" style="width: 100%; height: 400px;"></div>
-		</div>
+      <!-- 주소 -->
+      <div class="info-section">
+          <p>
+              <span th:if="${map.place_address != null and !#strings.isEmpty(map.place_address)}">📍 </span>
+              <span th:text="${map.place_address}">지역 정보 없음</span>
+          </p>
+      </div>
 
-		<!-- 지도 섹션 아래에 수정/삭제 버튼 추가 -->
-		<div class="action-buttons">
-			<!-- 수정하기 버튼 -->
-			<a th:href="@{/modifyPlace(place_seq=${map.place_seq})}"
-				class="btn btn-primary">수정하기</a>
+      <!-- 지번 -->
+      <div class="info-section">
+          <p>
+              <span th:if="${map.place_oldaddr != null and !#strings.isEmpty(map.place_oldaddr)}">🏡 </span>
+              <span th:text="${map.place_oldaddr}">지번 정보 없음</span>
+          </p>
+      </div>
+      
+      <!-- 우편번호 -->
+      <div class="info-section">
+          <p>
+              <span th:if="${map.place_postcode != null and !#strings.isEmpty(map.place_postcode)}">📮 </span>
+              <span th:text="${map.place_postcode}">우편번호 정보 없음</span>
+          </p>
+      </div>
 
-			<!-- 삭제하기 버튼 -->
-			<a th:href="@{/deletePlace(place_seq=${map.place_seq})}"
-				class="btn btn-danger"
-				onclick="return confirm('정말 이 장소를 삭제하시겠습니까?');">삭제하기</a>
-		</div>
-		<br><br><br>
+
+      <!-- 지도 섹션 -->
+      <div class="map-section">
+         <h5>지도</h5>
+         <div id="map" style="width: 100%; height: 400px;"></div>
+      </div>
+
+      <!-- 지도 섹션 아래에 수정/삭제 버튼 추가 -->
+      <div class="action-buttons">
+         <!-- 수정하기 버튼 -->
+         <a th:href="@{/modifyPlace(place_seq=${map.place_seq})}"
+            class="btn btn-primary">수정하기</a>
+
+         <!-- 삭제하기 버튼 -->
+         <a th:href="@{/deletePlace(place_seq=${map.place_seq})}"
+            class="btn btn-danger"
+            onclick="return confirm('정말 이 장소를 삭제하시겠습니까?');">삭제하기</a>
+      </div>
+      <br><br><br>
 
 
-		<script type="text/javascript"
-			src="//dapi.kakao.com/v2/maps/sdk.js?appkey=72e9905822817ffd02d844d2e0802d86&libraries=services"></script>
-		<script>
-			var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-			mapOption = {
-				center : new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-				level : 3
-			// 지도의 확대 레벨
-			};
+      <script type="text/javascript"
+         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=72e9905822817ffd02d844d2e0802d86&libraries=services"></script>
+      <script>
+         var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+         mapOption = {
+            center : new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level : 3
+         // 지도의 확대 레벨
+         };
 
-			// 지도를 생성합니다    
-			var map = new kakao.maps.Map(mapContainer, mapOption);
+         // 지도를 생성합니다    
+         var map = new kakao.maps.Map(mapContainer, mapOption);
 
-			// 주소-좌표 변환 객체를 생성합니다
-			var geocoder = new kakao.maps.services.Geocoder();
+         // 주소-좌표 변환 객체를 생성합니다
+         var geocoder = new kakao.maps.services.Geocoder();
 
-			// 주소로 좌표를 검색합니다
-			geocoder
-					.addressSearch(
-							'[[${map.place_address}]]',
-							function(result, status) {
+         // 주소로 좌표를 검색합니다
+         geocoder
+               .addressSearch(
+                     '[[${map.place_address}]]',
+                     function(result, status) {
 
-								// 정상적으로 검색이 완료됐으면 
-								if (status === kakao.maps.services.Status.OK) {
+                        // 정상적으로 검색이 완료됐으면 
+                        if (status === kakao.maps.services.Status.OK) {
 
-									var coords = new kakao.maps.LatLng(
-											result[0].y, result[0].x);
+                           var coords = new kakao.maps.LatLng(
+                                 result[0].y, result[0].x);
 
-									// 결과값으로 받은 위치를 마커로 표시합니다
-									var marker = new kakao.maps.Marker({
-										map : map,
-										position : coords
-									});
+                           // 결과값으로 받은 위치를 마커로 표시합니다
+                           var marker = new kakao.maps.Marker({
+                              map : map,
+                              position : coords
+                           });
 
-									// 인포윈도우로 장소에 대한 설명을 표시합니다
-									var infowindow = new kakao.maps.InfoWindow(
-											{
-												content : '<div style="width:150px;text-align:center;padding:6px 0;">[[${map.place_name}]]</div>'
-											});
-									infowindow.open(map, marker);
+                           // 인포윈도우로 장소에 대한 설명을 표시합니다
+                           var infowindow = new kakao.maps.InfoWindow(
+                                 {
+                                    content : '<div style="width:150px;text-align:center;padding:6px 0;">[[${map.place_name}]]</div>'
+                                 });
+                           infowindow.open(map, marker);
 
-									// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-									map.setCenter(coords);
-								}
-							});
-		</script>
-	</main>
+                           // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                           map.setCenter(coords);
+                        }
+                     });
+      </script>
+   </main>
 </body>
 </html>

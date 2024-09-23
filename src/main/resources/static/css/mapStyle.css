@@ -122,18 +122,12 @@
 	width: 100%;
 }
 
-
-/* 검색창 스크롤바 숨김 설정 */
-#search-container::-webkit-scrollbar {
-	display: none; /* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
-}
-
 /* 검색창 스타일 */
 #search-container {
- 
+	height: 790px; /* 세로 높이 고정 */
 	width: 30%;
 	padding: 0 20px 20px 20px;  /*위쪽 패딩을 0으로 설정, 나머지는 유지*/ 
-	overflow-y: auto;
+	overflow-y: auto; /* 세로 스크롤 생성 */
 
 }
 
@@ -170,13 +164,19 @@ form {
 /* 지도 영역 스타일 */
 #map {
 	flex: 1;
-
-	height: 500px;
+	height: 790px;
 	position: relative;
 	overflow: hidden;
 }
 
 /* 검색결과 목록 card */
+
+#placesList {
+    padding-left: 0; /* padding 제거 */
+    margin-left: 0;  /* margin 제거 */
+    list-style-type: none; /* 리스트 스타일 제거 */
+}
+
 .item {
   list-style-type: none;
   padding-inline-start: 0px;

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.EcoCamper.dao.PlacefilterSpecification;
 import com.example.EcoCamper.entity.Map;
@@ -25,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,6 +88,7 @@ public class MapController {
 		return ResponseEntity.ok(results);
 	}
 
+	// 장소 입력하기 폼
 	@GetMapping("/writePlace")
 	public String showMapForm(Model model) {
 		model.addAttribute("map", new Map());
@@ -93,12 +96,27 @@ public class MapController {
 		return "/index";
 	}
 
+	// 입력된 장소 db에 저장
 	@PostMapping("/savePlace")
-	public String saveMap(Map map) {
-		mapService.save(map);
-		return "redirect:/writePlace"; // 데이터 저장 후 다시 입력 폼으로 리다이렉트
+	public String savePlace(Map place, RedirectAttributes redirectAttributes) {
+	    try {
+	        // 현재 날짜를 upload_date에 설정
+	        place.setUpload_date(new Date());
+	        
+	        // 장소 데이터를 저장하고, 저장된 엔티티를 반환받음
+	        Map savedPlace = mapRepository.save(place);
+	        
+	        // 저장 성공 시 상세보기 페이지로 리다이렉트
+	        redirectAttributes.addAttribute("place_seq", savedPlace.getPlace_seq());
+	        return "redirect:/placeForm";
+	    } catch (Exception e) {
+	        // 저장 실패 시 실패 메시지와 함께 장소 입력 페이지로 리다이렉트
+	        redirectAttributes.addAttribute("saveSuccess", "false");
+	        return "redirect:/writePlace";
+	    }
 	}
 
+	// 장소 상세보기
 	@GetMapping("/placeForm")
 	public String placeForm(@RequestParam("place_seq") int place_seq, Model model) {
 
@@ -144,6 +162,86 @@ public class MapController {
 		model.addAttribute("place_season", place_season);
 		model.addAttribute("req", "/place/placeForm"); 
 		return "/index";
+	}
+
+	// 장소 삭제하기 로직
+	@GetMapping("/deletePlace")
+	public String deletePlace(@RequestParam("place_seq") int place_seq, RedirectAttributes redirectAttributes) {
+	    try {
+	        mapService.deletePlace(place_seq); // 삭제 로직
+	        redirectAttributes.addAttribute("deleteSuccess", "true");
+	    } catch (Exception e) {
+	        redirectAttributes.addAttribute("deleteSuccess", "false");
+	    }
+	    return "redirect:/map"; // 삭제 후 지도 페이지로 이동
+	}
+
+	// 장소 수정하기 (상세보기와 동일하게 place_seq로 장소 정보 띄우기)
+	@GetMapping("/modifyPlace")
+	public String modifyPlace(@RequestParam("place_seq") int place_seq, Model model) {
+
+		// seq를 이용해 데이터를 가져온 후, model에 담아 뷰로 전달
+		Optional<Map> mapOptional = mapService.getPlaceBySeq(place_seq);
+
+		// Optional에서 데이터를 추출하고 모델에 담는다.
+		if (mapOptional.isPresent()) {
+			model.addAttribute("map", mapOptional.get());
+		} else {
+			// 데이터가 없을 경우 처리
+			model.addAttribute("map", new Map()); // 또는 에러 처리
+		}
+
+		System.out.println("map optional 읽어온 정보: " + mapOptional.get());
+
+		String placeFacilityStr = mapOptional.get().getPlace_facility();
+		String placeEnvironmentStr = mapOptional.get().getPlace_environment();
+		String placeSeasonStr = mapOptional.get().getPlace_season();
+
+		List<String> place_facility = new ArrayList<>();
+		List<String> place_environment = new ArrayList<>();
+		List<String> place_season = new ArrayList<>();
+
+		if (placeFacilityStr != null && !placeFacilityStr.isEmpty()) {
+			place_facility = Arrays.asList(placeFacilityStr.split(","));
+		}
+
+		if (placeEnvironmentStr != null && !placeEnvironmentStr.isEmpty()) {
+			place_environment = Arrays.asList(placeEnvironmentStr.split(","));
+		}
+
+		if (placeSeasonStr != null && !placeSeasonStr.isEmpty()) {
+			place_season = Arrays.asList(placeSeasonStr.split(","));
+		}
+
+		System.out.println("place_facility 리스트: " + place_facility);
+		System.out.println("place_environment 리스트: " + place_environment);
+		System.out.println("place_season 리스트: " + place_season);
+
+		model.addAttribute("place_facility", place_facility);
+		model.addAttribute("place_environment", place_environment);
+		model.addAttribute("place_season", place_season);
+		model.addAttribute("req", "place/modifyPlace"); // map 데이터를 수정하는 폼
+		return "/index";
+	}
+	
+	// 장소 수정하기 로직
+	@PostMapping("/updatePlace")
+	public String updatePlace(HttpServletRequest request, Map placeData, RedirectAttributes redirectAttributes) {
+		int place_seq = Integer.parseInt(request.getParameter("place_seq"));
+		System.out.println(place_seq);
+		
+		// seq를 이용해 데이터를 가져온 후, model에 담아 뷰로 전달
+		Optional<Map> mapOptional = mapService.getPlaceBySeq(place_seq);
+		System.out.println(mapOptional);
+		
+	    try {
+	        mapService.updatePlace(placeData); // 수정 로직
+	        redirectAttributes.addAttribute("updateSuccess", "true");
+	        return "redirect:/placeForm?place_seq=" + placeData.getPlace_seq(); // 수정 성공 후 상세 페이지로 이동
+	    } catch (Exception e) {
+	        redirectAttributes.addAttribute("updateSuccess", "false");
+	        return "redirect:/modifyPlace?place_seq=" + placeData.getPlace_seq(); // 수정 실패 시 다시 수정 페이지로
+	    }
 	}
 
 }

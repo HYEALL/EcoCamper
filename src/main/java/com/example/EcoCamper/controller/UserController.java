@@ -91,7 +91,6 @@ public class UserController {
 			return "redirect:/index";
 			// 카카오 email로 정보가 없으면 회원가입
 		} else {
-			System.out.println("실행");
 			model.addAttribute("req", "/user/joinForm");
 			model.addAttribute("email", email);
 			model.addAttribute("name", nickname);
@@ -212,9 +211,9 @@ public class UserController {
 		List<Feed> list_feed = feedService.feedTop();
 		List<com.example.EcoCamper.entity.Map> list_map = mapService.getLatestFivePlaces();
 		
-		System.out.println(list_shop);
-		System.out.println(list_feed);
-		System.out.println(list_map);
+		//System.out.println(list_shop);
+		//System.out.println(list_feed);
+		//System.out.println(list_map);
 		model.addAttribute("list_shop", list_shop);
 		model.addAttribute("list_feed", list_feed);
 		model.addAttribute("list_map", list_map);

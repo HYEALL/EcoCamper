@@ -38,7 +38,7 @@ public class Map {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
                     generator = "MAP_SEQUENCE_GENERATOR")
     @SequenceGenerator(name = "MAP_SEQUENCE_GENERATOR",
-                        sequenceName = "place_seq_place",
+                        sequenceName = "place_seq",
                         initialValue = 1, allocationSize = 1)
     private int place_seq;
 
@@ -54,6 +54,7 @@ public class Map {
     private String place_keypointicon;
     private String place_precaution;
     private String place_precautionicon;
+    @Column(name = "place_bookinglink", length = 4000)
     private String place_bookinglink;
     private String place_tel;
     private double place_editorscore;
