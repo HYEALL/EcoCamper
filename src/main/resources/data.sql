@@ -174,7 +174,7 @@ delete Shop where productcode='0001';
 
 commit;
 
-
+create sequence place_seq nocycle nocache;
 -----------------------------
 -- 테이블 생성
 
@@ -205,7 +205,12 @@ CREATE TABLE map (
     place_youtubeTitle VARCHAR2(255),                 -- 유튜브 제목
     place_youtubeVideo VARCHAR2(1000)                 -- 유튜브 썸네일
 );
-
+delete map where place_seq=14;
+CREATE SEQUENCE place_seq
+    START WITH 11
+    INCREMENT BY 1;
+drop sequence place_seq;
+commit;
 -- 전체 데이터 검색
 SELECT * FROM map;
 -- 특정 place_seq에 대한 검색
